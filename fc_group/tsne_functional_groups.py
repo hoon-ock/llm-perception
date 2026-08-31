@@ -84,6 +84,17 @@ def load_activations(file_path):
     raise ValueError(f"Unsupported tensor type in file {file_path}")
 
 
+def default_five_layers(num_layers):
+    """Initial, mid-init, mid, mid-final, final layer indices."""
+    return [
+        0,
+        num_layers // 4,
+        num_layers // 2,
+        (3 * num_layers) // 4,
+        num_layers - 1,
+    ]
+
+
 def perform_pca(data, n_components=50):
     pca = PCA(n_components=n_components, random_state=42)
     return pca.fit_transform(data), pca
@@ -182,7 +193,9 @@ def parse_args():
                          help="Output directory. Default: fc_group/Results/tsne_plots/{model-name}")
     parser.add_argument("--layers", default=None,
                          help="Comma-separated layer indices, e.g. 0,16,31. "
-                              "Default: the chosen model's default_layers in fc_group/model_registry.py")
+                              "Default: 5 evenly-spaced layers (initial, mid-init, mid, "
+                              "mid-final, final) computed from the chosen model's num_layers "
+                              "in fc_group/model_registry.py")
     return parser.parse_args()
 
 
@@ -192,7 +205,7 @@ def main():
     model_name = args.model_name
 
     selected_layers = [int(l) for l in args.layers.split(',')] if args.layers \
-        else list(get_model_config(model_name)['default_layers'])
+        else default_five_layers(get_model_config(model_name)['num_layers'])
 
     activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, model_name.replace('/', '-'), entity_type)
     output_dir = args.output_dir or os.path.join('fc_group/Results/tsne_plots', model_name.replace('/', '-'))

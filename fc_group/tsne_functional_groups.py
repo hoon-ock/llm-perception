@@ -73,7 +73,7 @@ def load_activations(file_path):
     """
     Load activations from a .pt file and convert to a numpy array.
     """
-    tensor = torch.load(file_path)
+    tensor = torch.load(file_path, map_location="cpu")
     if isinstance(tensor, torch.Tensor):
         return tensor.cpu().numpy()
     if isinstance(tensor, dict):
@@ -177,6 +177,8 @@ def parse_args():
     parser.add_argument("--model-name", default=MODEL_NAME,
                          help="HF model_name whose saved activations to visualize (must match the directory "
                               "name under BASE_ACTIVATIONS_DIR used at extraction time). Default: %(default)s")
+    parser.add_argument("--output-dir", default=None,
+                         help="Output directory. Default: fc_group/Results/tsne_plots/{model-name}")
     return parser.parse_args()
 
 
@@ -186,7 +188,7 @@ def main():
     model_name = args.model_name
 
     activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, model_name.replace('/', '-'), entity_type)
-    output_dir = os.path.join('fc_group/Results/tsne_plots', entity_type)
+    output_dir = args.output_dir or os.path.join('fc_group/Results/tsne_plots', model_name.replace('/', '-'))
     filename_prefix = entity_type
 
     os.makedirs(output_dir, exist_ok=True)
@@ -242,7 +244,9 @@ def main():
             continue
 
         for feature, values in repeated_features.items():
-            output_path = os.path.join(output_dir, f"layer_{layer_num}_tsne_{feature}.png")
+            feature_dir = os.path.join(output_dir, feature)
+            os.makedirs(feature_dir, exist_ok=True)
+            output_path = os.path.join(feature_dir, f"{filename_prefix}_layer_{layer_num}.png")
             try:
                 plot_single_feature_tsne(
                     tsne_data=tsne_result,

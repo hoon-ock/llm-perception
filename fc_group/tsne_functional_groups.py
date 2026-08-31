@@ -10,6 +10,8 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import silhouette_score
 
+from model_registry import get_model_config
+
 # ============================
 # User Configuration Variables
 # ============================
@@ -32,7 +34,6 @@ FEATURES_TO_USE = [
     'pka', 'pkah', 'tpsa', 'avg_carbon_oxidation_state', 'hbd', 'hba',
     'boiling_point_c', 'water_solubility',
 ]  # Features to visualize
-SELECTED_LAYERS = None  # Specify list of layer numbers to include, e.g., [0, 15, 31]. None = all layers.
 
 # Plot Settings
 POINT_SIZE = 22
@@ -179,6 +180,9 @@ def parse_args():
                               "name under BASE_ACTIVATIONS_DIR used at extraction time). Default: %(default)s")
     parser.add_argument("--output-dir", default=None,
                          help="Output directory. Default: fc_group/Results/tsne_plots/{model-name}")
+    parser.add_argument("--layers", default=None,
+                         help="Comma-separated layer indices, e.g. 0,16,31. "
+                              "Default: the chosen model's default_layers in fc_group/model_registry.py")
     return parser.parse_args()
 
 
@@ -186,6 +190,9 @@ def main():
     args = parse_args()
     entity_type = args.entity_type
     model_name = args.model_name
+
+    selected_layers = [int(l) for l in args.layers.split(',')] if args.layers \
+        else list(get_model_config(model_name)['default_layers'])
 
     activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, model_name.replace('/', '-'), entity_type)
     output_dir = args.output_dir or os.path.join('fc_group/Results/tsne_plots', model_name.replace('/', '-'))
@@ -201,12 +208,11 @@ def main():
         print(f"No layer files found in {activations_dir}.")
         return
 
-    if SELECTED_LAYERS is not None:
-        pattern = re.compile(rf'{re.escape(filename_prefix)}\.last\.\d+_templates\.layer_(\d+)\.pt')
-        layer_files = [f for f in layer_files if int(pattern.match(f).group(1)) in SELECTED_LAYERS]
-        if not layer_files:
-            print("No matching layer files found for the selected layers.")
-            return
+    pattern = re.compile(rf'{re.escape(filename_prefix)}\.last\.\d+_templates\.layer_(\d+)\.pt')
+    layer_files = [f for f in layer_files if int(pattern.match(f).group(1)) in selected_layers]
+    if not layer_files:
+        print(f"No matching layer files found for layers {selected_layers}.")
+        return
 
     for filename in layer_files:
         layer_num = int(re.match(rf'{re.escape(filename_prefix)}\.last\.\d+_templates\.layer_(\d+)\.pt', filename).group(1))

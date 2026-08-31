@@ -171,3 +171,10 @@ cython_debug/
 .pypirc
 
 activation_datasets/
+fc_group/activation_datasets_functional_groups/
+fc_group/Results/
+fc_group/logs/
+fc_group/__*.csv
+
+# macOS
+.DS_Store

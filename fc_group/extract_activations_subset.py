@@ -7,8 +7,14 @@ import yaml
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import pandas as pd
 
+# Resolve the default config path relative to this script's own directory, not the
+# caller's cwd -- otherwise running from the repo root silently picks up the
+# unrelated top-level config_extract_activation.yaml (different model/batch_size)
+# instead of this one.
+DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config_extract_activation.yaml")
+
 # Load configuration and model parameters
-def load_config(config_file="config_extract_activation.yaml"):
+def load_config(config_file=DEFAULT_CONFIG_PATH):
     """
     Load the configuration file.
 
@@ -310,8 +316,8 @@ def generate_prompts(df, templates):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Extract per-layer activations for configured entity/prompt sets.")
-    parser.add_argument("--config", "-c", default="config_extract_activation.yaml",
-                         help="Path to the extraction config YAML (default: config_extract_activation.yaml).")
+    parser.add_argument("--config", "-c", default=DEFAULT_CONFIG_PATH,
+                         help="Path to the extraction config YAML (default: %(default)s).")
     parser.add_argument("--entity-types", nargs="+", default=None,
                          help="Only process entities whose entity_type matches one of these (default: all entities in the config).")
     parser.add_argument("--max-templates", type=int, default=None,
@@ -322,6 +328,9 @@ def parse_args():
     parser.add_argument("--model-name", default=None,
                          help="Override extraction.model_name from the config file (e.g. "
                               "deepseek-ai/DeepSeek-R1-Distill-Llama-8B, Qwen/Qwen3-8B). "
+                              "Default: use whatever the config file specifies.")
+    parser.add_argument("--batch-size", type=int, default=None,
+                         help="Override extraction.batch_size from the config file. "
                               "Default: use whatever the config file specifies.")
     return parser.parse_args()
 
@@ -373,7 +382,7 @@ def main():
     # Get extraction configuration
     extraction_config = config_data.get("extraction", {})
     model_name = args.model_name or extraction_config.get("model_name", "meta-llama/Llama-2-7b-hf")
-    batch_size = extraction_config.get("batch_size", 550)
+    batch_size = args.batch_size or extraction_config.get("batch_size", 550)
     aggregation = extraction_config.get("aggregation", "last")
     base_save_dir = extraction_config.get("save_dir", "activation_datasets")
     quantization_config = extraction_config.get("quantization", {})

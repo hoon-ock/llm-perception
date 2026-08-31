@@ -175,6 +175,8 @@ fc_group/activation_datasets_functional_groups/
 fc_group/Results/
 fc_group/logs/
 fc_group/__*.csv
+slurm-*.out
+slurm-*.err
 
 # macOS
 .DS_Store

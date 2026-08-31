@@ -34,6 +34,31 @@ MODEL_CONFIGS = {
         "num_layers": 28,
         "default_layers": [0, 14, 27],
     },
+    "meta-llama/Llama-3.1-70B": {
+        "hidden_dim": 8192,
+        "num_layers": 80,
+        "default_layers": [0, 40, 79],
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {
+        "hidden_dim": 8192,
+        "num_layers": 80,
+        "default_layers": [0, 40, 79],
+    },
+    "Qwen/Qwen3-32B": {
+        "hidden_dim": 5120,
+        "num_layers": 64,
+        "default_layers": [0, 32, 63],
+    },
+    "Qwen/Qwen2.5-Math-72B": {
+        "hidden_dim": 8192,
+        "num_layers": 80,
+        "default_layers": [0, 40, 79],
+    },
+    "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B": {
+        "hidden_dim": 5120,
+        "num_layers": 64,
+        "default_layers": [0, 32, 63],
+    },
 }
 
 

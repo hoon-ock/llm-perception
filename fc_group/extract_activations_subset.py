@@ -332,6 +332,10 @@ def parse_args():
     parser.add_argument("--batch-size", type=int, default=None,
                          help="Override extraction.batch_size from the config file. "
                               "Default: use whatever the config file specifies.")
+    parser.add_argument("--load-in-4bit", action="store_true",
+                         help="Force 4-bit quantization for this run, overriding "
+                              "extraction.quantization.load_in_4bit in the config. "
+                              "Needed for large models (e.g. 70B) that don't fit unquantized.")
     return parser.parse_args()
 
 def resolve_layers(layer_args, num_layers):
@@ -386,6 +390,8 @@ def main():
     aggregation = extraction_config.get("aggregation", "last")
     base_save_dir = extraction_config.get("save_dir", "activation_datasets")
     quantization_config = extraction_config.get("quantization", {})
+    if args.load_in_4bit:
+        quantization_config = {**quantization_config, "load_in_4bit": True}
     entities = extraction_config.get("entities", [])
 
     if args.entity_types:

@@ -89,7 +89,7 @@ def perform_pca(data, n_components=50):
 
 
 def perform_tsne(data, n_components=2, perplexity=30):
-    tsne = TSNE(n_components=n_components, random_state=42, perplexity=perplexity, max_iter=1000)
+    tsne = TSNE(n_components=n_components, random_state=42, perplexity=perplexity, n_iter=1000)
     return tsne.fit_transform(data)
 
 

@@ -72,7 +72,7 @@ def find_layer_file(directory, entity_type, layer):
 
 
 def load_activations(file_path):
-    tensor = torch.load(file_path)
+    tensor = torch.load(file_path, map_location="cpu")
     if isinstance(tensor, torch.Tensor):
         return tensor.cpu().numpy()
     if isinstance(tensor, dict):

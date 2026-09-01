@@ -1,4 +1,5 @@
 import argparse
+import inspect
 import os
 import re
 
@@ -55,19 +56,22 @@ def load_labels_and_features(csv_path, label_column, features):
     return labels, features_dict
 
 
-def get_layer_files(directory, prefix):
+def get_layer_files(directory, prefix, aggregation='last'):
     """
-    Get a sorted list of layer files from the specified directory.
-    Sorting is based on the layer number extracted from the filename.
-    Expected filename format: '{prefix}.last.{n}_templates.{layer}.pt'
+    Get (layer_number, filename) pairs from the specified directory, sorted by layer.
+    Expected filename format: '{prefix}.{aggregation}.{prompt_name}.layer_{n}.pt'
+    prompt_name is matched as an opaque field so both the statement templates
+    ('10_templates') and the question templates ('10_templates_questions') match.
     """
-    pattern = re.compile(rf'{re.escape(prefix)}\.last\.\d+_templates\.layer_(\d+)\.pt')
+    pattern = re.compile(
+        rf'^{re.escape(prefix)}\.{re.escape(aggregation)}\.[^.]+\.layer_(\d+)\.pt$'
+    )
     files = []
     for filename in os.listdir(directory):
         match = pattern.match(filename)
         if match:
             files.append((int(match.group(1)), filename))
-    return [filename for _, filename in sorted(files)]
+    return sorted(files)
 
 
 def load_activations(file_path):
@@ -101,7 +105,11 @@ def perform_pca(data, n_components=50):
 
 
 def perform_tsne(data, n_components=2, perplexity=30):
-    tsne = TSNE(n_components=n_components, random_state=42, perplexity=perplexity, n_iter=1000)
+    # scikit-learn renamed TSNE's n_iter to max_iter in 1.5 and dropped n_iter in 1.7.
+    # The cluster pins 1.2.2 (n_iter only), so pick whichever the installed version takes.
+    iter_kwarg = 'max_iter' if 'max_iter' in inspect.signature(TSNE).parameters else 'n_iter'
+    tsne = TSNE(n_components=n_components, random_state=42, perplexity=perplexity,
+                **{iter_kwarg: 1000})
     return tsne.fit_transform(data)
 
 
@@ -209,26 +217,33 @@ def main():
 
     activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, model_name.replace('/', '-'), entity_type)
     output_dir = args.output_dir or os.path.join('fc_group/Results/tsne_plots', model_name.replace('/', '-'))
+    # The .pt files are named with the raw entity_type, so matching must keep any
+    # spaces ('functional_group question'); the PNG names swap them for underscores
+    # to stay shell-friendly.
     filename_prefix = entity_type
+    output_prefix = entity_type.replace(' ', '_')
 
     os.makedirs(output_dir, exist_ok=True)
 
     labels, features_dict = load_labels_and_features(CSV_PATH, LABEL_COLUMN, FEATURES_TO_USE)
     num_symbols = len(labels)
 
+    if not os.path.isdir(activations_dir):
+        print(f"No layer files found in {activations_dir} "
+              f"(directory does not exist -- run extraction for this entity_type first).")
+        return
+
     layer_files = get_layer_files(activations_dir, filename_prefix)
     if not layer_files:
         print(f"No layer files found in {activations_dir}.")
         return
 
-    pattern = re.compile(rf'{re.escape(filename_prefix)}\.last\.\d+_templates\.layer_(\d+)\.pt')
-    layer_files = [f for f in layer_files if int(pattern.match(f).group(1)) in selected_layers]
+    layer_files = [(n, f) for n, f in layer_files if n in selected_layers]
     if not layer_files:
         print(f"No matching layer files found for layers {selected_layers}.")
         return
 
-    for filename in layer_files:
-        layer_num = int(re.match(rf'{re.escape(filename_prefix)}\.last\.\d+_templates\.layer_(\d+)\.pt', filename).group(1))
+    for layer_num, filename in layer_files:
         file_path = os.path.join(activations_dir, filename)
         print(f"Processing {filename} (layer {layer_num})")
 
@@ -265,7 +280,7 @@ def main():
         for feature, values in repeated_features.items():
             feature_dir = os.path.join(output_dir, feature)
             os.makedirs(feature_dir, exist_ok=True)
-            output_path = os.path.join(feature_dir, f"{filename_prefix}_layer_{layer_num}.png")
+            output_path = os.path.join(feature_dir, f"{output_prefix}_layer_{layer_num}.png")
             try:
                 plot_single_feature_tsne(
                     tsne_data=tsne_result,

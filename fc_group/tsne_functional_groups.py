@@ -11,7 +11,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import silhouette_score
 
-from model_registry import get_model_config
+from model_registry import default_five_layers, get_model_config
 
 # ============================
 # User Configuration Variables
@@ -86,17 +86,6 @@ def load_activations(file_path):
             return tensor['activations'].cpu().numpy()
         raise KeyError("Key 'activations' not found in the tensor dictionary.")
     raise ValueError(f"Unsupported tensor type in file {file_path}")
-
-
-def default_five_layers(num_layers):
-    """Initial, mid-init, mid, mid-final, final layer indices."""
-    return [
-        0,
-        num_layers // 4,
-        num_layers // 2,
-        (3 * num_layers) // 4,
-        num_layers - 1,
-    ]
 
 
 def perform_pca(data, n_components=50):

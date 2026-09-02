@@ -62,6 +62,21 @@ MODEL_CONFIGS = {
 }
 
 
+def default_five_layers(num_layers):
+    """Initial, mid-init, mid, mid-final, final layer indices.
+
+    A denser alternative to `default_layers` for analyses that plot a trend
+    across depth, where three points are too few to see the shape.
+    """
+    return [
+        0,
+        num_layers // 4,
+        num_layers // 2,
+        (3 * num_layers) // 4,
+        num_layers - 1,
+    ]
+
+
 def get_model_config(model_name):
     try:
         return MODEL_CONFIGS[model_name]

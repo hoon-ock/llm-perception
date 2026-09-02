@@ -29,7 +29,7 @@ from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 -- registers the '3d' proj
 from scipy.cluster.hierarchy import linkage
 from scipy.spatial.distance import squareform
 
-from model_registry import get_model_config
+from model_registry import default_five_layers, get_model_config
 
 # ============================
 # Config
@@ -41,8 +41,10 @@ ENTITY_TYPE = 'functional_group'
 CSV_PATH = 'fc_group/functional_group_dataset.csv'
 LABEL_COLUMN = 'iupac_name'
 ALKANE_LABEL = 'none (alkane)'
+# Unused here -- main() now derives layers from default_five_layers() -- but
+# anisotropy_diagnostic.py imports this constant from this module.
 DEFAULT_LAYERS = [0, 16, 31]
-DEFAULT_OUTPUT_DIR = 'fc_group/Results/functional_group_analogy_carbon_matched'
+DEFAULT_OUTPUT_DIR = 'fc_group/Results/functional_group_analogy'
 DEFAULT_NUM_NULL_SAMPLES = 10000
 HIDDEN_DIM = 4096
 SEED = 42
@@ -59,10 +61,15 @@ def load_labels_and_features(csv_path, label_column, features):
 
 
 def find_layer_file(directory, entity_type, layer):
-    """Locates the activation file for one (entity_type, layer) pair without
-    assuming a fixed template count in the filename (e.g. 10_templates vs
-    1_templates)."""
-    pattern = re.compile(rf'{re.escape(entity_type)}\.last\.\d+_templates\.layer_{layer}\.pt$')
+    """Locates the activation file for one (entity_type, layer) pair.
+
+    Expected filename format: '{entity_type}.last.{prompt_name}.layer_{n}.pt'.
+    prompt_name is matched as an opaque field so both the statement templates
+    ('10_templates') and the question templates ('10_templates_questions')
+    match -- re-encoding the writer's naming convention here is how this
+    silently stopped matching the question variants once.
+    """
+    pattern = re.compile(rf'^{re.escape(entity_type)}\.last\.[^.]+\.layer_{layer}\.pt$')
     matches = [f for f in os.listdir(directory) if pattern.match(f)]
     assert len(matches) == 1, (
         f"Expected exactly 1 activation file for entity_type='{entity_type}' layer={layer} "
@@ -487,7 +494,7 @@ def plot_layer_trend(summary_by_layer, output_path):
 
     ax.set_xticks(x)
     ax.set_xticklabels([str(L) for L in layers])
-    ax.set_xlabel('Layer (not evenly spaced - only 0, 16, 31 were extracted)')
+    ax.set_xlabel(f"Layer (categorical axis - analyzed layers: {', '.join(str(L) for L in layers)})")
     ax.set_ylabel('Cosine similarity')
     ax.set_title('Diff-vector similarity vs. layer depth')
     ax.legend(fontsize=8)
@@ -690,9 +697,11 @@ def parse_args():
                               "BASE_ACTIVATIONS_DIR used at extraction time). Default: %(default)s")
     parser.add_argument('--layers', default=None,
                          help="Comma-separated layer indices, e.g. 0,16,31. "
-                              "Default: the chosen model's default_layers in fc_group/model_registry.py")
+                              "Default: 5 evenly-spaced layers (initial, mid-init, mid, "
+                              "mid-final, final) computed from the chosen model's num_layers "
+                              "in fc_group/model_registry.py")
     parser.add_argument('--output-dir', default=None,
-                         help="Output directory. Default: {DEFAULT_OUTPUT_DIR}/{entity-type}")
+                         help=f"Output directory. Default: {DEFAULT_OUTPUT_DIR}/{{model-name}}/{{entity-type}}")
     parser.add_argument('--num-null-samples', type=int, default=DEFAULT_NUM_NULL_SAMPLES,
                          help="Number of cross-group pairs to sample for the empirical null. "
                               "Default: %(default)s")
@@ -700,7 +709,7 @@ def parse_args():
 
 
 def main():
-    global MODEL_NAME, HIDDEN_DIM, DEFAULT_LAYERS
+    global MODEL_NAME, HIDDEN_DIM
 
     args = parse_args()
     entity_type = args.entity_type
@@ -708,17 +717,26 @@ def main():
     MODEL_NAME = args.model_name
     model_config = get_model_config(MODEL_NAME)
     HIDDEN_DIM = model_config['hidden_dim']
-    DEFAULT_LAYERS = model_config['default_layers']
 
-    layers = [int(l) for l in args.layers.split(',')] if args.layers else list(DEFAULT_LAYERS)
-    output_dir = args.output_dir or os.path.join(DEFAULT_OUTPUT_DIR, entity_type)
+    layers = [int(l) for l in args.layers.split(',')] if args.layers \
+        else default_five_layers(model_config['num_layers'])
+    model_slug = MODEL_NAME.replace('/', '-')
+    output_dir = args.output_dir or os.path.join(DEFAULT_OUTPUT_DIR, model_slug, entity_type)
+
+    activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, model_slug, entity_type)
+    # An entity_type that was never extracted for this model is a normal outcome
+    # of sweeping the full config, not a crash -- report it the way
+    # tsne_functional_groups.py does and leave no empty output tree behind.
+    if not os.path.isdir(activations_dir):
+        print(f"No layer files found in {activations_dir} (directory does not exist)")
+        return
+
     os.makedirs(os.path.join(output_dir, 'data'), exist_ok=True)
 
     rng = np.random.default_rng(SEED)
 
     df = pd.read_csv(CSV_PATH)
     alkane_index = build_alkane_index(df)
-    activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, MODEL_NAME.replace('/', '-'), entity_type)
 
     summary_by_layer = {}
     within_by_group_layer = {}

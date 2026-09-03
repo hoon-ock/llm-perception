@@ -185,6 +185,44 @@ def compute_between_class_matrix(mean_diff_by_group):
     return matrix, groups
 
 
+def compute_between_class_matrix_by_carbon(diffs):
+    """Between-class similarity, carbon-matched: for each pair of groups the
+    cosine is taken separately at each shared chain length and only then
+    averaged, instead of averaging each group's diff-vectors over chain length
+    first (compute_between_class_matrix). Same lumped-vs-carbon-matched split
+    already made for the second-order analogy.
+
+    Expanding cos(mean_A, mean_B) shows it mixes all 16 (C, C') pairings --
+    matched and mismatched -- and weights each chain length by its diff-vector
+    norm; this keeps only the 4 matched terms and weights them equally, which
+    also yields a spread across chain length that the lumped version cannot.
+
+    Returns (mean_matrix, std_matrix, sims_by_C, groups) where sims_by_C maps
+    (group_a, group_b) -> {C: cosine_sim}.
+    """
+    groups = sorted(diffs.keys())
+    n = len(groups)
+    mean_matrix = np.eye(n)
+    std_matrix = np.zeros((n, n))
+    sims_by_C = {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            a, b = groups[i], groups[j]
+            # build_diff_vectors asserts 4 chain lengths per group, so this is
+            # normally all of them -- intersect anyway rather than assume it.
+            common_C = sorted(set(diffs[a]) & set(diffs[b]))
+            if not common_C:
+                print(f"WARNING: no shared carbon count between '{a}' and '{b}'; "
+                      f"leaving carbon-matched similarity at 0.")
+                continue
+            sims = {C: cosine_similarity(diffs[a][C], diffs[b][C]) for C in common_C}
+            sims_by_C[(a, b)] = sims
+            values = list(sims.values())
+            mean_matrix[i, j] = mean_matrix[j, i] = float(np.mean(values))
+            std_matrix[i, j] = std_matrix[j, i] = float(np.std(values))
+    return mean_matrix, std_matrix, sims_by_C, groups
+
+
 def compute_second_order_analogy(mean_diff_by_group, pair_a, pair_b):
     """Tests a "diff of diffs" analogy, e.g. is (thioether - thiol) pointing
     the same way as (ether - alcohol)? This checks whether a substitution
@@ -447,18 +485,19 @@ def plot_within_class_small_multiples(within_matrices, chain_labels_by_group, la
     plt.close()
 
 
-def plot_between_class_heatmap(matrix, groups, layer, output_path):
+def plot_between_class_heatmap(matrix, groups, layer, output_path, title_suffix=''):
     fig, ax = plt.subplots(figsize=(9, 8))
     sns.heatmap(matrix, ax=ax, vmin=-1, vmax=1, cmap='coolwarm',
                 xticklabels=groups, yticklabels=groups, square=True)
-    ax.set_title(f'Between-class diff-vector cosine similarity (layer {layer})')
+    suffix = f', {title_suffix}' if title_suffix else ''
+    ax.set_title(f'Between-class diff-vector cosine similarity (layer {layer}{suffix})')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     plt.savefig(output_path, dpi=150)
     plt.close()
 
 
-def plot_between_class_clustermap(matrix, groups, layer, output_path):
+def plot_between_class_clustermap(matrix, groups, layer, output_path, title_suffix=''):
     distance = 1 - matrix
     np.fill_diagonal(distance, 0)
     distance = (distance + distance.T) / 2
@@ -466,9 +505,26 @@ def plot_between_class_clustermap(matrix, groups, layer, output_path):
     Z = linkage(condensed, method='average')
     cg = sns.clustermap(matrix, row_linkage=Z, col_linkage=Z, vmin=-1, vmax=1, cmap='coolwarm',
                          xticklabels=groups, yticklabels=groups, figsize=(9, 9))
-    cg.fig.suptitle(f'Between-class clustering (layer {layer})', y=1.02)
+    suffix = f', {title_suffix}' if title_suffix else ''
+    cg.fig.suptitle(f'Between-class clustering (layer {layer}{suffix})', y=1.02)
     cg.savefig(output_path, dpi=150)
     plt.close(cg.fig)
+
+
+def plot_between_class_by_carbon_spread(std_matrix, groups, layer, output_path):
+    """Std of the carbon-matched cosine across chain lengths, per group pair --
+    the diagnostic the lumped matrix cannot give: it separates group pairs
+    whose relationship holds at every chain length from those carried by a
+    single C.
+    """
+    fig, ax = plt.subplots(figsize=(9, 8))
+    sns.heatmap(std_matrix, ax=ax, vmin=0, cmap='viridis',
+                xticklabels=groups, yticklabels=groups, square=True)
+    ax.set_title(f'Between-class similarity spread across chain length (layer {layer})')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150)
+    plt.close()
 
 
 def plot_layer_trend(summary_by_layer, output_path):
@@ -483,6 +539,12 @@ def plot_layer_trend(summary_by_layer, output_path):
     ax.errorbar(x, within_means, yerr=within_stds, marker='o', label='Within-class (same group)',
                 color='#2ecc71', capsize=4)
     ax.plot(x, between_means, marker='s', label='Between-class (different groups)', color='#e74c3c')
+    # Optional: a summary.json written before the carbon-matched matrix existed
+    # has no such key, so skip the series rather than crashing on an old run.
+    between_by_carbon = [summary_by_layer[L].get('between_mean_by_carbon') for L in layers]
+    if all(v is not None for v in between_by_carbon):
+        ax.plot(x, between_by_carbon, marker='^', color='#9b59b6',
+                label='Between-class (carbon-matched)')
     ax.axhspan(lower_cf, upper_cf, alpha=0.2, color='gray', label='Closed-form random-vector 99.9% CI')
 
     empirical_lowers = [summary_by_layer[L]['empirical_null_mean'] - summary_by_layer[L]['empirical_null_std']
@@ -570,6 +632,25 @@ def run_layer(layer, df, alkane_index, entity_type, activations_dir, num_null_sa
         os.path.join(output_dir, 'data', f'between_class_similarity_layer_{layer}.csv'),
     )
 
+    # Carbon-matched counterpart of the block above: cosine at each shared
+    # chain length first, averaged only afterwards. Reported alongside the
+    # lumped version rather than replacing it, so the two can be compared.
+    bc_mean_matrix, bc_std_matrix, bc_sims_by_C, _ = compute_between_class_matrix_by_carbon(diffs)
+    bc_by_carbon_rows = [
+        [a, b, C, sim]
+        for (a, b), sims in bc_sims_by_C.items() for C, sim in sims.items()
+    ]
+    save_long_format_csv(
+        bc_by_carbon_rows, ['group_a', 'group_b', 'carbon_count', 'cosine_sim'],
+        os.path.join(output_dir, 'data', f'between_class_similarity_by_carbon_layer_{layer}.csv'),
+    )
+    save_long_format_csv(
+        [[between_groups[i], between_groups[j], bc_mean_matrix[i, j], bc_std_matrix[i, j]]
+         for i in range(len(between_groups)) for j in range(i + 1, len(between_groups))],
+        ['group_a', 'group_b', 'mean_cosine_sim', 'std_cosine_sim'],
+        os.path.join(output_dir, 'data', f'between_class_similarity_by_carbon_mean_layer_{layer}.csv'),
+    )
+
     # Primary: carbon-matched diff-of-diffs (compares a1[C]-a2[C] vs b1[C]-b2[C]
     # at each shared C, rather than lumping chain lengths 3-6 together first).
     # The lumped, carbon-averaged similarity is still computed alongside it as
@@ -629,6 +710,7 @@ def run_layer(layer, df, alkane_index, entity_type, activations_dir, num_null_sa
 
     print(f"Within-class consistency (mean over groups): {within_mean_overall:.4f} +- {within_std_overall:.4f}")
     print(f"Between-class similarity (mean diff-vecs):   {np.mean(between_matrix[np.triu_indices_from(between_matrix, k=1)]):.4f}")
+    print(f"Between-class similarity (carbon-matched):    {np.mean(bc_mean_matrix[np.triu_indices_from(bc_mean_matrix, k=1)]):.4f}")
     print(f"Closed-form null 99.9% CI: [{lower_cf:.4f}, {upper_cf:.4f}]")
     print(f"Empirical cross-group null: {empirical_null.mean():.4f} +- {empirical_null.std():.4f}")
 
@@ -648,6 +730,20 @@ def run_layer(layer, df, alkane_index, entity_type, activations_dir, num_null_sa
     plot_between_class_clustermap(
         between_matrix, between_groups, layer,
         os.path.join(output_dir, f'between_class_clustermap_layer_{layer}.png'),
+    )
+    plot_between_class_heatmap(
+        bc_mean_matrix, between_groups, layer,
+        os.path.join(output_dir, f'between_class_heatmap_by_carbon_layer_{layer}.png'),
+        title_suffix='carbon-matched',
+    )
+    plot_between_class_clustermap(
+        bc_mean_matrix, between_groups, layer,
+        os.path.join(output_dir, f'between_class_clustermap_by_carbon_layer_{layer}.png'),
+        title_suffix='carbon-matched',
+    )
+    plot_between_class_by_carbon_spread(
+        bc_std_matrix, between_groups, layer,
+        os.path.join(output_dir, f'between_class_by_carbon_std_layer_{layer}.png'),
     )
     sims_by_C_by_quadruple = {(pair_a, pair_b): sims_by_C for pair_a, pair_b, sims_by_C, _ in by_carbon_plot_data}
     for pair_a, pair_b in ANALOGY_QUADRUPLES:
@@ -674,6 +770,8 @@ def run_layer(layer, df, alkane_index, entity_type, activations_dir, num_null_sa
         'within_mean': within_mean_overall,
         'within_std': within_std_overall,
         'between_mean': float(np.mean(between_matrix[np.triu_indices_from(between_matrix, k=1)])),
+        'between_mean_by_carbon': float(np.mean(bc_mean_matrix[np.triu_indices_from(bc_mean_matrix, k=1)])),
+        'between_std_by_carbon': float(np.mean(bc_std_matrix[np.triu_indices_from(bc_std_matrix, k=1)])),
         'full_within_mean': full_within_mean,
         'full_between_mean': full_between_mean,
         'empirical_null_mean': float(empirical_null.mean()),

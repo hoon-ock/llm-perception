@@ -25,20 +25,23 @@ import matplotlib.pyplot as plt
 
 from functional_group_analogy_carbon_matched import (
     BASE_ACTIVATIONS_DIR, MODEL_NAME, CSV_PATH, LABEL_COLUMN, ALKANE_LABEL,
-    DEFAULT_LAYERS, DEFAULT_NUM_NULL_SAMPLES, HIDDEN_DIM, SEED,
+    DEFAULT_NUM_NULL_SAMPLES, HIDDEN_DIM, SEED,
     find_layer_file, load_activations, load_and_average_templates,
     build_alkane_index, build_diff_vectors, cosine_similarity,
     flatten_diff_vectors, compute_full_pairwise_matrix,
     empirical_null_cross_group, closed_form_null_ci,
     save_long_format_csv, save_json,
 )
-from model_registry import get_model_config
+from model_registry import default_five_layers, get_model_config
 
 # ============================
 # Config
 # ============================
 
-DEFAULT_ENTITY_TYPE = 'molecule_name_bare'
+# Matches the default in tsne_functional_groups.py and
+# functional_group_analogy_carbon_matched.py, so all three analyses read the
+# same entity_type (and the same CSV) unless told otherwise.
+DEFAULT_ENTITY_TYPE = 'functional_group'
 DEFAULT_OUTPUT_DIR = 'fc_group/Results/anisotropy_diagnostic'
 SVD_K_VALUES = [1, 2, 3, 5, 10, 20]
 
@@ -267,9 +270,11 @@ def parse_args():
                               "BASE_ACTIVATIONS_DIR used at extraction time). Default: %(default)s")
     parser.add_argument('--layers', default=None,
                          help="Comma-separated layer indices, e.g. 0,16,31. "
-                              "Default: the chosen model's default_layers in fc_group/model_registry.py")
+                              "Default: 5 evenly-spaced layers (initial, mid-init, mid, "
+                              "mid-final, final) computed from the chosen model's num_layers "
+                              "in fc_group/model_registry.py")
     parser.add_argument('--output-dir', default=None,
-                         help="Output directory. Default: {DEFAULT_OUTPUT_DIR}/{entity-type}")
+                         help=f"Output directory. Default: {DEFAULT_OUTPUT_DIR}/{{model-name}}/{{entity-type}}")
     parser.add_argument('--num-null-samples', type=int, default=DEFAULT_NUM_NULL_SAMPLES,
                          help="Number of cross-group pairs to sample for the empirical null. "
                               "Default: %(default)s")
@@ -277,7 +282,7 @@ def parse_args():
 
 
 def main():
-    global MODEL_NAME, HIDDEN_DIM, DEFAULT_LAYERS
+    global MODEL_NAME, HIDDEN_DIM
 
     args = parse_args()
     entity_type = args.entity_type
@@ -285,17 +290,28 @@ def main():
     MODEL_NAME = args.model_name
     model_config = get_model_config(MODEL_NAME)
     HIDDEN_DIM = model_config['hidden_dim']
-    DEFAULT_LAYERS = model_config['default_layers']
 
-    layers = [int(l) for l in args.layers.split(',')] if args.layers else list(DEFAULT_LAYERS)
-    output_dir = args.output_dir or os.path.join(DEFAULT_OUTPUT_DIR, entity_type)
+    layers = [int(l) for l in args.layers.split(',')] if args.layers \
+        else default_five_layers(model_config['num_layers'])
+    model_slug = MODEL_NAME.replace('/', '-')
+    # The model slug has to be part of the path: without it a second model's run
+    # silently overwrites the first one's results for the same entity_type.
+    output_dir = args.output_dir or os.path.join(DEFAULT_OUTPUT_DIR, model_slug, entity_type)
+
+    activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, model_slug, entity_type)
+    # An entity_type that was never extracted for this model is a normal outcome
+    # of sweeping the full config, not a crash -- report it the way the other
+    # fc_group analyses do, before makedirs leaves an empty output tree behind.
+    if not os.path.isdir(activations_dir):
+        print(f"No layer files found in {activations_dir} (directory does not exist)")
+        return
+
     os.makedirs(os.path.join(output_dir, 'data'), exist_ok=True)
 
     rng = np.random.default_rng(SEED)
 
     df = pd.read_csv(CSV_PATH)
     alkane_index = build_alkane_index(df)
-    activations_dir = os.path.join(BASE_ACTIVATIONS_DIR, MODEL_NAME.replace('/', '-'), entity_type)
 
     summary_by_layer = {}
     for layer in layers:

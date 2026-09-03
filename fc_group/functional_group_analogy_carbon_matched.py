@@ -41,8 +41,8 @@ ENTITY_TYPE = 'functional_group'
 CSV_PATH = 'fc_group/functional_group_dataset.csv'
 LABEL_COLUMN = 'iupac_name'
 ALKANE_LABEL = 'none (alkane)'
-# Unused here -- main() now derives layers from default_five_layers() -- but
-# anisotropy_diagnostic.py imports this constant from this module.
+# Unused here -- main() now derives layers from default_five_layers(). Kept only
+# for parity with functional_group_analogy.py, which still has its own copy.
 DEFAULT_LAYERS = [0, 16, 31]
 DEFAULT_OUTPUT_DIR = 'fc_group/Results/functional_group_analogy'
 DEFAULT_NUM_NULL_SAMPLES = 10000

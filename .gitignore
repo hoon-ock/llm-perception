@@ -176,6 +176,7 @@ fc_group/Results/
 Results_HCC/
 fc_group/logs/
 fc_group/__*.csv
+fc_group/PROBE_NOTES.md
 slurm-*.out
 slurm-*.err
 

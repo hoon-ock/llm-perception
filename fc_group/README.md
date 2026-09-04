@@ -31,6 +31,8 @@ similarity, anisotropy baselines, t-SNE/PCA visualization).
 | `functional_group_analogy_carbon_matched.py` | Same analysis with carbon-count-matched controls |
 | `anisotropy_diagnostic.py` | How much of the diff-vector geometry is generic transformer-hidden-state anisotropy vs. genuine chemistry-specific structure |
 | `tsne_functional_groups.py` | t-SNE/PCA visualization of activations, colored by functional group / pKa / TPSA / etc. |
+| `functional_group_probe.py` | Supervised counterpart to the above: layer-wise linear probe predicting functional group from the last-token residual stream |
+| `run_functional_group_probe.sbatch` | SLURM job array running the probe for 2 models x every entity type in the config (46 tasks) |
 
 Generated at runtime, not committed (see `.gitignore`):
 `activation_datasets_functional_groups/` (saved activation tensors, one subdirectory per
@@ -68,6 +70,7 @@ python fc_group/functional_group_analogy.py --entity-type functional_group
 python fc_group/functional_group_analogy_carbon_matched.py --entity-type functional_group
 python fc_group/anisotropy_diagnostic.py --entity-type functional_group
 python fc_group/tsne_functional_groups.py --entity-type functional_group
+python fc_group/functional_group_probe.py --entity-type functional_group
 ```
 
 Common flags across the analysis scripts: `--entity-type`, `--model-name`, `--layers`
@@ -79,6 +82,113 @@ Available `entity_type` values are defined in `config_extract_activation.yaml`:
 `avg_carbon_oxidation_state`, `hbd`, `hba`, `boiling_point_c`, `water_solubility`,
 `molecule`, `molecule_name_bare`, `molecule_formula_bare` — each also has a `... question`
 variant using interrogative prompt templates instead of declarative ones.
+
+## The linear probe
+
+`functional_group_probe.py` is the one supervised analysis here, and the functional-group
+counterpart of `Direct_recall/categorical_probe.py` in the root project. It asks whether
+functional-group identity is *linearly decodable* from the last-token residual stream, and at
+what depth decodability peaks -- the question the unsupervised geometry scripts cannot answer.
+
+Three targets (`--target`, or `all` for every one of them):
+
+| Target | Trained on | Scored on | Chance |
+|---|---|---|---|
+| `fine` | 20 `functional_group` classes | the same 20 | 5% |
+| `coarse` | 5 heteroatom families -- hydrocarbon / halide / oxygen / nitrogen / sulfur | the same 5 | 20% |
+| `fine_to_coarse` | all 20 classes | the 5 families | 20% |
+
+`fine_to_coarse` is the one worth explaining. Under leave-one-group-out a plain `fine` probe is
+impossible -- withholding a class removes its output unit -- but a probe *trained* on all 20
+can still be asked whether a held-out group's molecules land in the right family. Withhold
+`alkyl iodide`, and "it was called a bromide" is a stronger result than "it landed somewhere in
+the halide blob". Because it is scored on the 5 families, it is directly comparable to `coarse`.
+
+Three splits, in increasing order of strictness (`--split`, repeatable):
+
+| Split | Folds | What it tests |
+|---|---|---|
+| `molecule` | 4 (`StratifiedGroupKFold`) | Decodability with all templates of a molecule kept on one side. 4 folds, not 5: 17 of the 20 fine classes have exactly 4 molecules. |
+| `carbon` | 4 (leave-one-carbon-count-out) | Whether the functional-group direction is invariant to backbone length -- the probe analogue of `functional_group_analogy_carbon_matched.py`. |
+| `group` | 19 (leave-one-fine-group-out) | Withhold `alkyl iodide` entirely; is it still placed with the halides having seen only F/Cl/Br? |
+
+**`--split` defaults to `group` alone.** `molecule` and `carbon` are saturated by the molecule
+name in the prompt -- character n-grams alone score 0.975-1.00 on both -- so running them by
+default only produces impressive numbers that say nothing about the model. They remain one flag
+away and become worth running again the moment the prompts stop naming the molecule. Pairing
+`--target fine_to_coarse --split molecule` is also the natural ceiling for a leave-one-group-out
+score: it measures how often the fine probe gets the family right when the group *was* seen.
+
+`group` is skipped for the plain `fine` target on purpose: removing a class from an n-way
+classifier removes its output unit, so held-out accuracy would be 0 by construction and measure
+nothing. Use `fine_to_coarse` instead.
+
+Reported per layer: balanced accuracy (headline), macro-F1, plain accuracy, and a per-molecule
+score that sums class probabilities over a molecule's prompt templates before the argmax.
+`--num-null-samples` runs a label-permutation null shuffled over the **92 molecules** (not the
+expanded rows, which would leak templates of the same molecule across the split); it defaults
+to five layers spread over depth, since the null is essentially layer-independent and running
+it everywhere dominates the runtime. `--null-layers all` overrides that.
+
+`--surface-baseline` fits the same probe on char n-grams of the raw prompt strings and draws
+the result onto every layer-trend plot. Every template embeds `{iupac_name} ({formula})`, so
+"Propan-1-ol (CH3CH2CH2OH)" hands a probe the substrings `-ol` and `OH` directly; this baseline
+is how much accuracy is available without running the model at all, and anything the probe
+scores below that line is not evidence of recalled chemistry. It is off by default but cheap,
+and on a first run over Llama-3.1-8B it already reorders which results mean anything:
+
+| Split | Surface n-grams | Probe (layer 31) |
+|---|---|---|
+| fine / molecule | 0.98 | 1.00 |
+| fine / carbon | 1.00 | 1.00 |
+| coarse / molecule | 1.00 | 1.00 |
+| coarse / carbon | 1.00 | 1.00 |
+| **coarse / group** | **0.47** | **0.98** |
+
+The molecule and carbon splits are saturated by orthography alone -- the functional group is
+recoverable from the molecule's spelling, so a near-perfect probe there says little. The
+leave-one-group-out split is the one that separates them, and it is also the only split where
+the probe climbs with depth (0.41 -> 0.72 -> 0.98 across layers 0/16/31).
+
+> These numbers come from the local single-template smoke activations (layers 0/16/31 only,
+> one prompt template rather than ten), so treat them as a shape, not a result. Re-run against
+> the full extraction before quoting them.
+
+### Cost
+
+Two things keep this affordable, both exact rather than approximations:
+
+`--pca-components` defaults to a full-rank PCA rotation of each training fold. Under an L2
+penalty the optimum lies in the span of the training data, and PCA is an orthonormal rotation
+within that span, so the penalty is preserved and the raw-4096-dim solution is reproduced to
+the digit -- while running ~10x faster. Pass `-1` to fit in the raw hidden-state basis and
+confirm this on your own data.
+
+The scaler and PCA are also fit once per fold and reused, rather than refit inside the loops
+that vary only the labels (`run_null`) or only `C` (`select_C`). Neither transform is
+supervised, so this cannot change a result; measured end to end it is ~1.5x, and on the wider
+70B activations `select_C` is ~2.8x and `run_null` ~1.8x. The gain is bounded by the logistic
+regression itself, which dominates on real activation data.
+
+### The sweep
+
+`run_functional_group_probe.sbatch` is a 46-task array: 2 models x every entity type in
+`config_extract_activation.yaml`, running `--target all` at the default `group` split. The probe
+target is always the functional group, so the entity type selects which *prompt* the last-token
+state is read from -- `functional_group` asks for the group, `pka` asks about acidity,
+`molecule_name_bare` asks nothing at all. Sweeping all of them is the attribute-specificity
+matrix: is functional-group identity present in every last-token state, or only when the prompt
+asks for it?
+
+The entity list is derived from the config, as in `run_anisotropy_diagnostic.sbatch`, so the two
+cannot drift. The one thing that cannot self-update is the static `#SBATCH --array` range, so a
+preflight asserts `models x entities == ARRAY_SIZE` and fails at submission if they disagree.
+
+**One CPU core, no GPU, and that is deliberate.** The probe is entirely scikit-learn; `torch`
+appears only as `torch.load(..., map_location="cpu")`. A GPU would idle for the whole run while
+competing with the extraction jobs that need one. Extra cores do not help either -- measured on
+a 920x8192 fold, one preprocess+fit takes 0.35s at 1 thread and 0.33s at 8, because the matrices
+are too small for BLAS parallelism and lbfgs is serial. Throughput comes from the array width.
 
 ## Multi-model support
 

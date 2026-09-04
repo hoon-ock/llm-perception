@@ -116,6 +116,12 @@ def assign_colors_to_categories(categories):
 def plot_single_feature_tsne(tsne_data, feature, values, title, output_path):
     """
     Plot a single feature's t-SNE visualization on a square (PLOT_SIZE x PLOT_SIZE) figure.
+
+    Returns:
+        (silhouette_2d, n_classes): the silhouette score rendered onto the plot and the
+        number of categories it was computed over -- (None, None) for continuous
+        features and whenever the metric is undefined. Returned so main() can also
+        write them to CSV; previously they were readable only by eye, off the PNG.
     """
     fig, ax = plt.subplots(figsize=(PLOT_SIZE, PLOT_SIZE))
     ax.set_box_aspect(1)  # keep the drawn plot box square regardless of data range or colorbar
@@ -124,6 +130,8 @@ def plot_single_feature_tsne(tsne_data, feature, values, title, output_path):
     ax.set_title(f"{title}\n{feature}")
     is_categorical = any(isinstance(v, (str, bool)) for v in values)
     metric_text = ""
+    silhouette_2d = None
+    n_classes = None
 
     if is_categorical:
         # Some columns (e.g. pkah, water_solubility) mix real category strings
@@ -144,8 +152,15 @@ def plot_single_feature_tsne(tsne_data, feature, values, title, output_path):
         try:
             labels_numeric = pd.factorize(pd.Series(values))[0]
             if len(set(labels_numeric)) > 1:
-                silhouette_avg = silhouette_score(tsne_data, labels_numeric)
-                metric_text = f"Silhouette Score: {silhouette_avg:.2f}"
+                # NOTE: this is computed on the 2-D t-SNE coordinates, not on the
+                # embeddings, so it is NOT a valid absolute cluster-quality number --
+                # t-SNE distances are not metric-preserving. It is only meaningful as a
+                # relative comparison between two colorings of the SAME tsne_data (e.g.
+                # functional_group vs template_index), which share coordinates and points
+                # and differ only in labels.
+                silhouette_2d = float(silhouette_score(tsne_data, labels_numeric))
+                n_classes = int(len(set(labels_numeric)))
+                metric_text = f"Silhouette Score: {silhouette_2d:.2f}"
             else:
                 metric_text = "Silhouette Score: N/A"
         except Exception:
@@ -176,6 +191,7 @@ def plot_single_feature_tsne(tsne_data, feature, values, title, output_path):
     # regardless of legend/colorbar content, so every output image is square.
     plt.savefig(output_path)
     plt.close()
+    return silhouette_2d, n_classes
 
 
 def parse_args():
@@ -232,6 +248,8 @@ def main():
         print(f"No matching layer files found for layers {selected_layers}.")
         return
 
+    metric_rows = []
+
     for layer_num, filename in layer_files:
         file_path = os.path.join(activations_dir, filename)
         print(f"Processing {filename} (layer {layer_num})")
@@ -252,6 +270,24 @@ def main():
             for feature, values in features_dict.items()
         }
 
+        # Which prompt template produced each row -- not a CSV column, so it is built
+        # here from the row layout. generate_prompts() in extract_activations_subset.py
+        # loops molecules in the outer loop and templates in the inner one, so the rows
+        # cycle 0..k-1 within each molecule block; that is the same molecule-major
+        # assumption the repeat above already makes, so the two stay aligned.
+        #
+        # Colouring the same t-SNE by this answers whether a layout is driven by prompt
+        # wording or by chemistry. Values are strings on purpose: plot_single_feature_tsne
+        # routes on isinstance(v, (str, bool)), and only the categorical branch gives
+        # distinct colours, a legend and a silhouette -- ints would fall through to the
+        # continuous colorbar, which says nothing here.
+        if activations_per_symbol > 1:
+            repeated_features['template_index'] = [
+                f'template_{i:02d}'
+                for _ in range(num_symbols)
+                for i in range(activations_per_symbol)
+            ]
+
         try:
             pca_result, pca = perform_pca(activations, n_components=min(50, activations.shape[0], activations.shape[1]))
             print(f"PCA explained variance ratio for layer {layer_num}: {pca.explained_variance_ratio_.sum():.2f}")
@@ -271,16 +307,40 @@ def main():
             os.makedirs(feature_dir, exist_ok=True)
             output_path = os.path.join(feature_dir, f"{output_prefix}_layer_{layer_num}.png")
             try:
-                plot_single_feature_tsne(
+                silhouette_2d, n_classes = plot_single_feature_tsne(
                     tsne_data=tsne_result,
                     feature=feature,
                     values=values,
                     title=f"t-SNE Visualization of Layer {layer_num} Activations",
                     output_path=output_path,
                 )
+                metric_rows.append({
+                    'model': model_name,
+                    'prompt_type': entity_type,
+                    'layer': layer_num,
+                    'feature': feature,
+                    'silhouette_2d': silhouette_2d,
+                    'n_points': len(values),
+                    'n_classes': n_classes,
+                })
                 print(f"Saved t-SNE plot to {output_path}")
             except Exception as e:
                 print(f"Error plotting t-SNE for layer {layer_num}, feature {feature}: {e}")
+
+    # One file per (model, entity_type) invocation rather than a shared append target:
+    # run_tsne_analysis.sbatch calls this script once per entity type, so appending would
+    # duplicate rows on every re-run. Concatenate the per-run files for the full table.
+    if metric_rows:
+        metrics_dir = os.path.join(output_dir, 'metrics')
+        os.makedirs(metrics_dir, exist_ok=True)
+        metrics_path = os.path.join(metrics_dir, f"{output_prefix}_metrics.csv")
+        pd.DataFrame(metric_rows, columns=[
+            'model', 'prompt_type', 'layer', 'feature',
+            'silhouette_2d', 'n_points', 'n_classes',
+        ]).to_csv(metrics_path, index=False)
+        print(f"Saved t-SNE metrics to {metrics_path}")
+    else:
+        print("No metrics collected; skipping metrics CSV.")
 
 
 if __name__ == "__main__":

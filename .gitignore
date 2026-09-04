@@ -173,6 +173,7 @@ cython_debug/
 activation_datasets/
 fc_group/activation_datasets_functional_groups/
 fc_group/Results/
+Results_HCC/
 fc_group/logs/
 fc_group/__*.csv
 slurm-*.out

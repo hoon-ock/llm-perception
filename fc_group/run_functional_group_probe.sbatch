@@ -3,7 +3,11 @@
 #SBATCH --partition=ock
 #SBATCH --cpus-per-task=1
 #SBATCH --time=12:00:00
-#SBATCH --mem=32G
+# Measured peak RSS of a real run at 70B scale (920 x 8192) is 910 MB. 4G is
+# ~4x headroom. This was 32G, inherited from run_anisotropy_diagnostic.sbatch,
+# which pinned the array to 15 concurrent tasks on one node (15 x 32G = 480G)
+# with the rest stuck in PD (Resources).
+#SBATCH --mem=4G
 # 2 models x 23 entity types. Append '%8' (--array=0-45%8) to cap how many
 # run at once if the partition is busy; there is no reason to throttle otherwise,
 # since each task is a single CPU core.
@@ -111,14 +115,39 @@ ENTITY="${ENTITIES[$(( TASK_ID % ${#ENTITIES[@]} ))]}"
 echo "=== task=$TASK_ID model=$MODEL entity_type=$ENTITY ==="
 
 # ---- Run ----
-# ~20 min for the 8B (32 layers), ~1h for the 70B (80 layers, 8192-dim).
+#
+# --num-null-samples 0 is deliberate, not corner-cutting. The permutation null is
+# ~91% of this job's runtime (19 folds x 50 perms x 0.2s vs 19s of real CV per
+# layer/target), and it does not depend on the activations: shuffled labels leave
+# no signal regardless of what X holds, so the null is a property of the fold
+# structure, class distribution, classifier and metric -- all identical across
+# every task here. Measured across layers 0/16/31 it is flat and at chance
+# (coarse 0.184-0.200 against 0.20; fine 0.037-0.047 against 0.05), so running it
+# in all 46 tasks estimates one constant 46 times.
+#
+# It is still needed once, as the leak detector: if the molecule-level shuffle
+# ever broke, the null would rise above chance. Run it separately per model and
+# quote those as the reference band -- see "Reference nulls" in fc_group/README.md.
+#
+# --surface-baseline is also off, but for a different reason, and the honest
+# numbers are worth stating: it costs only ~0.23s per task (~0.2% of runtime) and
+# it genuinely varies per entity type (the 21 name+formula prompts span
+# 0.4934-0.5724). So this is not the null's "recomputing one constant" argument
+# -- it is a deliberate choice to leave the control out of the sweep.
+#
+# It matters because it is what separates recalled chemistry from reading "-ol"
+# out of the prompt: on the first run it showed 4 of 5 splits were saturated by
+# spelling alone, turning an apparent 1.000 into a non-result. It does not scale
+# with layer count, so one layer recovers it for any entity type in seconds:
+#
+#   python fc_group/functional_group_probe.py --entity-type <name> \
+#     --layers 31 --num-null-samples 0 --surface-baseline --output-dir <dir>
 RUN_LOG=$(mktemp)
 if python fc_group/functional_group_probe.py \
      --model-name "$MODEL" \
      --entity-type "$ENTITY" \
      --target all \
-     --num-null-samples 50 \
-     --surface-baseline 2>&1 | tee "$RUN_LOG"; then
+     --num-null-samples 0 2>&1 | tee "$RUN_LOG"; then
   # Exit 0 still covers "the activations for this entity were never extracted",
   # which is a real problem when they are supposed to exist.
   if grep -q "No layer files found" "$RUN_LOG"; then

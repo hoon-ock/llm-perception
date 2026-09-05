@@ -127,15 +127,49 @@ Reported per layer: balanced accuracy (headline), macro-F1, plain accuracy, and 
 score that sums class probabilities over a molecule's prompt templates before the argmax.
 `--num-null-samples` runs a label-permutation null shuffled over the **92 molecules** (not the
 expanded rows, which would leak templates of the same molecule across the split); it defaults
-to five layers spread over depth, since the null is essentially layer-independent and running
-it everywhere dominates the runtime. `--null-layers all` overrides that.
+to five layers spread over depth. `--null-layers all` overrides that.
+
+### Reference nulls
+
+**The sweep runs with `--num-null-samples 0`, and that is deliberate.** The null is ~91% of the
+job's runtime -- 19 folds x 50 permutations x ~0.2 s against ~19 s of real CV per layer/target
+-- and it does not depend on the activations. Shuffled labels leave no signal regardless of what
+`X` holds, so the null is a property of the fold structure, class distribution, classifier and
+metric, all identical across every task in the sweep. Measured across layers 0/16/31 it is flat
+and sits at chance:
+
+| experiment | chance | by layer | spread |
+|---|---|---|---|
+| `coarse_molecule` | 0.20 | 0.189 0.193 0.193 | 0.004 |
+| `coarse_group` | 0.20 | 0.199 0.184 0.189 | 0.014 |
+| `fine_molecule` | 0.05 | 0.037 0.039 0.043 | 0.006 |
+| `fine_to_coarse_group` | 0.20 | 0.200 0.185 0.190 | 0.015 |
+
+Layer 0 and layer 31 are entirely different representations, so 46 tasks each computing this
+would be estimating one constant 46 times. Measured on the sweep's own configuration, turning it
+off is **8.3x faster** (168.4 s -> 20.2 s) and leaves every `probe_scores_*.csv` byte-identical.
+
+The null still matters once, as the **leak detector**: if the molecule-level shuffle ever broke,
+it would rise above chance. Run it separately per model -- the two differ in hidden dimension --
+and quote those as the reference band for every entity type:
+
+```bash
+python fc_group/functional_group_probe.py --model-name meta-llama/Llama-3.1-8B \
+  --entity-type functional_group --num-null-samples 50 --output-dir Results/null_ref_8b
+python fc_group/functional_group_probe.py --model-name meta-llama/Llama-3.1-70B \
+  --entity-type functional_group --num-null-samples 50 --output-dir Results/null_ref_70b
+```
+
+With the null off, `summary_*.json` carries `null_mean: null` and `p_value_best_layer: null`,
+and the layer-trend plots drop the null band while keeping the chance line and the surface
+baseline.
 
 `--surface-baseline` fits the same probe on char n-grams of the raw prompt strings and draws
 the result onto every layer-trend plot. Every template embeds `{iupac_name} ({formula})`, so
 "Propan-1-ol (CH3CH2CH2OH)" hands a probe the substrings `-ol` and `OH` directly; this baseline
 is how much accuracy is available without running the model at all, and anything the probe
-scores below that line is not evidence of recalled chemistry. It is off by default but cheap,
-and on a first run over Llama-3.1-8B it already reorders which results mean anything:
+scores below that line is not evidence of recalled chemistry. On a first run over Llama-3.1-8B
+it already reorders which results mean anything:
 
 | Split | Surface n-grams | Probe (layer 31) |
 |---|---|---|
@@ -153,6 +187,23 @@ the probe climbs with depth (0.41 -> 0.72 -> 0.98 across layers 0/16/31).
 > These numbers come from the local single-template smoke activations (layers 0/16/31 only,
 > one prompt template rather than ten), so treat them as a shape, not a result. Re-run against
 > the full extraction before quoting them.
+
+**The sweep does not run it.** That is a deliberate choice rather than a cost one: it is only
+~0.23 s per task (~0.2% of runtime), and unlike the null it genuinely varies per entity type --
+the 21 name+formula prompts span 0.4934-0.5724, and `molecule_formula_bare` sits apart at
+0.5197 because its prompt carries no molecule name. So sweep results carry no orange line and
+`summary_*.json` has `surface_baseline_balanced_acc: null`.
+
+It does not scale with layer count, so one layer recovers it for any entity type in seconds
+(measured: 6.8 s):
+
+```bash
+python fc_group/functional_group_probe.py --entity-type <name> \
+  --layers 31 --num-null-samples 0 --surface-baseline --output-dir <dir>
+```
+
+Worth doing for any entity type whose probe score you intend to quote -- without it there is no
+way to tell a real result from one that spelling already explains.
 
 ### Cost
 
@@ -184,7 +235,10 @@ The entity list is derived from the config, as in `run_anisotropy_diagnostic.sba
 cannot drift. The one thing that cannot self-update is the static `#SBATCH --array` range, so a
 preflight asserts `models x entities == ARRAY_SIZE` and fails at submission if they disagree.
 
-**One CPU core, no GPU, and that is deliberate.** The probe is entirely scikit-learn; `torch`
+**One CPU core, 4 GB, no GPU, and all three are deliberate.** Measured peak RSS at 70B scale
+(920 x 8192) is 910 MB, so 4 GB is ~4x headroom; the earlier 32 GB request -- inherited from
+`run_anisotropy_diagnostic.sbatch` -- pinned the array to 15 concurrent tasks on one node
+(15 x 32 GB = 480 GB) with the remaining 31 stuck in `PD (Resources)`. The probe is entirely scikit-learn; `torch`
 appears only as `torch.load(..., map_location="cpu")`. A GPU would idle for the whole run while
 competing with the extraction jobs that need one. Extra cores do not help either -- measured on
 a 920x8192 fold, one preprocess+fit takes 0.35s at 1 thread and 0.33s at 8, because the matrices

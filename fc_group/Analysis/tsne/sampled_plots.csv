@@ -1,0 +1,12 @@
+model,prompt_type,layer,depth,coloring,silhouette_2d,visual_verdict,note
+meta-llama-Llama-3.1-8B,pka,0,0.00,functional_group,-0.11,mixed,"many small tight clumps, each multi-coloured; consistent with template structure"
+meta-llama-Llama-3.1-8B,pka,16,0.52,functional_group,-0.21,clustered,"clear colour-coherent clusters; several classes split across islands"
+meta-llama-Llama-3.1-8B,pka,24,0.77,functional_group,-0.13,clustered,"cleanest of the 8B pka series: compact and colour-pure"
+meta-llama-Llama-3.1-8B,pka,31,1.00,functional_group,-0.28,degraded,"still some coherence but centre is diffuse"
+meta-llama-Llama-3.1-8B,pkah,16,0.52,functional_group,-0.22,clustered,"as good as pka at the same layer"
+meta-llama-Llama-3.1-8B,pka question,16,0.52,functional_group,-0.12,mixed,"question variant of a prompt that does cluster"
+meta-llama-Llama-3.1-8B,functional_group,16,0.52,functional_group,-0.08,mixed,"best silhouette of the sample, no visible FG structure"
+meta-llama-Llama-3.1-8B,tpsa,16,0.52,functional_group,-0.08,mixed,
+meta-llama-Llama-3.1-8B,avg_carbon_oxidation_state,16,0.52,functional_group,-0.08,mixed,
+meta-llama-Llama-3.1-70B,pka,40,0.51,functional_group,-0.10,clustered,"clean, near colour-pure clusters"
+meta-llama-Llama-3.1-70B,pka,60,0.76,functional_group,-0.06,clustered,"cleanest plot in the whole sample; silhouette is near the top of the range"

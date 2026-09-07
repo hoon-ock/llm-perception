@@ -1,0 +1,16 @@
+model,entity_type,family,n_folds,mean_balanced_acc
+meta-llama-Llama-3.1-8B,avg_carbon_oxidation_state question,question,19,0.5155502392344499
+meta-llama-Llama-3.1-8B,avg_carbon_oxidation_state,declarative,19,0.5203349282296651
+meta-llama-Llama-3.1-8B,functional_group question,question,19,0.5019736842105263
+meta-llama-Llama-3.1-8B,functional_group,declarative,19,0.5118421052631579
+meta-llama-Llama-3.1-8B,functional_group_structure question,question,19,0.49436090225563917
+meta-llama-Llama-3.1-8B,functional_group_structure,declarative,19,0.4962406015037593
+meta-llama-Llama-3.1-8B,hba,declarative,19,0.49144736842105274
+meta-llama-Llama-3.1-8B,hbd question,question,19,0.48618421052631583
+meta-llama-Llama-3.1-8B,hbd,declarative,19,0.48223684210526313
+meta-llama-Llama-3.1-8B,pka question,question,19,0.5119617224880383
+meta-llama-Llama-3.1-8B,pka,declarative,19,0.5191387559808613
+meta-llama-Llama-3.1-8B,pkah question,question,19,0.49880382775119614
+meta-llama-Llama-3.1-8B,pkah,declarative,19,0.506578947368421
+meta-llama-Llama-3.1-8B,tpsa question,question,19,0.4982057416267943
+meta-llama-Llama-3.1-8B,tpsa,declarative,19,0.4964114832535885

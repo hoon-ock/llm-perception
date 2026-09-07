@@ -1,0 +1,191 @@
+model,layer,depth,group,within_score
+meta-llama-Llama-3.1-8B,0,0.0,alcohol,0.8276707331339518
+meta-llama-Llama-3.1-8B,0,0.0,aldehyde,0.9035115242004395
+meta-llama-Llama-3.1-8B,0,0.0,alkyl bromide,0.7991274992624918
+meta-llama-Llama-3.1-8B,0,0.0,alkyl chloride,0.8105752567450205
+meta-llama-Llama-3.1-8B,0,0.0,alkyl fluoride,0.8009196817874908
+meta-llama-Llama-3.1-8B,0,0.0,alkyl iodide,0.8106133540471395
+meta-llama-Llama-3.1-8B,0,0.0,amide,0.9115501940250397
+meta-llama-Llama-3.1-8B,0,0.0,amine,0.8187101284662882
+meta-llama-Llama-3.1-8B,0,0.0,carboxylic acid,0.9625118672847748
+meta-llama-Llama-3.1-8B,0,0.0,ester,0.6909359395503998
+meta-llama-Llama-3.1-8B,0,0.0,ether,0.7758414844671885
+meta-llama-Llama-3.1-8B,0,0.0,imine,0.9026520649592081
+meta-llama-Llama-3.1-8B,0,0.0,ketone,0.5025000994404157
+meta-llama-Llama-3.1-8B,0,0.0,nitrile,0.9373909135659536
+meta-llama-Llama-3.1-8B,0,0.0,nitro,0.9720638692378998
+meta-llama-Llama-3.1-8B,0,0.0,sulfone,0.9458247125148773
+meta-llama-Llama-3.1-8B,0,0.0,sulfoxide,0.9403980374336243
+meta-llama-Llama-3.1-8B,0,0.0,thioether,0.8708743353684744
+meta-llama-Llama-3.1-8B,0,0.0,thiol,0.8277197082837423
+meta-llama-Llama-3.1-8B,8,0.2581,alcohol,0.8264462053775787
+meta-llama-Llama-3.1-8B,8,0.2581,aldehyde,0.7298429111639658
+meta-llama-Llama-3.1-8B,8,0.2581,alkyl bromide,0.8642172416051229
+meta-llama-Llama-3.1-8B,8,0.2581,alkyl chloride,0.8930245240529379
+meta-llama-Llama-3.1-8B,8,0.2581,alkyl fluoride,0.9005513489246368
+meta-llama-Llama-3.1-8B,8,0.2581,alkyl iodide,0.9000648260116577
+meta-llama-Llama-3.1-8B,8,0.2581,amide,0.7724692523479462
+meta-llama-Llama-3.1-8B,8,0.2581,amine,0.8514050046602885
+meta-llama-Llama-3.1-8B,8,0.2581,carboxylic acid,0.7999623119831085
+meta-llama-Llama-3.1-8B,8,0.2581,ester,0.732183704773585
+meta-llama-Llama-3.1-8B,8,0.2581,ether,0.7317255735397339
+meta-llama-Llama-3.1-8B,8,0.2581,imine,0.8923278550306956
+meta-llama-Llama-3.1-8B,8,0.2581,ketone,0.7882127463817596
+meta-llama-Llama-3.1-8B,8,0.2581,nitrile,0.7454441587130228
+meta-llama-Llama-3.1-8B,8,0.2581,nitro,0.9286025663216909
+meta-llama-Llama-3.1-8B,8,0.2581,sulfone,0.9025142192840576
+meta-llama-Llama-3.1-8B,8,0.2581,sulfoxide,0.8923318286736807
+meta-llama-Llama-3.1-8B,8,0.2581,thioether,0.8006354173024496
+meta-llama-Llama-3.1-8B,8,0.2581,thiol,0.9132531682650248
+meta-llama-Llama-3.1-8B,16,0.5161,alcohol,0.8648399909337362
+meta-llama-Llama-3.1-8B,16,0.5161,aldehyde,0.7941771248976389
+meta-llama-Llama-3.1-8B,16,0.5161,alkyl bromide,0.8035411437352499
+meta-llama-Llama-3.1-8B,16,0.5161,alkyl chloride,0.844858855009079
+meta-llama-Llama-3.1-8B,16,0.5161,alkyl fluoride,0.9032026330629984
+meta-llama-Llama-3.1-8B,16,0.5161,alkyl iodide,0.8436010976632436
+meta-llama-Llama-3.1-8B,16,0.5161,amide,0.8167273104190826
+meta-llama-Llama-3.1-8B,16,0.5161,amine,0.8768030901749929
+meta-llama-Llama-3.1-8B,16,0.5161,carboxylic acid,0.8551295101642609
+meta-llama-Llama-3.1-8B,16,0.5161,ester,0.7919389605522156
+meta-llama-Llama-3.1-8B,16,0.5161,ether,0.8069047033786774
+meta-llama-Llama-3.1-8B,16,0.5161,imine,0.8871907293796539
+meta-llama-Llama-3.1-8B,16,0.5161,ketone,0.8075591723124186
+meta-llama-Llama-3.1-8B,16,0.5161,nitrile,0.7885282635688782
+meta-llama-Llama-3.1-8B,16,0.5161,nitro,0.9169012705485026
+meta-llama-Llama-3.1-8B,16,0.5161,sulfone,0.9319982330004374
+meta-llama-Llama-3.1-8B,16,0.5161,sulfoxide,0.932513693968455
+meta-llama-Llama-3.1-8B,16,0.5161,thioether,0.8980762362480164
+meta-llama-Llama-3.1-8B,16,0.5161,thiol,0.9131846725940704
+meta-llama-Llama-3.1-8B,24,0.7742,alcohol,0.9452836811542511
+meta-llama-Llama-3.1-8B,24,0.7742,aldehyde,0.9171001811822256
+meta-llama-Llama-3.1-8B,24,0.7742,alkyl bromide,0.842558761437734
+meta-llama-Llama-3.1-8B,24,0.7742,alkyl chloride,0.8834186395009359
+meta-llama-Llama-3.1-8B,24,0.7742,alkyl fluoride,0.9115517834822336
+meta-llama-Llama-3.1-8B,24,0.7742,alkyl iodide,0.8651840289433798
+meta-llama-Llama-3.1-8B,24,0.7742,amide,0.9372740387916565
+meta-llama-Llama-3.1-8B,24,0.7742,amine,0.9385645985603333
+meta-llama-Llama-3.1-8B,24,0.7742,carboxylic acid,0.9400664667288462
+meta-llama-Llama-3.1-8B,24,0.7742,ester,0.8769858380158743
+meta-llama-Llama-3.1-8B,24,0.7742,ether,0.8086923956871033
+meta-llama-Llama-3.1-8B,24,0.7742,imine,0.9340964754422506
+meta-llama-Llama-3.1-8B,24,0.7742,ketone,0.9367294013500214
+meta-llama-Llama-3.1-8B,24,0.7742,nitrile,0.9291845262050629
+meta-llama-Llama-3.1-8B,24,0.7742,nitro,0.9337412416934967
+meta-llama-Llama-3.1-8B,24,0.7742,sulfone,0.9322511156400045
+meta-llama-Llama-3.1-8B,24,0.7742,sulfoxide,0.9349790116151174
+meta-llama-Llama-3.1-8B,24,0.7742,thioether,0.8789728482564291
+meta-llama-Llama-3.1-8B,24,0.7742,thiol,0.9399645527203878
+meta-llama-Llama-3.1-8B,31,1.0,alcohol,0.9301658968130747
+meta-llama-Llama-3.1-8B,31,1.0,aldehyde,0.8791758219401041
+meta-llama-Llama-3.1-8B,31,1.0,alkyl bromide,0.7536026537418365
+meta-llama-Llama-3.1-8B,31,1.0,alkyl chloride,0.8925223350524902
+meta-llama-Llama-3.1-8B,31,1.0,alkyl fluoride,0.8818089962005615
+meta-llama-Llama-3.1-8B,31,1.0,alkyl iodide,0.8151578903198242
+meta-llama-Llama-3.1-8B,31,1.0,amide,0.9219905535380045
+meta-llama-Llama-3.1-8B,31,1.0,amine,0.9325649738311768
+meta-llama-Llama-3.1-8B,31,1.0,carboxylic acid,0.9240075846513113
+meta-llama-Llama-3.1-8B,31,1.0,ester,0.8487586776415507
+meta-llama-Llama-3.1-8B,31,1.0,ether,0.7932397524515787
+meta-llama-Llama-3.1-8B,31,1.0,imine,0.9165354569753011
+meta-llama-Llama-3.1-8B,31,1.0,ketone,0.9115813374519348
+meta-llama-Llama-3.1-8B,31,1.0,nitrile,0.9111519853274027
+meta-llama-Llama-3.1-8B,31,1.0,nitro,0.9178975919882456
+meta-llama-Llama-3.1-8B,31,1.0,sulfone,0.9284735321998596
+meta-llama-Llama-3.1-8B,31,1.0,sulfoxide,0.934943437576294
+meta-llama-Llama-3.1-8B,31,1.0,thioether,0.877110481262207
+meta-llama-Llama-3.1-8B,31,1.0,thiol,0.9580444395542145
+meta-llama-Llama-3.1-70B,0,0.0,alcohol,0.8270214299360911
+meta-llama-Llama-3.1-70B,0,0.0,aldehyde,0.8730767567952474
+meta-llama-Llama-3.1-70B,0,0.0,alkyl bromide,0.8533204098542532
+meta-llama-Llama-3.1-70B,0,0.0,alkyl chloride,0.7141955892244974
+meta-llama-Llama-3.1-70B,0,0.0,alkyl fluoride,0.8116468985875448
+meta-llama-Llama-3.1-70B,0,0.0,alkyl iodide,0.85789222518603
+meta-llama-Llama-3.1-70B,0,0.0,amide,0.8918639024098715
+meta-llama-Llama-3.1-70B,0,0.0,amine,0.793781578540802
+meta-llama-Llama-3.1-70B,0,0.0,carboxylic acid,0.9526936511198679
+meta-llama-Llama-3.1-70B,0,0.0,ester,0.6923550963401794
+meta-llama-Llama-3.1-70B,0,0.0,ether,0.7433422406514486
+meta-llama-Llama-3.1-70B,0,0.0,imine,0.9019904434680939
+meta-llama-Llama-3.1-70B,0,0.0,ketone,0.47092698390285176
+meta-llama-Llama-3.1-70B,0,0.0,nitrile,0.917904406785965
+meta-llama-Llama-3.1-70B,0,0.0,nitro,0.9550718267758688
+meta-llama-Llama-3.1-70B,0,0.0,sulfone,0.9126607477664948
+meta-llama-Llama-3.1-70B,0,0.0,sulfoxide,0.8671355942885081
+meta-llama-Llama-3.1-70B,0,0.0,thioether,0.812488834063212
+meta-llama-Llama-3.1-70B,0,0.0,thiol,0.8310585220654806
+meta-llama-Llama-3.1-70B,20,0.2532,alcohol,0.7824507157007853
+meta-llama-Llama-3.1-70B,20,0.2532,aldehyde,0.6916721314191818
+meta-llama-Llama-3.1-70B,20,0.2532,alkyl bromide,0.7457623779773712
+meta-llama-Llama-3.1-70B,20,0.2532,alkyl chloride,0.7433523138364156
+meta-llama-Llama-3.1-70B,20,0.2532,alkyl fluoride,0.8378536701202393
+meta-llama-Llama-3.1-70B,20,0.2532,alkyl iodide,0.764586607615153
+meta-llama-Llama-3.1-70B,20,0.2532,amide,0.7967657347520193
+meta-llama-Llama-3.1-70B,20,0.2532,amine,0.8496376673380533
+meta-llama-Llama-3.1-70B,20,0.2532,carboxylic acid,0.8111738363901774
+meta-llama-Llama-3.1-70B,20,0.2532,ester,0.5958860019842783
+meta-llama-Llama-3.1-70B,20,0.2532,ether,0.7451396981875101
+meta-llama-Llama-3.1-70B,20,0.2532,imine,0.8496066232522329
+meta-llama-Llama-3.1-70B,20,0.2532,ketone,0.6503436962763468
+meta-llama-Llama-3.1-70B,20,0.2532,nitrile,0.7949229180812836
+meta-llama-Llama-3.1-70B,20,0.2532,nitro,0.8916719158490499
+meta-llama-Llama-3.1-70B,20,0.2532,sulfone,0.8563824693361918
+meta-llama-Llama-3.1-70B,20,0.2532,sulfoxide,0.8463941812515259
+meta-llama-Llama-3.1-70B,20,0.2532,thioether,0.8223277429739634
+meta-llama-Llama-3.1-70B,20,0.2532,thiol,0.8922341366608938
+meta-llama-Llama-3.1-70B,40,0.5063,alcohol,0.8851971924304962
+meta-llama-Llama-3.1-70B,40,0.5063,aldehyde,0.8502870599428812
+meta-llama-Llama-3.1-70B,40,0.5063,alkyl bromide,0.8903317153453827
+meta-llama-Llama-3.1-70B,40,0.5063,alkyl chloride,0.8555817306041718
+meta-llama-Llama-3.1-70B,40,0.5063,alkyl fluoride,0.8977947135766348
+meta-llama-Llama-3.1-70B,40,0.5063,alkyl iodide,0.9015747308731079
+meta-llama-Llama-3.1-70B,40,0.5063,amide,0.8821820418039957
+meta-llama-Llama-3.1-70B,40,0.5063,amine,0.9117941160996755
+meta-llama-Llama-3.1-70B,40,0.5063,carboxylic acid,0.862077921628952
+meta-llama-Llama-3.1-70B,40,0.5063,ester,0.7244963546593984
+meta-llama-Llama-3.1-70B,40,0.5063,ether,0.7927806675434113
+meta-llama-Llama-3.1-70B,40,0.5063,imine,0.9332200686136881
+meta-llama-Llama-3.1-70B,40,0.5063,ketone,0.8091202974319458
+meta-llama-Llama-3.1-70B,40,0.5063,nitrile,0.9000015060106913
+meta-llama-Llama-3.1-70B,40,0.5063,nitro,0.9410504301389059
+meta-llama-Llama-3.1-70B,40,0.5063,sulfone,0.9221445421377817
+meta-llama-Llama-3.1-70B,40,0.5063,sulfoxide,0.9197642008463541
+meta-llama-Llama-3.1-70B,40,0.5063,thioether,0.8756954471270243
+meta-llama-Llama-3.1-70B,40,0.5063,thiol,0.9360528091589609
+meta-llama-Llama-3.1-70B,60,0.7595,alcohol,0.9060170153776804
+meta-llama-Llama-3.1-70B,60,0.7595,aldehyde,0.8507820765177408
+meta-llama-Llama-3.1-70B,60,0.7595,alkyl bromide,0.9035391211509705
+meta-llama-Llama-3.1-70B,60,0.7595,alkyl chloride,0.8440397183100382
+meta-llama-Llama-3.1-70B,60,0.7595,alkyl fluoride,0.9144058624903361
+meta-llama-Llama-3.1-70B,60,0.7595,alkyl iodide,0.9146493872006735
+meta-llama-Llama-3.1-70B,60,0.7595,amide,0.8968695104122162
+meta-llama-Llama-3.1-70B,60,0.7595,amine,0.9256605307261149
+meta-llama-Llama-3.1-70B,60,0.7595,carboxylic acid,0.8743003904819489
+meta-llama-Llama-3.1-70B,60,0.7595,ester,0.7647706866264343
+meta-llama-Llama-3.1-70B,60,0.7595,ether,0.8656687537829081
+meta-llama-Llama-3.1-70B,60,0.7595,imine,0.9351297418276469
+meta-llama-Llama-3.1-70B,60,0.7595,ketone,0.8775569101174673
+meta-llama-Llama-3.1-70B,60,0.7595,nitrile,0.9059910277525584
+meta-llama-Llama-3.1-70B,60,0.7595,nitro,0.9490863780180613
+meta-llama-Llama-3.1-70B,60,0.7595,sulfone,0.9419587055842081
+meta-llama-Llama-3.1-70B,60,0.7595,sulfoxide,0.9404244323571523
+meta-llama-Llama-3.1-70B,60,0.7595,thioether,0.9122901558876038
+meta-llama-Llama-3.1-70B,60,0.7595,thiol,0.945334662993749
+meta-llama-Llama-3.1-70B,79,1.0,alcohol,0.8906891445318857
+meta-llama-Llama-3.1-70B,79,1.0,aldehyde,0.8697733084360758
+meta-llama-Llama-3.1-70B,79,1.0,alkyl bromide,0.8084507683912913
+meta-llama-Llama-3.1-70B,79,1.0,alkyl chloride,0.8137155771255493
+meta-llama-Llama-3.1-70B,79,1.0,alkyl fluoride,0.8416822055975596
+meta-llama-Llama-3.1-70B,79,1.0,alkyl iodide,0.8614245156447092
+meta-llama-Llama-3.1-70B,79,1.0,amide,0.8949098289012909
+meta-llama-Llama-3.1-70B,79,1.0,amine,0.9073122640450796
+meta-llama-Llama-3.1-70B,79,1.0,carboxylic acid,0.8980073730150858
+meta-llama-Llama-3.1-70B,79,1.0,ester,0.8102511068185171
+meta-llama-Llama-3.1-70B,79,1.0,ether,0.8037083248297373
+meta-llama-Llama-3.1-70B,79,1.0,imine,0.9051724076271057
+meta-llama-Llama-3.1-70B,79,1.0,ketone,0.885660449663798
+meta-llama-Llama-3.1-70B,79,1.0,nitrile,0.9102545777956644
+meta-llama-Llama-3.1-70B,79,1.0,nitro,0.9302443365255991
+meta-llama-Llama-3.1-70B,79,1.0,sulfone,0.9116653203964233
+meta-llama-Llama-3.1-70B,79,1.0,sulfoxide,0.9138935407002767
+meta-llama-Llama-3.1-70B,79,1.0,thioether,0.8430517117182413
+meta-llama-Llama-3.1-70B,79,1.0,thiol,0.8980231781800588

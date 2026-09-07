@@ -1,0 +1,41 @@
+model,layer,depth,pair_a,pair_b,cosine_sim,clears_ci
+meta-llama-Llama-3.1-8B,0,0.0,thioether - thiol,ether - alcohol,0.4879620373249054,1
+meta-llama-Llama-3.1-8B,0,0.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,0.07845679670572281,1
+meta-llama-Llama-3.1-8B,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,-0.14008793234825134,1
+meta-llama-Llama-3.1-8B,0,0.0,imine - aldehyde,amine - alcohol,0.04429284483194351,0
+meta-llama-Llama-3.1-8B,8,0.2581,thioether - thiol,ether - alcohol,0.6427133679389954,1
+meta-llama-Llama-3.1-8B,8,0.2581,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,0.1073654443025589,1
+meta-llama-Llama-3.1-8B,8,0.2581,sulfoxide - thioether,sulfone - sulfoxide,-0.0229041650891304,0
+meta-llama-Llama-3.1-8B,8,0.2581,imine - aldehyde,amine - alcohol,0.21557019650936127,1
+meta-llama-Llama-3.1-8B,16,0.5161,thioether - thiol,ether - alcohol,0.7037471532821655,1
+meta-llama-Llama-3.1-8B,16,0.5161,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,0.09436965733766556,1
+meta-llama-Llama-3.1-8B,16,0.5161,sulfoxide - thioether,sulfone - sulfoxide,-0.1514291614294052,1
+meta-llama-Llama-3.1-8B,16,0.5161,imine - aldehyde,amine - alcohol,0.44375577569007874,1
+meta-llama-Llama-3.1-8B,24,0.7742,thioether - thiol,ether - alcohol,0.6592795848846436,1
+meta-llama-Llama-3.1-8B,24,0.7742,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.24990476667881012,1
+meta-llama-Llama-3.1-8B,24,0.7742,sulfoxide - thioether,sulfone - sulfoxide,-0.14114582538604736,1
+meta-llama-Llama-3.1-8B,24,0.7742,imine - aldehyde,amine - alcohol,0.683415412902832,1
+meta-llama-Llama-3.1-8B,31,1.0,thioether - thiol,ether - alcohol,0.6431759595870972,1
+meta-llama-Llama-3.1-8B,31,1.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.34948310256004333,1
+meta-llama-Llama-3.1-8B,31,1.0,sulfoxide - thioether,sulfone - sulfoxide,-0.3013056218624115,1
+meta-llama-Llama-3.1-8B,31,1.0,imine - aldehyde,amine - alcohol,0.6089657545089722,1
+meta-llama-Llama-3.1-70B,0,0.0,thioether - thiol,ether - alcohol,0.7490499019622803,1
+meta-llama-Llama-3.1-70B,0,0.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.16748566925525665,1
+meta-llama-Llama-3.1-70B,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,0.2667355239391327,1
+meta-llama-Llama-3.1-70B,0,0.0,imine - aldehyde,amine - alcohol,-0.1633538454771042,1
+meta-llama-Llama-3.1-70B,20,0.2532,thioether - thiol,ether - alcohol,0.5412211418151855,1
+meta-llama-Llama-3.1-70B,20,0.2532,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.15559688210487366,1
+meta-llama-Llama-3.1-70B,20,0.2532,sulfoxide - thioether,sulfone - sulfoxide,-0.03682093694806099,1
+meta-llama-Llama-3.1-70B,20,0.2532,imine - aldehyde,amine - alcohol,0.3848331570625305,1
+meta-llama-Llama-3.1-70B,40,0.5063,thioether - thiol,ether - alcohol,0.7187040448188782,1
+meta-llama-Llama-3.1-70B,40,0.5063,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.21436424553394318,1
+meta-llama-Llama-3.1-70B,40,0.5063,sulfoxide - thioether,sulfone - sulfoxide,0.009188984520733356,0
+meta-llama-Llama-3.1-70B,40,0.5063,imine - aldehyde,amine - alcohol,0.47220444679260254,1
+meta-llama-Llama-3.1-70B,60,0.7595,thioether - thiol,ether - alcohol,0.7316778898239136,1
+meta-llama-Llama-3.1-70B,60,0.7595,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.2579428255558014,1
+meta-llama-Llama-3.1-70B,60,0.7595,sulfoxide - thioether,sulfone - sulfoxide,0.08120033144950867,1
+meta-llama-Llama-3.1-70B,60,0.7595,imine - aldehyde,amine - alcohol,0.43757274746894836,1
+meta-llama-Llama-3.1-70B,79,1.0,thioether - thiol,ether - alcohol,0.7001746296882629,1
+meta-llama-Llama-3.1-70B,79,1.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.21556837856769562,1
+meta-llama-Llama-3.1-70B,79,1.0,sulfoxide - thioether,sulfone - sulfoxide,-0.08517180383205414,1
+meta-llama-Llama-3.1-70B,79,1.0,imine - aldehyde,amine - alcohol,0.4649698734283447,1

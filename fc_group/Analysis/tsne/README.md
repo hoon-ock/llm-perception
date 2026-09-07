@@ -32,9 +32,9 @@ anyone else has. The absence of `template_index` matters specifically for the th
 
 ## 2. Method
 
-11 plots inspected directly, all under the `functional_group` coloring (recorded in
+12 plots inspected directly, all under the `functional_group` coloring (recorded in
 `sampled_plots.csv` with silhouette and verdict). "Clustered" means colour-coherent regions are
-visible; "mixed" means every clump contains many colours. This is a sample, not a census — 5 of
+visible; "mixed" means every clump contains many colours. This is a sample, not a census — 6 of
 23 prompt types at the 8B middle layer, plus a layer series for `pka` in both models.
 
 ## 3. The printed silhouette is not usable
@@ -65,6 +65,11 @@ perfect*. Uniform mixing, by contrast, makes intra- and inter-class distances eq
 the score toward 0. The metric therefore rewards mixing and punishes genuine multi-island
 clustering.
 
+There is a second, independent reason they cannot be compared **across prompts**: point count
+and perplexity differ. `perplexity = min(30, max(5, n // 4))`, and the two bare prompts have one
+template (92 points, perplexity 23) against 644-1012 points and perplexity 30 everywhere else.
+Even a well-behaved metric would not be comparable across that boundary.
+
 **Fix:** compute cluster quality in the original activation space, before PCA/t-SNE — silhouette
 on the 4096-d (or 8192-d) vectors, or a k-NN label-purity score, which is robust to a class
 occupying several regions. t-SNE stays a visualisation; it should not be the thing measured.
@@ -90,7 +95,7 @@ So it is not "the pKa prompt" but the **declarative acidity prompts**, plural. T
 the probe results (`Analysis/probe/README.md` §2).
 
 The word **"only" remains unverified**: 5 of 23 prompt types were checked. Settling it means
-scoring all 23, which needs §6.
+scoring all 23, which needs §7.
 
 Worth noting alongside: `functional_group` is the prompt the probe reads functional group from
 *best* (balanced accuracy 0.997), yet its t-SNE is the most thoroughly mixed of the sample.
@@ -119,6 +124,10 @@ geometry sharpens for another quarter of the stack.
 Caveat: only 5 layers per model were rendered, so "peak at L24" means "best of {0, 8, 16, 24,
 31}" — layers 20 and 28 were never plotted.
 
+**Why this shape?** See §5 — the layer where each model is most
+isotropic coincides exactly with its t-SNE peak, and the final-layer degradation is an
+anisotropy spike.
+
 ### "At initial layers, clustering reflects the prompt template rather than functional group"
 
 **Plausible and mechanically expected, but not verifiable from this tree.**
@@ -137,7 +146,103 @@ sweep ran and does not exist in `Results_HCC/`. What can be said:
 
 Re-running with `template_index` settles this in one pass.
 
-## 5. Sample size and what would change these conclusions
+## 5. Why the peak sits at d ≈ 0.76, and why the last layer degrades
+
+Ordered by how well the existing data supports each. None of this required a re-run — the
+`anisotropy_diagnostic` tree covers the same prompts and the same layers.
+
+### Supported by measurement
+
+**(a) The representation is most spread out exactly where the clusters are cleanest.**
+Mean pairwise cosine among activations (lower = more spread) bottoms out at the t-SNE peak
+layer in both models, then jumps back at the final layer:
+
+| prompt | | | | | | most isotropic | t-SNE peak |
+|---|---|---|---|---|---|---|---|
+| 8B `pka` | 0.992 | 0.984 | 0.928 | **0.719** | 0.945 | L24 | L24 |
+| 8B `functional_group` | 0.990 | 0.965 | 0.943 | **0.856** | 0.943 | L24 | — |
+| 70B `pka` | 0.997 | 0.953 | 0.784 | **0.560** | 0.886 | L60 | L60 |
+| 70B `functional_group` | 0.996 | 0.954 | 0.837 | **0.780** | 0.933 | L60 | — |
+
+It also predicts *which prompts* cluster. At L16/L40, where most of the verdicts in
+`sampled_plots.csv` were made, the two prompts that cluster are the two most isotropic, with a
+clear gap to the rest — in both models:
+
+| 8B L16 | anisotropy | diff-vector PC1 | verdict |
+|---|---|---|---|
+| `pka` | **0.928** | **0.478** | clustered |
+| `pkah` | **0.931** | **0.483** | clustered |
+| `functional_group` | 0.943 | 0.608 | mixed |
+| `tpsa` | 0.969 | 0.612 | mixed |
+| `avg_carbon_oxidation_state` | 0.972 | 0.604 | mixed |
+| `pka question` | 0.980 | 0.529 | mixed |
+
+The 70B at L40 gives the same order (`pka` 0.784, `pkah` 0.789, then 0.837–0.974).
+
+The likely mechanism is **effective dimensionality**, not anisotropy as such. A caveat matters
+here: `perform_pca` (`tsne_functional_groups.py:91`) uses sklearn `PCA`, which **centers**, so
+t-SNE never sees the uncentered geometry and "the cloud is compressed" cannot be the
+explanation directly. What high pairwise cosine indexes is variance concentrating in few
+directions — and the independent measure agrees, since the clustering prompts also have the
+lowest PC1 share. If 60–80% of variance sits in one to three directions, PCA-50 → t-SNE is
+resolving 20 classes out of a near-degenerate subspace. Note the PC1 figure is computed over
+*diff vectors*, not the raw activations t-SNE consumes, so it is indicative rather than
+conclusive.
+
+**(b) The final-layer degradation is the anisotropy spike.** `pka` goes 0.719 → 0.945 (8B) and
+0.560 → 0.886 (70B) on the last step alone — most of the way back to the layer-0 value. This is
+the familiar final-LayerNorm / rogue-dimension effect, and it is the same signature as the
+probe's late-layer decline for declarative prompts (`Analysis/probe/README.md` §3).
+
+**(c) Linear separability and metric clustering are different properties.** This dissolves the
+apparent tension with the probe saturating earlier (d ≈ 0.47–0.52) rather than leaving it as a
+puzzle. A probe needs only a separating hyperplane; t-SNE needs neighbourhoods dominated by one
+class. The two come apart measurably here: `functional_group` has the **highest** centered
+within−between gap of any prompt (0.875 / 0.884, `Analysis/analogy/`) and is simultaneously the
+most visually mixed. Class information is present and linearly readable; it is simply not the
+dominant source of variance.
+
+### Plausible, not measurable from these outputs
+
+**(d) Template variance washes out with depth.** At L0 the state is dominated by the final
+token, which is a template property, and the L0 plots show many small multi-coloured clumps.
+Prediction: silhouette against `template_index` decays toward 0 by d ≈ 0.76. Needs the
+`template_index` coloring, which postdates the sweep (§1).
+
+**(e) Next-token specialisation.** For `pka` the next token is a pKa *number*, not a group name,
+so at the final layer points might reorganise by predicted pKa — merging groups that share a
+pKa, splitting same-group molecules whose chain length shifts it. **Tested and inconclusive:**
+the `pka`-coloured 8B L31 plot shows structure, but the colouring is continuous so no silhouette
+is computed for it and there is no like-for-like comparison against the categorical plot. It is
+not obviously more pKa-ordered than group-ordered. (Incidentally, the molecules with no pKa
+value do form a coherent region.) Settling this needs a numeric measure, e.g. a k-NN regression
+score on pKa per layer.
+
+**(f) Depth-of-processing.** Abstract features peak in late-middle layers; the last layers
+belong to the output distribution. Consistent with everything above, but it restates the
+observation rather than evidencing it.
+
+### Artifacts that could produce the pattern on their own
+
+- **5 sampled layers.** "d ≈ 0.76" means "best of {0, 8, 16, 24, 31}". The true peak could sit
+  anywhere in roughly 0.6–0.9.
+- **t-SNE settings are not comparable across prompts.** `perplexity = min(30, max(5, n // 4))`,
+  and point counts differ by an order of magnitude: `molecule_name_bare` and
+  `molecule_formula_bare` have **1 template → 92 points** (perplexity 23), everything else has
+  7–11 templates → 644–1012 points (perplexity 30). Any cross-prompt comparison spanning that
+  boundary compares two different t-SNE configurations.
+- **`random_state=42`** — a single draw, with no seed-sensitivity check. Apparent island
+  structure can move between seeds.
+- **The verdicts are visual judgments**, recorded per plot in `sampled_plots.csv` so they can be
+  disputed individually.
+
+A note on what *doesn't* explain it: low anisotropy alone is not sufficient.
+`molecule_formula_bare` is the most isotropic prompt at 8B L24 (0.490) and still shows no
+functional-group clustering — it has the weakest class signal of any prompt (probe best 0.688).
+Both ingredients are needed. That observation is confounded by the 92-point difference above,
+so treat it as suggestive.
+
+## 6. Sample size and what would change these conclusions
 
 Everything here comes from 11 plots. The most likely way any of it is wrong:
 
@@ -148,7 +253,7 @@ Everything here comes from 11 plots. The most likely way any of it is wrong:
 - **Visual verdicts are judgments.** They are recorded in `sampled_plots.csv` so they can be
   disagreed with per-plot, but they are not measurements.
 
-## 6. To settle this properly
+## 7. To settle this properly
 
 Re-run the sweep with the current script — it now produces both missing artifacts:
 
@@ -171,4 +276,5 @@ That alone gives a 23 × 5 × 2 table of silhouettes and the template plots for 
 
 | file | contents |
 |---|---|
-| `sampled_plots.csv` | the 11 plots inspected: model, prompt, layer, silhouette, visual verdict |
+| `sampled_plots.csv` | the 12 plots inspected: model, prompt, layer, colouring, silhouette, visual verdict |
+| `analyze_tsne_context.py` + `data/anisotropy_by_prompt_layer.csv` | the anisotropy / effective-dimensionality join behind §5, for all 23 prompts x 5 layers x 2 models |

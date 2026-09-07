@@ -8,5 +8,7 @@ meta-llama-Llama-3.1-8B,pka question,16,0.52,functional_group,-0.12,mixed,"quest
 meta-llama-Llama-3.1-8B,functional_group,16,0.52,functional_group,-0.08,mixed,"best silhouette of the sample, no visible FG structure"
 meta-llama-Llama-3.1-8B,tpsa,16,0.52,functional_group,-0.08,mixed,
 meta-llama-Llama-3.1-8B,avg_carbon_oxidation_state,16,0.52,functional_group,-0.08,mixed,
+meta-llama-Llama-3.1-8B,molecule_formula_bare,24,0.77,functional_group,0.15,mixed,"only positive silhouette seen, on a visibly mixed plot; most isotropic prompt (0.490) yet no FG clustering -- but confounded: 1 template means 92 points and perplexity 23, vs ~1000 points and perplexity 30 elsewhere"
 meta-llama-Llama-3.1-70B,pka,40,0.51,functional_group,-0.10,clustered,"clean, near colour-pure clusters"
 meta-llama-Llama-3.1-70B,pka,60,0.76,functional_group,-0.06,clustered,"cleanest plot in the whole sample; silhouette is near the top of the range"
+meta-llama-Llama-3.1-8B,pka,31,1.00,pka,,inconclusive,"pKa-coloured version of the L31 plot, to test whether the final layer reorganises by predicted pKa rather than group; continuous colouring so no silhouette is computed and no like-for-like comparison is possible. Structure is visible but not obviously more pKa-ordered than group-ordered. Incidental: the grey x points (no pKa value) form a coherent region."

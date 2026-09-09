@@ -221,7 +221,10 @@ def main():
     args = p.parse_args()
 
     config_data = load_config(args.config)
-    hf_token = config_data.get('HF_TOKEN')
+    # Environment first, config second -- see the note in
+    # extract_activations_subset.py. Keeps the tracked config free of secrets and
+    # free of the merge collisions that come with editing it locally.
+    hf_token = os.environ.get('HF_TOKEN') or config_data.get('HF_TOKEN')
     extraction = config_data.get('extraction', {})
     model_name = args.model_name or extraction.get('model_name')
     quantization = extraction.get('quantization', {})

@@ -44,10 +44,17 @@ Same environment as the repository root — see the top-level `README.md` for
 `requirements.txt` install and hardware/quantization notes (bitsandbytes 4-bit
 quantization is Linux+NVIDIA only; on macOS/CPU it falls back to plain fp16/bf16).
 
-Gated models (Llama, Qwen, DeepSeek-distilled checkpoints) need Hugging Face auth — either
-run `huggingface-cli login` once, or add an `HF_TOKEN` key to
-`config_extract_activation.yaml` (it's read via `config_data.get("HF_TOKEN")`, `config.json`
-at the repo root is a separate file used by other sub-projects and is *not* read here).
+Gated models (the Llama checkpoints here) need Hugging Face auth. In preference order:
+
+1. `export HF_TOKEN=...` — checked first, and the one to use on a cluster.
+2. `huggingface-cli login` once — the cached token is picked up automatically.
+3. An `HF_TOKEN` key in `config_extract_activation.yaml` — still supported, but **avoid it**.
+   That file is tracked, so a local edit collides with every `git pull` that touches it
+   (`error: Your local changes to the following files would be overwritten by merge`), and it
+   puts a secret one `git add -A` away from a public repo.
+
+(`config.json` at the repo root is a separate file used by other sub-projects and is *not*
+read here.)
 
 ## Usage
 

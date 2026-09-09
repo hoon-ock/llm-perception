@@ -381,7 +381,13 @@ def main():
 
     # Load configuration
     config_data = load_config(args.config)
-    HF_TOKEN = config_data.get("HF_TOKEN")
+    # Environment first, config second. The token has to live *somewhere* on the
+    # cluster, and putting it in this tracked YAML means every pull that touches
+    # the file collides with the local edit ("your local changes would be
+    # overwritten by merge"). Reading HF_TOKEN from the environment lets the
+    # config stay pristine -- `export HF_TOKEN=...` in the shell or the sbatch
+    # script, and nothing tracked ever holds a secret.
+    HF_TOKEN = os.environ.get("HF_TOKEN") or config_data.get("HF_TOKEN")
 
     # Get extraction configuration
     extraction_config = config_data.get("extraction", {})

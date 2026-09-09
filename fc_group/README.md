@@ -32,7 +32,7 @@ similarity, anisotropy baselines, t-SNE/PCA visualization).
 | `anisotropy_diagnostic.py` | How much of the diff-vector geometry is generic transformer-hidden-state anisotropy vs. genuine chemistry-specific structure |
 | `tsne_functional_groups.py` | t-SNE/PCA visualization of activations, colored by functional group / pKa / TPSA / etc. |
 | `functional_group_probe.py` | Supervised counterpart to the above: layer-wise linear probe predicting functional group from the last-token residual stream |
-| `run_functional_group_probe.sbatch` | SLURM job array running the probe for 2 models x every entity type in the config (46 tasks) |
+| `scripts/02_probe.sbatch` | SLURM job array running the probe for 2 models x every entity type in the config (46 tasks) |
 
 Generated at runtime, not committed (see `.gitignore`):
 `activation_datasets_functional_groups/` (saved activation tensors, one subdirectory per
@@ -223,7 +223,7 @@ regression itself, which dominates on real activation data.
 
 ### The sweep
 
-`run_functional_group_probe.sbatch` is a 46-task array: 2 models x every entity type in
+`scripts/02_probe.sbatch` is a 240-task array: 10 models x every entity type in
 `config_extract_activation.yaml`, running `--target all` at the default `group` split. The probe
 target is always the functional group, so the entity type selects which *prompt* the last-token
 state is read from -- `functional_group` asks for the group, `pka` asks about acidity,
@@ -231,13 +231,13 @@ state is read from -- `functional_group` asks for the group, `pka` asks about ac
 matrix: is functional-group identity present in every last-token state, or only when the prompt
 asks for it?
 
-The entity list is derived from the config, as in `run_anisotropy_diagnostic.sbatch`, so the two
+The entity list is derived from the config, as in `scripts/04_anisotropy.sbatch`, so the two
 cannot drift. The one thing that cannot self-update is the static `#SBATCH --array` range, so a
 preflight asserts `models x entities == ARRAY_SIZE` and fails at submission if they disagree.
 
 **One CPU core, 4 GB, no GPU, and all three are deliberate.** Measured peak RSS at 70B scale
 (920 x 8192) is 910 MB, so 4 GB is ~4x headroom; the earlier 32 GB request -- inherited from
-`run_anisotropy_diagnostic.sbatch` -- pinned the array to 15 concurrent tasks on one node
+`scripts/04_anisotropy.sbatch` -- pinned the array to 15 concurrent tasks on one node
 (15 x 32 GB = 480 GB) with the remaining 31 stuck in `PD (Resources)`. The probe is entirely scikit-learn; `torch`
 appears only as `torch.load(..., map_location="cpu")`. A GPU would idle for the whole run while
 competing with the extraction jobs that need one. Extra cores do not help either -- measured on

@@ -328,7 +328,7 @@ def main():
                 print(f"Error plotting t-SNE for layer {layer_num}, feature {feature}: {e}")
 
     # One file per (model, entity_type) invocation rather than a shared append target:
-    # run_tsne_analysis.sbatch calls this script once per entity type, so appending would
+    # fc_group/scripts/03_tsne.sbatch calls this script once per entity type, so appending would
     # duplicate rows on every re-run. Concatenate the per-run files for the full table.
     if metric_rows:
         metrics_dir = os.path.join(output_dir, 'metrics')

@@ -258,7 +258,7 @@ Everything here comes from 11 plots. The most likely way any of it is wrong:
 Re-run the sweep with the current script — it now produces both missing artifacts:
 
 ```bash
-sbatch fc_group/run_tsne_analysis.sbatch     # emits metrics/*_metrics.csv and template_index plots
+sbatch fc_group/scripts/03_tsne.sbatch   # emits metrics/*_metrics.csv and template_index plots
 ```
 
 That alone gives a 23 × 5 × 2 table of silhouettes and the template plots for §4.3. It does

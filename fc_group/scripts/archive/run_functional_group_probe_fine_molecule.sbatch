@@ -1,20 +1,23 @@
 #!/bin/bash
-#SBATCH --job-name=fc_probe
+#SBATCH --job-name=fc_probe_fine_mol
 #SBATCH --partition=ock
 #SBATCH --cpus-per-task=1
 #SBATCH --time=12:00:00
 # Measured peak RSS of a real run at 70B scale (920 x 8192) is 910 MB. 4G is
-# ~4x headroom. This was 32G, inherited from run_anisotropy_diagnostic.sbatch,
-# which pinned the array to 15 concurrent tasks on one node (15 x 32G = 480G)
-# with the rest stuck in PD (Resources).
+# ~4x headroom. The design matrix here is identical in size to the group-split
+# sweep's -- only the fold structure differs -- so the same figure applies.
 #SBATCH --mem=4G
-# 2 models x 23 entity types. Append '%8' (--array=0-45%8) to cap how many
+# 2 models x 24 entity types. Append '%8' (--array=0-47%8) to cap how many
 # run at once if the partition is busy; there is no reason to throttle otherwise,
 # since each task is a single CPU core.
-#SBATCH --array=0-45
+#SBATCH --array=0-47
 # stderr is folded into stdout on purpose: the "=== model=... ===" marker is on
 # stdout, so splitting the streams makes tracebacks unattributable.
-#SBATCH --output=slurm-%A_%a.out
+#
+# The 'fine-mol-' prefix is not cosmetic. This sweep and run_functional_group_probe.sbatch
+# are both submitted from the repo root, so a shared 'slurm-%A_%a.out' pattern would
+# interleave two sweeps in one directory listing with no way to tell them apart.
+#SBATCH --output=slurm-fine-mol-%A_%a.out
 
 # Needed so `python ... | tee` reports python's status rather than tee's.
 set -o pipefail
@@ -44,14 +47,20 @@ export NUMEXPR_NUM_THREADS=1
 # ---- Sweep definition ----
 #
 # One array task per (model, entity_type) pair, over every entity type in the
-# extraction config.
+# extraction config -- the same grid as run_functional_group_probe.sbatch.
 #
-# The probe's target is always the functional group, so the entity type selects
-# which *prompt* the last-token state is read from -- `functional_group` asks
-# for the group, `pka` asks about acidity, `molecule_name_bare` asks nothing at
-# all. Sweeping all of them is the attribute-specificity matrix: is functional
-# group identity present in every last-token state, or only when the prompt
-# asks for it?
+# What differs is the experiment. That script runs `--target all` at the default
+# `group` split, which expands to exactly two jobs: coarse/group and
+# fine_to_coarse/group. fine/group is skipped by the probe itself, because
+# holding a class out of a 20-way classifier removes its output unit and
+# accuracy would be 0 by construction. So every number it reports is scored in
+# the 5-family space, and the sweep produces no true 20-class result.
+#
+# This script is that missing result. Under the molecule split
+# (StratifiedGroupKFold over molecules) all 20 fine classes appear on both sides
+# of every fold, so all 20 output units exist and the held-out molecules are
+# scorable in fine space. "Which of the 20 functional groups is this", not
+# "which of the 5 heteroatom families".
 MODELS=(
   "meta-llama/Llama-3.1-8B"
   "meta-llama/Llama-3.1-70B"
@@ -95,7 +104,7 @@ for e in cfg['extraction']['entities']:
 
 # `--array` is a static range but the lists it indexes are derived at runtime,
 # so it is the one thing that cannot self-update. Catch the mismatch here.
-ARRAY_SIZE=46   # must equal the span of '#SBATCH --array=0-45' above
+ARRAY_SIZE=48   # must equal the span of '#SBATCH --array=0-47' above
 N_EXPECTED=$(( ${#MODELS[@]} * ${#ENTITIES[@]} ))
 if [ "$N_EXPECTED" -ne "$ARRAY_SIZE" ]; then
   echo "ERROR: ${#MODELS[@]} models x ${#ENTITIES[@]} entity types = $N_EXPECTED runs,"
@@ -116,37 +125,45 @@ echo "=== task=$TASK_ID model=$MODEL entity_type=$ENTITY ==="
 
 # ---- Run ----
 #
+# --surface-baseline is ON here, unlike in run_functional_group_probe.sbatch, and
+# that is the single most important line in this file.
+#
+# The first time fine/molecule was run (8B, entity_type=functional_group) it
+# scored 1.000 -- against a char n-gram baseline of 0.975. TF-IDF over the raw
+# prompt string solves the 20-way task without the model at all, by reading
+# "-ol" / "-amine" / "-oic acid" out of the name. A 1.000 quoted without that
+# control next to it is a non-result, and this is the exact regime where that
+# already happened once.
+#
+# It is not expected to be saturated everywhere: `functional_group` is the worst
+# case because its prompt names the group outright, while the 21 name+formula
+# prompts span 0.4934-0.5724 on the same baseline. Sweeping all 23 with the
+# control attached is what separates recalled chemistry from orthography, per
+# entity type. It costs ~0.23s per task (~0.2% of runtime).
+#
+# Read the output as (best_balanced_acc - surface_baseline_balanced_acc), NOT as
+# best_balanced_acc against the 0.05 chance line. Both are in summary_fine_molecule.json.
+#
 # --num-null-samples 0 is deliberate, not corner-cutting. The permutation null is
-# ~91% of this job's runtime (19 folds x 50 perms x 0.2s vs 19s of real CV per
-# layer/target), and it does not depend on the activations: shuffled labels leave
+# the dominant cost and does not depend on the activations: shuffled labels leave
 # no signal regardless of what X holds, so the null is a property of the fold
 # structure, class distribution, classifier and metric -- all identical across
 # every task here. Measured across layers 0/16/31 it is flat and at chance
-# (coarse 0.184-0.200 against 0.20; fine 0.037-0.047 against 0.05), so running it
-# in all 46 tasks estimates one constant 46 times.
+# (fine 0.037-0.047 against 0.05), so running it in all 46 tasks estimates one
+# constant 46 times. It is still needed once, as the leak detector: if the
+# molecule-level shuffle ever broke, the null would rise above chance. Run it
+# separately per model -- see "Reference nulls" in fc_group/README.md.
 #
-# It is still needed once, as the leak detector: if the molecule-level shuffle
-# ever broke, the null would rise above chance. Run it separately per model and
-# quote those as the reference band -- see "Reference nulls" in fc_group/README.md.
-#
-# --surface-baseline is also off, but for a different reason, and the honest
-# numbers are worth stating: it costs only ~0.23s per task (~0.2% of runtime) and
-# it genuinely varies per entity type (the 21 name+formula prompts span
-# 0.4934-0.5724). So this is not the null's "recomputing one constant" argument
-# -- it is a deliberate choice to leave the control out of the sweep.
-#
-# It matters because it is what separates recalled chemistry from reading "-ol"
-# out of the prompt: on the first run it showed 4 of 5 splits were saturated by
-# spelling alone, turning an apparent 1.000 into a non-result. It does not scale
-# with layer count, so one layer recovers it for any entity type in seconds:
-#
-#   python fc_group/functional_group_probe.py --entity-type <name> \
-#     --layers 31 --num-null-samples 0 --surface-baseline --output-dir <dir>
+# --n-splits is left at its default of 4, which is deliberate: 17 of the 20 fine
+# classes have exactly 4 molecules, so 5 folds would guarantee folds containing
+# zero instances of some classes. See iter_folds() in functional_group_probe.py.
 RUN_LOG=$(mktemp)
 if python fc_group/functional_group_probe.py \
      --model-name "$MODEL" \
      --entity-type "$ENTITY" \
-     --target all \
+     --target fine \
+     --split molecule \
+     --surface-baseline \
      --num-null-samples 0 2>&1 | tee "$RUN_LOG"; then
   # Exit 0 still covers "the activations for this entity were never extracted",
   # which is a real problem when they are supposed to exist.

@@ -186,8 +186,10 @@ So the spread between prompts is **not** an orthography artifact — the n-gram 
 tell these prompts apart at all, because they differ only in the wrapper around an identical
 molecule name and formula. The cross-prompt comparisons above are measuring representation.
 
-**Gap:** the sweep runs without `--surface-baseline`, so this exists for 15 of 46 tasks and
-**none of the 70B ones**. Recovering it costs ~7 s per entity type at one layer:
+**Gap, since closed for future runs.** The sweep that produced these results ran without
+`--surface-baseline`, so it exists for 15 of 46 tasks and **none of the 70B ones**.
+`fc_group/scripts/02_probe.sbatch` now passes `--surface-baseline` on every task, so a re-run
+will have it throughout — but that cannot be applied retroactively to the numbers below. Recovering it costs ~7 s per entity type at one layer:
 
 ```bash
 python fc_group/functional_group_probe.py --entity-type <name> --model-name <model> \
@@ -225,13 +227,21 @@ with resolution at ceiling" — are therefore unrecoverable without re-running t
 why §4 is built on a resampling test over hard labels instead: the question was about
 *significance*, which hard labels can answer, not about *resolution*.
 
-**The `formula`-column notation confound is unfixed.** `PROBE_NOTES.md` §7 — 9 of 20 groups are
+**The `formula`-column notation confound is fixed for future runs, but not for the results in
+this document.** `PROBE_NOTES.md` §7 — 9 of 20 groups are
 always SMILES, 8 always condensed, and F/Br/I are SMILES while Cl is condensed. The halide
-result stays confounded until `extract_properties.py` is fixed and the group split re-run.
+result stays confounded here. `extract_properties.py` now emits `smiles` and
+`condensed_formula` for **every** molecule from one set of templates, so notation carries no
+class information in either column, and `formula` is retained unchanged only for backward
+compatibility. That cannot be applied retroactively: the notation confound is part of the
+*prompt text*, which is baked into the activations these results were computed from. It clears
+only on re-extraction.
 
 **Reference lines are missing from the sweep.** It runs with `--num-null-samples 0` and without
-`--surface-baseline` (both deliberate, see the sbatch comments), so `null_mean`, `p_value` and
-`surface_baseline_balanced_acc` are `null` in every summary. The null is a property of the fold
+`--surface-baseline` (both deliberate at the time, see the sbatch comments), so `null_mean`,
+`p_value` and `surface_baseline_balanced_acc` are `null` in every summary. The surface baseline
+has since been turned on in `fc_group/scripts/02_probe.sbatch`; the null remains off by design,
+being a property of the fold structure rather than the activations. The null is a property of the fold
 structure and is quotable once per model; the surface baseline is not (§5).
 
 ## 8. Regenerating

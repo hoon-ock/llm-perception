@@ -100,7 +100,7 @@ DEFAULT_N_SPLITS = 4
 INNER_CV_SPLITS = 3
 SEED = 42
 
-SPLIT_CHOICES = ('molecule', 'carbon', 'group')
+SPLIT_CHOICES = ('molecule', 'carbon', 'group', 'template')
 DEFAULT_SPLITS = ('group',)
 
 # target -> (column the probe is trained on, column it is scored against).
@@ -182,9 +182,24 @@ def iter_folds(split, y_mol, mol_idx, df, n_splits, seed):
     molecule -- StratifiedGroupKFold over molecules. Defaults to 4 folds, not 5:
         17 of the 20 fine classes have exactly 4 molecules, so 5 folds would
         guarantee folds containing zero instances of some classes.
-    carbon   -- leave-one-carbon-count-out (C3/C4/C5/C6). Every class appears on
-        both sides of every fold, so this isolates invariance to backbone length
-        -- the probe analogue of functional_group_analogy_carbon_matched.py.
+    carbon   -- train on ONE carbon count, test on the other three (C3/C4/C5/C6).
+        Note the direction: `C4` names the fold *trained* on butyl backbones, not
+        the one tested on them. This was leave-one-carbon-count-out, which trains
+        on three chain lengths and tests on the fourth -- interpolation, and it
+        saturated at 1.000. Reversing it makes the probe extrapolate from a
+        single backbone length, which is where the headroom is. Every class still
+        appears on both sides of every fold, so it still isolates invariance to
+        backbone length -- the probe analogue of
+        functional_group_analogy_carbon_matched.py.
+    template -- hold out prompt phrasings AND molecules together. A pure template
+        holdout would be near-free: the same molecule appears in train and test
+        under different wordings, so the probe can identify the molecule and
+        ignore the phrasing. Crossing the two axes is what makes it a real
+        generalization test -- train on half the templates crossed with half the
+        molecules, test on the complementary halves. The off-diagonal rows (train
+        templates x test molecules, and vice versa) belong to neither side and are
+        dropped, so each fold uses about half the data. Requires
+        --template-mode expand; under `average` there is no template axis at all.
     group    -- leave-one-fine-group-out, coarse target only. Holding a class out
         of an n-way classifier removes its output unit, so for the fine target
         held-out accuracy would be 0 by construction and measure nothing. On the
@@ -202,8 +217,37 @@ def iter_folds(split, y_mol, mol_idx, df, n_splits, seed):
     elif split == 'carbon':
         carbon_rows = expand(df[CARBON_COLUMN].values, mol_idx)
         for c in sorted(np.unique(carbon_rows)):
-            te = all_rows[carbon_rows == c]
-            yield f'C{c}', all_rows[carbon_rows != c], te
+            # Train on the single chain length c, test on all the others.
+            yield f'C{c}', all_rows[carbon_rows == c], all_rows[carbon_rows != c]
+
+    elif split == 'template':
+        n_templates = len(mol_idx) // len(df)
+        if n_templates < 2:
+            print(f"  skipping split 'template': needs at least 2 templates per molecule, "
+                  f"found {n_templates} (use --template-mode expand on a multi-template "
+                  f"activation file)")
+            return
+        # Rows are molecule-major / template-minor, the layout build_design_matrix
+        # produces, so a row's template is just its position within its molecule.
+        template_rows = np.arange(len(mol_idx)) % n_templates
+        template_half = template_rows < (n_templates // 2)
+
+        # Split molecules stratified on the label so both halves keep every class,
+        # rather than slicing molecule ids and hoping. One StratifiedGroupKFold
+        # split with 2 folds gives the two halves directly.
+        cv = StratifiedGroupKFold(n_splits=2, shuffle=True, random_state=seed)
+        mol_half_a, _ = next(iter(cv.split(all_rows.reshape(-1, 1), y_rows, groups=mol_idx)))
+        molecule_half = np.zeros(len(mol_idx), dtype=bool)
+        molecule_half[mol_half_a] = True
+
+        # Two folds, each using one diagonal of the template x molecule grid. The
+        # off-diagonal cells are deliberately unused: including them in training
+        # would put the test molecules back in front of the probe.
+        for name, tmpl_train, mol_train in (('tmplA_molB', True, True),
+                                            ('tmplB_molA', False, False)):
+            tr = all_rows[(template_half == tmpl_train) & (molecule_half == mol_train)]
+            te = all_rows[(template_half != tmpl_train) & (molecule_half != mol_train)]
+            yield name, tr, te
 
     elif split == 'group':
         fine_rows = expand(df[FINE_COLUMN].values, mol_idx)
@@ -697,6 +741,14 @@ def main():
                 fold_cache[key] = list(iter_folds(
                     split, y_mol[target], mol_idx, df, args.n_splits, args.seed))
             folds = fold_cache[key]
+            # A split can decline to produce folds for this data -- `template`
+            # does when the activation file holds a single template. Drop the job
+            # rather than running the probe over an empty fold list, which would
+            # reach balanced_accuracy_score with no predictions and raise there.
+            if not folds:
+                if key in results:
+                    del results[key]
+                continue
             y_rows = expand(y_mol[target], mol_idx)
 
             label_map = label_maps[target]

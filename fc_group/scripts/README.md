@@ -13,7 +13,7 @@ exits non-zero rather than failing obscurely.
 | job | resources | tasks | what it runs |
 |---|---|---|---|
 | `00_smoke_test_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | one template, three layers — checks a model loads and emits right-shaped output before committing to a full sweep |
-| `01_extract_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | `extract_activations_subset.py` — the activations everything else reads |
+| `01_extract_small` / `_large` | gpu:1 / gpu:2 | 3 / 2 | `extract_activations_subset.py` — the activations everything else reads |
 | `02_probe` | cpu, 4G | 120 | `functional_group_probe.py` |
 | `03_tsne` | cpu, 32G | 120 | `tsne_functional_groups.py` |
 | `04_anisotropy` | cpu, 32G | 120 | `anisotropy_diagnostic.py` |

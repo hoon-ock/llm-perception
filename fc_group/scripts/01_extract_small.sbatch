@@ -5,6 +5,10 @@
 #SBATCH --array=0-2
 #SBATCH --time=08:00:00
 #SBATCH --mem=32G
+# 1 core was the default. This path is not quantized, so the CPU cost is
+# safetensors deserialization before .to(device); 8 cores x 3 array tasks is 24
+# of the node's 32, leaving headroom.
+#SBATCH --cpus-per-task=8
 #SBATCH --output=slurm-%A_%a.out
 #SBATCH --error=slurm-%A_%a.err
 

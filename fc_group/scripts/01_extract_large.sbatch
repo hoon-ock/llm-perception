@@ -1,15 +1,28 @@
 #!/bin/bash
 #SBATCH --job-name=extract_activations_large
 #SBATCH --partition=ock
-#SBATCH --gres=gpu:4
+# Two GPUs, not four. A 70B under NF4 with double-quant off needs ~44G:
+# ~35G packed 4-bit weights, ~4.4G of fp32 absmax scales (blocksize 64), and
+# ~4.2G of embed_tokens + lm_head, which bitsandbytes leaves in fp16 (128256 x
+# 8192, untied at this scale). That does not safely fit one 48G L40S once
+# activations land on it, but sits comfortably on two. It matters because ock is
+# a single node with 4 GPUs: at gpu:4 each array task owned the whole partition
+# and the two 70B models ran strictly back to back. At gpu:2 they run at once.
+#SBATCH --gres=gpu:2
 #SBATCH --array=0-1
 #SBATCH --time=1-00:00:00
-# Host RAM, not VRAM. device_map="auto" reads safetensors shard by shard and
-# quantizes each onto the GPU, so the fp16 checkpoint is never resident on the
-# host -- peak RSS is roughly one shard. This was 200G, which SLURM counts as a
-# consumable resource and which could hold the job pending on a 4-GPU partition
-# even with GPUs idle. Check with `sacct -j <id> --format=ReqMem,MaxRSS`.
+# Host RAM, not VRAM, and the load path barely touches it: device_map="auto"
+# reads safetensors shard by shard and quantizes each onto the GPU, so the fp16
+# checkpoint is never resident on the host and peak RSS is roughly one shard.
+# This was 200G on a node that has 491G, so it was never actually blocking --
+# just an order of magnitude more than the job can use. Confirm with
+# `sacct -j <id> --format=ReqMem,MaxRSS`; raise this if MaxRSS approaches 64G.
 #SBATCH --mem=64G
+# 1 core was the default and the 70B load is CPU-bound on safetensors
+# deserialization plus bitsandbytes quantization. Deliberately 8 rather than the
+# 8-per-GPU ratio (16): at 16 the two concurrent tasks would need exactly all 32
+# of the node's cores, so anything else running pushes one to pending.
+#SBATCH --cpus-per-task=8
 #SBATCH --output=slurm-%A_%a.out
 #SBATCH --error=slurm-%A_%a.err
 

@@ -10,7 +10,7 @@
 # The names come from fc_group/model_registry.py, which is already the source of
 # truth for hidden_dim/num_layers and already raises on an unregistered model.
 # The size split does not live there because it is a scheduling decision, not a
-# property of the model: it is what decides gpu:1 at full precision versus gpu:4
+# property of the model: it is what decides gpu:1 at full precision versus gpu:2
 # in 4-bit. So it is declared here and then checked against the registry, which
 # is the part that matters -- adding a model to the registry without giving it a
 # size class fails loudly instead of dropping it from every sweep.

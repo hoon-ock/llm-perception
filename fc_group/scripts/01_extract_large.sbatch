@@ -4,7 +4,12 @@
 #SBATCH --gres=gpu:4
 #SBATCH --array=0-1
 #SBATCH --time=1-00:00:00
-#SBATCH --mem=200G
+# Host RAM, not VRAM. device_map="auto" reads safetensors shard by shard and
+# quantizes each onto the GPU, so the fp16 checkpoint is never resident on the
+# host -- peak RSS is roughly one shard. This was 200G, which SLURM counts as a
+# consumable resource and which could hold the job pending on a 4-GPU partition
+# even with GPUs idle. Check with `sacct -j <id> --format=ReqMem,MaxRSS`.
+#SBATCH --mem=64G
 #SBATCH --output=slurm-%A_%a.out
 #SBATCH --error=slurm-%A_%a.err
 

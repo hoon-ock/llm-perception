@@ -24,7 +24,7 @@ Two readouts:
 No activation extraction is needed, so this runs on any prompt condition
 immediately.
 
-    python fc_group/generation_eval.py --model-name Qwen/Qwen3-8B \
+    python fc_group/generation_eval.py --model-name phenixace/Chem-R-Faithful \
         --entity-types functional_group --max-templates 1
 """
 import argparse

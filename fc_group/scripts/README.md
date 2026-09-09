@@ -12,15 +12,15 @@ exits non-zero rather than failing obscurely.
 
 | job | resources | tasks | what it runs |
 |---|---|---|---|
-| `00_smoke_test_small` / `_large` | gpu:1 / gpu:4 | 5 each | one template, three layers — checks a model loads and emits right-shaped output before committing to a full sweep |
-| `01_extract_small` / `_large` | gpu:1 / gpu:4 | 5 each | `extract_activations_subset.py` — the activations everything else reads |
-| `02_probe` | cpu, 4G | 240 | `functional_group_probe.py` |
-| `03_tsne` | cpu, 32G | 240 | `tsne_functional_groups.py` |
-| `04_anisotropy` | cpu, 32G | 240 | `anisotropy_diagnostic.py` |
-| `05_analogy` | cpu, 32G | 240 | `functional_group_analogy_carbon_matched.py` |
-| `06_generation_eval_small` / `_large` | gpu:1 / gpu:4 | 5 each | `generation_eval.py` — behavioural readout, needs no activations |
+| `00_smoke_test_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | one template, three layers — checks a model loads and emits right-shaped output before committing to a full sweep |
+| `01_extract_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | `extract_activations_subset.py` — the activations everything else reads |
+| `02_probe` | cpu, 4G | 120 | `functional_group_probe.py` |
+| `03_tsne` | cpu, 32G | 120 | `tsne_functional_groups.py` |
+| `04_anisotropy` | cpu, 32G | 120 | `anisotropy_diagnostic.py` |
+| `05_analogy` | cpu, 32G | 120 | `functional_group_analogy_carbon_matched.py` |
+| `06_generation_eval_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | `generation_eval.py` — behavioural readout, needs no activations |
 
-240 = 10 models × 24 entity types.
+120 = 5 models × 24 entity types.
 
 ## Why small/large are separate files
 
@@ -57,7 +57,7 @@ grep -h SUMMARY slurm-*.out | sort | uniq -c
 sbatch --export=ALL,PROBE_TARGET=fine,PROBE_SPLIT=molecule fc_group/scripts/02_probe.sbatch
 ```
 
-Cap concurrency on a busy partition by appending `%N` to the array, e.g. `--array=0-239%20`.
+Cap concurrency on a busy partition by appending `%N` to the array, e.g. `--array=0-119%20`.
 
 ## `archive/`
 

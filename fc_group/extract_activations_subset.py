@@ -327,7 +327,7 @@ def parse_args():
                               "and/or the keywords bottom/middle/top (e.g. --layers bottom middle top, or --layers 0 15 31).")
     parser.add_argument("--model-name", default=None,
                          help="Override extraction.model_name from the config file (e.g. "
-                              "deepseek-ai/DeepSeek-R1-Distill-Llama-8B, Qwen/Qwen3-8B). "
+                              "deepseek-ai/DeepSeek-R1-Distill-Llama-8B, phenixace/Chem-R-Faithful). "
                               "Default: use whatever the config file specifies.")
     parser.add_argument("--batch-size", type=int, default=None,
                          help="Override extraction.batch_size from the config file. "

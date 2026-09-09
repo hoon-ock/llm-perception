@@ -4,10 +4,10 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=02:00:00
 #SBATCH --mem=32G
-# 10 models x 24 entity types. Append '%N' (--array=0-239%20) to cap concurrency
+# 5 models x 24 entity types. Append '%N' (--array=0-119%20) to cap concurrency
 # if the partition is busy; each task is a single CPU core, so there is otherwise
 # no reason to throttle.
-#SBATCH --array=0-239
+#SBATCH --array=0-119
 # stderr folded into stdout on purpose: the "=== task=... ===" marker is on
 # stdout, so splitting the streams makes tracebacks unattributable.
 #SBATCH --output=slurm-tsne-%A_%a.out
@@ -28,7 +28,7 @@ export OMP_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 
-# ---- Preflight: fail here rather than 240 identical failures below ----
+# ---- Preflight: fail here rather than 120 identical failures below ----
 
 # Every path in this script is relative to the repo root.
 [ -f fc_group/tsne_functional_groups.py ] || {
@@ -50,7 +50,7 @@ done < <(read_entity_types)
 
 # --array is static but the lists it indexes are derived at runtime, so this is
 # the one thing that cannot self-update. Catch the mismatch here.
-ARRAY_SIZE=240   # must equal the span of '#SBATCH --array=0-239' above
+ARRAY_SIZE=120   # must equal the span of '#SBATCH --array=0-119' above
 N_EXPECTED=$(( ${#ALL_MODELS[@]} * ${#ENTITIES[@]} ))
 if [ "$N_EXPECTED" -ne "$ARRAY_SIZE" ]; then
   echo "ERROR: ${#ALL_MODELS[@]} models x ${#ENTITIES[@]} entity types = $N_EXPECTED runs,"

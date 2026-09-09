@@ -19,20 +19,18 @@ MODEL_CONFIGS = {
         "num_layers": 32,
         "default_layers": [0, 16, 31],
     },
-    "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B": {
-        "hidden_dim": 3584,
-        "num_layers": 28,
-        "default_layers": [0, 14, 27],
-    },
-    "Qwen/Qwen3-8B": {
+    # Chemistry-specialised, and built on Llama-3.1-8B -- the config fingerprint
+    # matches it exactly (vocab 128256, rope_theta 500000, 4096/32, 8 kv heads,
+    # max_position_embeddings 131072). Sharing a base with a model already in this
+    # registry is the point: it makes chemistry-tuned vs base a controlled
+    # comparison, same architecture and same tokenizer, with no second model to
+    # add. The other chemistry Llamas considered (KALE-LM-Chem, ChemDFM) sit at
+    # max_position 8192, i.e. Llama-3-8B, which would have confounded domain
+    # training with the 3 -> 3.1 difference.
+    "phenixace/Chem-R-Faithful": {
         "hidden_dim": 4096,
-        "num_layers": 36,
-        "default_layers": [0, 18, 35],
-    },
-    "Qwen/Qwen2.5-Math-7B": {
-        "hidden_dim": 3584,
-        "num_layers": 28,
-        "default_layers": [0, 14, 27],
+        "num_layers": 32,
+        "default_layers": [0, 16, 31],
     },
     "meta-llama/Llama-3.1-70B": {
         "hidden_dim": 8192,
@@ -43,21 +41,6 @@ MODEL_CONFIGS = {
         "hidden_dim": 8192,
         "num_layers": 80,
         "default_layers": [0, 40, 79],
-    },
-    "Qwen/Qwen3-32B": {
-        "hidden_dim": 5120,
-        "num_layers": 64,
-        "default_layers": [0, 32, 63],
-    },
-    "Qwen/Qwen2.5-Math-72B": {
-        "hidden_dim": 8192,
-        "num_layers": 80,
-        "default_layers": [0, 40, 79],
-    },
-    "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B": {
-        "hidden_dim": 5120,
-        "num_layers": 64,
-        "default_layers": [0, 32, 63],
     },
 }
 

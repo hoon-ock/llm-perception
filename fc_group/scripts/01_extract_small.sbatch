@@ -2,7 +2,7 @@
 #SBATCH --job-name=extract_activations_small
 #SBATCH --partition=ock
 #SBATCH --gres=gpu:1
-#SBATCH --array=0-4
+#SBATCH --array=0-2
 #SBATCH --time=08:00:00
 #SBATCH --mem=32G
 #SBATCH --output=slurm-%A_%a.out
@@ -26,7 +26,7 @@ MODELS=("${SMALL_MODELS[@]}")
 # --array is static but MODELS is derived at runtime, so this is the one thing
 # that cannot self-update. Catch the mismatch here rather than silently running
 # a narrower sweep than intended.
-ARRAY_SIZE=5   # must equal the span of '#SBATCH --array=0-4' above
+ARRAY_SIZE=3   # must equal the span of '#SBATCH --array=0-2' above
 if [ "${#MODELS[@]}" -ne "$ARRAY_SIZE" ]; then
   echo "ERROR: ${#MODELS[@]} models but --array declares $ARRAY_SIZE."
   echo "       Update the --array line and ARRAY_SIZE together."

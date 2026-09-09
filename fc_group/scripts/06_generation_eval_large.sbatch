@@ -3,7 +3,7 @@
 #SBATCH --partition=ock
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=4
-#SBATCH --array=0-4
+#SBATCH --array=0-1
 #SBATCH --time=08:00:00
 #SBATCH --mem=200G
 # stderr folded into stdout so the "=== model=... ===" marker stays attached to
@@ -36,7 +36,7 @@ export HF_HOME=/work/ock/hoon/hf_cache
 source fc_group/scripts/models.sh || exit 1
 MODELS=("${LARGE_MODELS[@]}")
 
-ARRAY_SIZE=5   # must equal the span of '#SBATCH --array=0-4' above
+ARRAY_SIZE=2   # must equal the span of '#SBATCH --array=0-1' above
 if [ "${#MODELS[@]}" -ne "$ARRAY_SIZE" ]; then
   echo "ERROR: ${#MODELS[@]} models but --array declares $ARRAY_SIZE."
   echo "       Update the --array line and ARRAY_SIZE together."

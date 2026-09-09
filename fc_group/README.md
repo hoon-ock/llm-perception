@@ -253,18 +253,29 @@ add a new model. It just needs an entry in `model_registry.py`:
 
 ```python
 MODEL_CONFIGS = {
-    "meta-llama/Llama-3.1-8B": {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
-    "deepseek-ai/DeepSeek-R1-Distill-Llama-8B": {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
-    "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B":  {"hidden_dim": 3584, "num_layers": 28, "default_layers": [0, 14, 27]},
-    "Qwen/Qwen3-8B":                            {"hidden_dim": 4096, "num_layers": 36, "default_layers": [0, 18, 35]},
-    "Qwen/Qwen2.5-Math-7B":                     {"hidden_dim": 3584, "num_layers": 28, "default_layers": [0, 14, 27]},
+    "meta-llama/Llama-3.1-8B":                   {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-8B":  {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
+    "phenixace/Chem-R-Faithful":                 {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
+    "meta-llama/Llama-3.1-70B":                  {"hidden_dim": 8192, "num_layers": 80, "default_layers": [0, 40, 79]},
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {"hidden_dim": 8192, "num_layers": 80, "default_layers": [0, 40, 79]},
 }
 ```
 
-The one architecture constraint: the model must expose `model.model.layers` (true for
-Llama/Mistral/Qwen2/Qwen3-family causal LMs in `transformers`, not guaranteed for every
-architecture). Verify `hidden_dim`/`num_layers` against the model's actual `config.json` on
-Hugging Face before adding a new entry.
+The set is deliberately all-Llama: base (Llama-3.1), reasoning-distilled (DeepSeek-R1-Distill)
+and chemistry-tuned (Chem-R-Faithful, itself a Llama-3.1-8B derivative) at 8B, plus the 8B/70B
+scale pair. Every contrast therefore varies one thing against a shared architecture and
+tokenizer. Qwen-family models were dropped for that reason and because `qwen3` needs
+transformers >= 4.51, which the cluster environment predates.
+
+Two constraints on a new model. It must expose `model.model.layers` (true for
+Llama/Mistral/Qwen-family causal LMs in `transformers`, not guaranteed for every
+architecture), and the *installed* `transformers` must recognise its `model_type` -- a newer
+architecture than the environment knows fails inside `AutoConfig.from_pretrained` only after
+the weights have downloaded.
+
+`python fc_group/check_model_registry.py` checks both, plus `hidden_dim`/`num_layers` against
+the model's real `config.json`, in seconds and without a GPU. Run it before adding an entry or
+submitting a sweep.
 
 Extraction:
 ```bash

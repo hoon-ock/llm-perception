@@ -79,6 +79,22 @@ def weight_bytes(model, token, timeout):
                if f.get('path', '').endswith(WEIGHT_SUFFIXES))
 
 
+def architecture_supported(model_type):
+    """Whether the installed transformers recognises this architecture.
+
+    This is the exact lookup that raises `KeyError: 'qwen3'` deep inside
+    AutoConfig.from_pretrained -- a failure that costs a GPU allocation and a
+    model download to discover, but is answerable here in milliseconds. Returns
+    (supported, installed_version).
+    """
+    try:
+        import transformers
+        from transformers.models.auto.configuration_auto import CONFIG_MAPPING_NAMES
+    except ImportError:
+        return None, None
+    return model_type in CONFIG_MAPPING_NAMES, transformers.__version__
+
+
 def cached_locally(model):
     """Whether HF already has this model unpacked, so it need not be re-fetched."""
     home = os.environ.get('HF_HOME')
@@ -101,13 +117,17 @@ def main():
 
     socket.setdefaulttimeout(args.timeout)
     token = read_token(args.config)
+    tf = architecture_supported("llama")[1]
+    print(f"transformers: {tf or 'not importable'}")
     print(f"HF token: {'found' if token else 'NOT found -- gated repos will report as gated'}\n")
 
-    header = f"{'model':44s} {'hidden_dim':>20s} {'num_layers':>18s} {'weights':>10s}  cached"
+    header = (f"{'model':44s} {'arch':>10s} {'hidden_dim':>18s} {'num_layers':>16s} "
+              f"{'weights':>10s}  cached")
     print(header)
     print('-' * len(header))
 
-    mismatches, gated, unreachable, total_bytes, to_download = [], [], [], 0, 0
+    mismatches, gated, unreachable, unsupported = [], [], [], []
+    total_bytes, to_download, tf_version = 0, 0, None
     for model, registry in MODEL_CONFIGS.items():
         cached = cached_locally(model)
         cached_str = '-' if cached is None else ('yes' if cached else 'no')
@@ -126,6 +146,12 @@ def main():
             print(f"{model:44s} {type(exc).__name__:>40s} {'':>10s}  {cached_str}")
             continue
 
+        model_type = config.get('model_type', '?')
+        supported, tf_version = architecture_supported(model_type)
+        if supported is False:
+            unsupported.append((model, model_type))
+        arch = model_type if supported is not False else f'{model_type}!'
+
         actual_dim = config.get('hidden_size')
         actual_layers = config.get('num_hidden_layers')
         dim_ok = actual_dim == registry['hidden_dim']
@@ -142,9 +168,9 @@ def main():
                 to_download += size
         size_str = '-' if not size else f'{size / 1e9:.1f} GB'
 
-        print(f"{model:44s} "
-              f"{('%s %s' % (actual_dim, 'ok' if dim_ok else '!= reg %s' % registry['hidden_dim'])):>20s} "
-              f"{('%s %s' % (actual_layers, 'ok' if layers_ok else '!= reg %s' % registry['num_layers'])):>18s} "
+        print(f"{model:44s} {arch:>10s} "
+              f"{('%s %s' % (actual_dim, 'ok' if dim_ok else '!= reg %s' % registry['hidden_dim'])):>18s} "
+              f"{('%s %s' % (actual_layers, 'ok' if layers_ok else '!= reg %s' % registry['num_layers'])):>16s} "
               f"{size_str:>10s}  {cached_str}")
 
     print()
@@ -162,6 +188,14 @@ def main():
         print(f"\nUNREACHABLE ({len(unreachable)}):")
         for model, why in unreachable:
             print(f"  {model}: {why}")
+    if unsupported:
+        print(f"\nUNLOADABLE ON THIS TRANSFORMERS ({len(unsupported)}) "
+              f"-- installed: {tf_version or 'unknown'}:")
+        for model, model_type in unsupported:
+            print(f"  {model}: model_type={model_type!r} not in CONFIG_MAPPING_NAMES")
+        print("  These fail inside AutoConfig.from_pretrained after the weights download.")
+        print("  Either upgrade transformers or drop them from the registry.")
+        return 1
     if mismatches:
         print(f"\nREGISTRY MISMATCHES ({len(mismatches)}) -- fix fc_group/model_registry.py:")
         for model, field, reg, actual in mismatches:

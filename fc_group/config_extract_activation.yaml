@@ -4,9 +4,7 @@ extraction:
   # of each -- also overridable per-run via extract_activations_subset.py --model-name):
   # - "meta-llama/Meta-Llama-3.1-70B"
   # - "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
-  # - "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-  # - "Qwen/Qwen3-8B"
-  # - "Qwen/Qwen2.5-Math-7B"
+  # - "phenixace/Chem-R-Faithful"   # chemistry-tuned, same Llama-3.1-8B base
   batch_size: 8
   aggregation: "last"
   save_dir: "fc_group/activation_datasets_functional_groups"

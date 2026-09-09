@@ -29,18 +29,13 @@ print('\n'.join(MODEL_CONFIGS))
 SMALL_MODELS=(
   "meta-llama/Llama-3.1-8B"
   "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
-  "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-  "Qwen/Qwen3-8B"
-  "Qwen/Qwen2.5-Math-7B"
+  "phenixace/Chem-R-Faithful"
 )
 
 # >=32B: needs 4-bit sharded across the four allocated GPUs.
 LARGE_MODELS=(
   "meta-llama/Llama-3.1-70B"
   "deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
-  "Qwen/Qwen3-32B"
-  "Qwen/Qwen2.5-Math-72B"
-  "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
 )
 
 # The consistency check this file exists for.

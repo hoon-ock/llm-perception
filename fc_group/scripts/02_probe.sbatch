@@ -5,9 +5,9 @@
 #SBATCH --time=12:00:00
 # Measured peak RSS at 70B width (920 x 8192) is 910 MB; 4G is ~4x headroom.
 #SBATCH --mem=4G
-# 10 models x 24 entity types. Append '%N' (--array=0-239%20) to cap concurrency
+# 5 models x 24 entity types. Append '%N' (--array=0-119%20) to cap concurrency
 # if the partition is busy; each task is a single CPU core.
-#SBATCH --array=0-239
+#SBATCH --array=0-119
 #SBATCH --output=slurm-probe-%A_%a.out
 
 set -o pipefail
@@ -53,7 +53,7 @@ while IFS= read -r entity; do
 done < <(read_entity_types)
 [ ${#ENTITIES[@]} -gt 0 ] || { echo "ERROR: no entity types parsed from config"; exit 1; }
 
-ARRAY_SIZE=240   # must equal the span of '#SBATCH --array=0-239' above
+ARRAY_SIZE=120   # must equal the span of '#SBATCH --array=0-119' above
 N_EXPECTED=$(( ${#ALL_MODELS[@]} * ${#ENTITIES[@]} ))
 if [ "$N_EXPECTED" -ne "$ARRAY_SIZE" ]; then
   echo "ERROR: ${#ALL_MODELS[@]} models x ${#ENTITIES[@]} entity types = $N_EXPECTED runs,"

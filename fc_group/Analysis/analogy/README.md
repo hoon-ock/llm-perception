@@ -137,8 +137,12 @@ that F, Br and I are written as SMILES in `functional_group_dataset.csv` while C
 a condensed formula. So `alkyl bromide − alkyl chloride` is partly a *notation* difference while
 `alkyl iodide − alkyl bromide` is not — the two vectors encode different things, and
 anti-alignment is what that predicts. This is the same confound that made `alkyl chloride` the
-sole failing group in the probe's leave-one-group-out. Fix `extract_properties.py` before
-concluding anything about halogen analogies.
+sole failing group in the probe's leave-one-group-out. `extract_properties.py` has since been
+fixed — `smiles` and `condensed_formula` are now populated for every molecule from one set of
+templates — but the fix cannot reach these results, because the notation is part of the prompt
+text baked into the activations. Treat "the halogen analogy fails" as untested until the
+prompts are re-extracted from the clean columns; the prediction is that it stops being
+anti-aligned.
 
 ## 4. Limits
 

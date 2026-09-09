@@ -48,6 +48,43 @@ extraction:
         - "What is the functional-group identity of {iupac_name} ({formula})?"
         - "For the molecule {iupac_name} ({formula}), what is the defining functional group?"
 
+    # --- Lexical-ablation condition ---------------------------------------------
+    #
+    # The declarative prompts above hand over the answer twice: `propan-1-ol`
+    # ends in `-ol`, and the formula shows `OH`. Character n-grams on the prompt
+    # text alone score 0.975-1.00 on four of the five probe splits, so nothing
+    # measured from them separates "the model represents functional groups" from
+    # "the model can read a suffix".
+    #
+    # This condition drops the molecule name and gives only the structure, as
+    # canonical SMILES. It uses the `smiles` column, which is populated for every
+    # molecule from one set of templates -- unlike `formula`, where notation is
+    # confounded with class (9 groups written entirely as SMILES, 8 entirely as
+    # condensed formulas). Pair every run with --surface-baseline: the quantity
+    # of interest is probe minus surface, not probe.
+    #
+    # Note the target should move from `coarse` to `fine` here. `coarse` is
+    # heteroatom family and a SMILES string spells the heteroatom out
+    # (O, N, S, Cl), so character n-grams solve it trivially. Telling alcohol
+    # from ether, or aldehyde from ketone from ester, is what needs connectivity
+    # rather than an atom.
+    - entity_type: "functional_group_smiles"
+      data_file: "fc_group/functional_group_dataset.csv"
+      prompt_name: "10_templates"
+      templates:
+        - "The molecule with SMILES {smiles} contains the functional group "
+        - "The primary functional group in the molecule with SMILES {smiles} is "
+        - "For the molecule with SMILES {smiles}, the functional-group class is "
+        - "The molecule with SMILES {smiles} is classified as a molecule containing a "
+        - "The characteristic functional group of the molecule with SMILES {smiles} is "
+        - "The main functional group present in the molecule with SMILES {smiles} is "
+        - "When classified by functional group, the molecule with SMILES {smiles} is a "
+        - "The molecule with SMILES {smiles} can be categorized by the functional group "
+        - "The functional-group identity of the molecule with SMILES {smiles} is "
+        - "For the molecule with SMILES {smiles}, the defining functional group is "
+
+
+
     - entity_type: "functional_group_structure"
       data_file: "fc_group/functional_group_dataset.csv"
       prompt_name: "7_templates"

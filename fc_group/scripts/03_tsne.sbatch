@@ -68,8 +68,7 @@ echo "=== task=$TASK_ID model=$MODEL entity_type=$ENTITY ==="
 RUN_LOG=$(mktemp)
 if python fc_group/tsne_functional_groups.py \
      --model-name "$MODEL" \
-     --entity-type "$ENTITY" \
-      \     2>&1 | tee "$RUN_LOG"; then
+     --entity-type "$ENTITY" 2>&1 | tee "$RUN_LOG"; then
   # Exit 0 still covers "the activations for this entity were never extracted",
   # which is expected for models the extraction sweep has not reached yet and a
   # real problem for the ones it has.

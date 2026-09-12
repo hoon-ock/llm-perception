@@ -12,7 +12,7 @@ local smoke run. This file reports the **HCC sweep**: 2 models × 23 entity type
 > The other splits are saturated by orthography and cannot separate anything.
 >
 > Models: `meta-llama/Llama-3.1-8B` (32 layers) and `meta-llama/Llama-3.1-70B` (80 layers).
-> Source tree: `fc_group/Results_HCC/functional_group_probe/`, which is **gitignored** — so
+> Source tree: `fc_group/Results/functional_group_probe/`, which is **gitignored** — so
 > the CSVs in `data/` are the durable record, not the tree they were derived from.
 
 ---
@@ -251,7 +251,7 @@ python fc_group/Analysis/probe/analyze_sweep.py            # writes data/*.csv
 python fc_group/Analysis/probe/analyze_sweep.py --tag fine_to_coarse_group
 ```
 
-Requires a populated `fc_group/Results_HCC/functional_group_probe/`. CPU-only, no model
+Requires a populated `fc_group/Results/functional_group_probe/`. CPU-only, no model
 loading, ~4 s. `--n-boot` and `--seed` control the bootstrap; CI bounds move by < 0.002 between
 seeds at the default 20,000 draws.
 

@@ -42,7 +42,8 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..'))
-DEFAULT_ANALOGY = os.path.join(REPO, 'fc_group', 'Results_HCC', 'functional_group_analogy')
+# What 05_analogy writes, on the cluster and locally alike.
+DEFAULT_ANALOGY = os.path.join(REPO, 'fc_group', 'Results', 'functional_group_analogy')
 # Outputs follow the same shape as every other experiment here --
 # Results/{experiment}/{model-slug}/{entity_type}/ with figures at the leaf and CSVs
 # under data/ (cf. functional_group_analogy_carbon_matched.py:47, functional_group_probe.py:65).
@@ -305,7 +306,8 @@ def write_csv(path, rows, fieldnames=None):
 N_CORNERS = 4
 TOL = 1e-9
 
-# The reference case. These track the contents of Results_HCC/ *and* ANALOGY_QUADRUPLES:
+# The reference case. These track the diff vectors under --analogy-dir *and*
+# ANALOGY_QUADRUPLES:
 # adding or removing a quadruple changes the trial count and every pooled number with it.
 # Regenerate them deliberately when either changes; do not nudge them to make a run pass.
 REFERENCE_MODEL = 'meta-llama-Llama-3.1-8B'
@@ -509,9 +511,11 @@ def check_groups(trials, group_rows):
 def check_reference(trials, trend):
     """9. Fixed regression on the one case whose numbers are published."""
     problems = []
-    note = ("(these depend on Results_HCC/ and on ANALOGY_QUADRUPLES -- if the activations "
-            "were re-extracted or the quadruple set changed, update the constants rather "
-            "than hunting a regression)")
+    note = ("(these depend on the diff vectors under --analogy-dir and on "
+            "ANALOGY_QUADRUPLES. Pointing at a different extraction -- the single-template "
+            "smoke activations rather than the full sweep, say -- moves them legitimately, "
+            "as does changing the quadruple set. Update the constants deliberately in that "
+            "case rather than hunting a regression.)")
 
     for srow in trend:
         if srow['mode'] != 'carbon_matched' or srow['layer'] not in REFERENCE_HIT1:
@@ -848,7 +852,7 @@ def main():
                   f"{len(RETRIEVAL_QUADRUPLES)} quadruples, {n_cm} carbon-matched trials "
                   f"per layer over {n_groups} candidate groups")
         # entity_type is used raw as a directory name, spaces and all, matching the
-        # Results_HCC tree this reads from ('functional_group question' et al).
+        # Results tree this reads from ('functional_group question' et al).
         out_dir = os.path.join(args.output_dir, model, args.entity_type)
         write_model_outputs(out_dir, args.entity_type, model, rows, not args.no_plots)
 

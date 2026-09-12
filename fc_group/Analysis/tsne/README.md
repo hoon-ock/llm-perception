@@ -1,7 +1,7 @@
 # t-SNE of functional-group activations — what the plots do and don't show
 
 Companion to `fc_group/Analysis/probe/README.md`. That one covers the supervised probe; this
-one covers the unsupervised geometry in `fc_group/Results_HCC/tsne_plots/`.
+one covers the unsupervised geometry in `fc_group/Results/tsne_plots/`.
 
 > **The headline is a caveat.** The silhouette score printed on every one of these plots is
 > computed on the **2-D t-SNE coordinates**, not on the activations, and in this sample it does
@@ -10,7 +10,7 @@ one covers the unsupervised geometry in `fc_group/Results_HCC/tsne_plots/`.
 
 ## 1. What actually exists
 
-`fc_group/Results_HCC/tsne_plots/{model}/{coloring}/{prompt_type}_layer_{L}.png`
+`fc_group/Results/tsne_plots/{model}/{coloring}/{prompt_type}_layer_{L}.png`
 
 - **2760 files, all PNG.** Zero CSV, zero JSON — no machine-readable output at all.
 - 2 models × 12 colorings × 23 prompt types × 5 layers.
@@ -133,7 +133,7 @@ anisotropy spike.
 **Plausible and mechanically expected, but not verifiable from this tree.**
 
 The plot that would show it — the `template_index` coloring — was added three days after the
-sweep ran and does not exist in `Results_HCC/`. What can be said:
+sweep ran and does not exist in `Results/`. What can be said:
 
 - 8B `pka` L0 shows many small, tight, multi-coloured clumps (silhouette −0.11), which is the
   signature of a variable other than functional group organising the space.

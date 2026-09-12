@@ -5,13 +5,13 @@ Third review pass, after `Analysis/probe/` and `Analysis/tsne/`. Scope is the **
 
 > **Two things decide most of what follows.** (1) The activation space is strongly anisotropic
 > — raw pairwise cosine runs 0.78–1.00 — so `full_within_mean` cannot be quoted on its own; the
-> mean-centered numbers from `Results_HCC/anisotropy_diagnostic/` are the real ones. (2) The
+> mean-centered numbers from `Results/anisotropy_diagnostic/` are the real ones. (2) The
 > second-order analogy rests on **four hand-chosen quadruples**, and they disagree in sign, so
 > their mean is not a summary of anything.
 
 ## 1. The anisotropy control
 
-`Results_HCC/anisotropy_diagnostic/.../summary_all_layers.json` reports the same within/between
+`Results/anisotropy_diagnostic/.../summary_all_layers.json` reports the same within/between
 statistics twice — as computed, and after subtracting the global mean vector.
 
 | model | L | depth | raw pairwise cos | orig within | orig between | **cent within** | **cent between** |
@@ -184,7 +184,7 @@ python fc_group/Analysis/analogy/analyze_analogy.py                    # functio
 python fc_group/Analysis/analogy/analyze_analogy.py --entity-type pka  # any other prompt
 ```
 
-Needs both `Results_HCC/functional_group_analogy/` and `Results_HCC/anisotropy_diagnostic/`;
+Needs both `Results/functional_group_analogy/` and `Results/anisotropy_diagnostic/`;
 the script asserts their layer sets match rather than silently emitting empty centered columns.
 
 | file in `data/` | contents |
@@ -321,5 +321,5 @@ concept that is wrong in both.
 
 It also holds a fixed regression on 8B/`functional_group` — hit@1 34/57/59 of 80 at layers
 0/16/31, mean rank 3.79/2.17/1.35, and O↔S at 16/16. Those track the contents of
-`Results_HCC/` **and** `ANALOGY_QUADRUPLES`, so after a legitimate re-extraction or a change
+`Results/` **and** `ANALOGY_QUADRUPLES`, so after a legitimate re-extraction or a change
 to the quadruple set the constants at the top of the file are what should change.

@@ -42,9 +42,12 @@ python -c "import yaml, torch, scipy, seaborn, matplotlib, pandas" || {
 
 # This job reads what 05_analogy wrote, not the activations themselves. If that tree is
 # absent the whole array is pointless, so say so once here.
-[ -d fc_group/Results_HCC/functional_group_analogy ] || {
-  echo "ERROR: fc_group/Results_HCC/functional_group_analogy/ missing -- run 05_analogy"
-  echo "       first; this job reads its diff_vectors_layer_*.npz files."
+# Passed explicitly below rather than left to the script's default, so what this job
+# consumes sits next to the check that it exists.
+ANALOGY_DIR=fc_group/Results/functional_group_analogy
+[ -d "$ANALOGY_DIR" ] || {
+  echo "ERROR: $ANALOGY_DIR/ missing -- run 05_analogy first; this job reads its"
+  echo "       diff_vectors_layer_*.npz files."
   exit 1; }
 
 # One shared model list and one shared entity list, so this job cannot drift from the
@@ -76,6 +79,7 @@ echo "=== task=$TASK_ID model=$MODEL entity_type=$ENTITY ==="
 RUN_LOG=$(mktemp)
 # Both scripts take the slash form models.sh provides and normalise it themselves.
 if python fc_group/analogy_retrieval.py \
+     --analogy-dir "$ANALOGY_DIR" \
      --model-name "$MODEL" \
      --entity-type "$ENTITY" 2>&1 | tee "$RUN_LOG"; then
   # analogy_retrieval.py self-checks before it writes, so reaching here means the

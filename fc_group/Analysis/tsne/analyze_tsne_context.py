@@ -3,7 +3,7 @@
 
 The t-SNE sweep itself wrote no numbers (see README section 1), so the visual
 verdicts in `sampled_plots.csv` are all there is on that side. This script pulls
-the quantities that *are* measured -- from `Results_HCC/anisotropy_diagnostic/`,
+the quantities that *are* measured -- from `Results/anisotropy_diagnostic/`,
 which covers the same prompts and the same layers -- and lines them up against
 those verdicts, so README section 5 argues from a table rather than from prose.
 
@@ -25,7 +25,7 @@ import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-DEFAULT_ANISO = os.path.join(REPO, 'fc_group', 'Results_HCC', 'anisotropy_diagnostic')
+DEFAULT_ANISO = os.path.join(REPO, 'fc_group', 'Results', 'anisotropy_diagnostic')
 DEFAULT_CONFIG = os.path.join(REPO, 'fc_group', 'config_extract_activation.yaml')
 DEFAULT_VERDICTS = os.path.join(HERE, 'sampled_plots.csv')
 DEFAULT_OUT = os.path.join(HERE, 'data')
@@ -75,7 +75,7 @@ def collect(aniso_dir, templates, verdicts):
         span = N_LAYERS[model] - 1
         model_dir = os.path.join(aniso_dir, model)
         if not os.path.isdir(model_dir):
-            raise SystemExit(f"missing {model_dir} -- is Results_HCC populated?")
+            raise SystemExit(f"missing {model_dir} -- is Results populated?")
         for entity_type in sorted(os.listdir(model_dir)):
             path = os.path.join(model_dir, entity_type, 'data', 'summary_all_layers.json')
             if not os.path.exists(path):

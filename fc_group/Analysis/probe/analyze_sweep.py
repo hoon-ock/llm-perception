@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Derive the sweep-level findings from `fc_group/Results_HCC/functional_group_probe/`.
+"""Derive the sweep-level findings from `fc_group/Results/functional_group_probe/`.
 
 The probe writes one result tree per (model, entity_type); this script reads across
 all of them and produces the four tables that `README.md` quotes, so no number in
@@ -23,7 +23,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-DEFAULT_RESULTS = os.path.join(REPO, 'fc_group', 'Results_HCC', 'functional_group_probe')
+DEFAULT_RESULTS = os.path.join(REPO, 'fc_group', 'Results', 'functional_group_probe')
 DEFAULT_OUT = os.path.join(HERE, 'data')
 
 MODEL_8B = 'meta-llama-Llama-3.1-8B'
@@ -64,7 +64,7 @@ def load_curves(results_dir, tag):
         if not out[model]:
             raise SystemExit(
                 f"no summary_{tag}.json under {os.path.join(results_dir, model)} -- "
-                "is Results_HCC populated for this tag?")
+                "is Results populated for this tag?")
     return out
 
 

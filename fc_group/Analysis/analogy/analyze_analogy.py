@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Derive the functional-group analogy findings from the two HCC result trees.
 
-Reads `Results_HCC/functional_group_analogy/` (within/between cosine, second-order
-analogies) and joins it against `Results_HCC/anisotropy_diagnostic/`, which carries
+Reads `Results/functional_group_analogy/` (within/between cosine, second-order
+analogies) and joins it against `Results/anisotropy_diagnostic/`, which carries
 the **mean-centered** version of the same within/between numbers.
 
 That join is the point of this script. Raw cosine among these activations runs
@@ -22,8 +22,8 @@ import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-DEFAULT_ANALOGY = os.path.join(REPO, 'fc_group', 'Results_HCC', 'functional_group_analogy')
-DEFAULT_ANISO = os.path.join(REPO, 'fc_group', 'Results_HCC', 'anisotropy_diagnostic')
+DEFAULT_ANALOGY = os.path.join(REPO, 'fc_group', 'Results', 'functional_group_analogy')
+DEFAULT_ANISO = os.path.join(REPO, 'fc_group', 'Results', 'anisotropy_diagnostic')
 DEFAULT_OUT = os.path.join(HERE, 'data')
 
 MODEL_8B = 'meta-llama-Llama-3.1-8B'
@@ -66,7 +66,7 @@ def collect(analogy_dir, aniso_dir, entity_type, models):
                               'summary_all_layers.json')
         for path in (a_path, n_path):
             if not os.path.exists(path):
-                raise SystemExit(f"missing {path} -- is Results_HCC populated for {entity_type}?")
+                raise SystemExit(f"missing {path} -- is Results populated for {entity_type}?")
 
         analogy = read_json(a_path)
         aniso = read_json(n_path)

@@ -19,6 +19,7 @@ exits non-zero rather than failing obscurely.
 | `04_anisotropy` | cpu, 32G | 120 | `anisotropy_diagnostic.py` |
 | `05_analogy` | cpu, 32G | 120 | `functional_group_analogy_carbon_matched.py` |
 | `06_generation_eval_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | `generation_eval.py` — behavioural readout, needs no activations |
+| `07_retrieval` | cpu, 8G | 120 | `analogy_retrieval.py` — reads what `05_analogy` wrote, not the activations, so it must run after it. Self-checks before writing, so `SUMMARY: ok` means the output was validated |
 
 120 = 5 models × 24 entity types.
 

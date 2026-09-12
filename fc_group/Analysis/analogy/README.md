@@ -107,6 +107,28 @@ other is "are the groups alike in how alike their members are", and only the sec
 
 ## 3. The analogy result is 2-of-4, not a mean
 
+> **Superseded in part.** This section analyses the original **four** quadruples. The set is
+> now **seven** — both halogen quadruples were dropped as notation-confounded, and three
+> controls were added (see `functional_group_analogy_carbon_matched.py:259` for the
+> selection criteria). The HCC sweep behind the tables below has not been rerun, so these
+> numbers still describe the old set. What the local 8B layers already show:
+>
+> | quadruple | L0 | L16 | L31 | |
+> |---|---|---|---|---|
+> | thioether−thiol ~ ether−alcohol | +0.382 | +0.740 | +0.599 | O↔S, notation-crossed |
+> | thiol−alcohol ~ thioether−ether | −0.176 | +0.447 | **+0.588** | **its notation-clean control** |
+> | imine−aldehyde ~ amine−alcohol | +0.056 | +0.107 | +0.556 | O→N, notation-crossed |
+> | amide−carboxylic acid ~ amine−alcohol | +0.141 | +0.228 | **+0.616** | **its notation-clean control** |
+> | carboxylic acid−alcohol ~ amide−amine | +0.713 | +0.861 | +0.629 | matched legs |
+> | ester−carboxylic acid ~ ketone−aldehyde | +0.269 | +0.043 | **+0.129** | **mismatched legs, negative control** |
+>
+> Two things follow. **The O↔S and O→N results survive their notation controls** — the clean
+> and crossed versions converge by the final layer (+0.588 vs +0.599, +0.616 vs +0.556),
+> though they disagree sharply at layer 0 where the geometry is orthographic anyway. And
+> **leg symmetry predicts success**: the two quadruples built from the same carbonyl groups
+> differ only in whether their legs conserve hbd/hba, and score +0.629 against +0.129.
+
+
 The per-layer mean (8B: 0.118 → 0.273 → 0.150) averages four quadruples that **disagree in
 sign**, two consistently positive and two consistently negative. Individually:
 
@@ -170,3 +192,134 @@ the script asserts their layer sets match rather than silently emitting empty ce
 | `layer_trend.csv` | per model × layer: raw pairwise cosine, original and centered within/between/gap, within_std, PC1 ratio, analogy mean, signed significance counts |
 | `analogy_quadruples.csv` | all 4 quadruples × layer × model, individual cosines, direction-aware significance flag |
 | `within_by_group.csv` | per-group within-class score by layer — which groups drive the mean |
+
+## 6. The retrieval test
+
+§3 scores each quadruple by the **cosine between two offset vectors**. That is not what the
+word2vec analogy result measures. That result is *retrieval* — `king − man + woman` lands
+nearest to `queen` — and offset cosines in those spaces are well short of 1. Scoring by
+cosine alone measures the strictly harder quantity, and it changes the verdict on half the
+quadruples.
+
+`fc_group/analogy_retrieval.py` runs the retrieval version over the diff vectors the
+analogy script already saved to `data/diff_vectors_layer_{L}.npz`, so it needs no rerun and no GPU. For
+each quadruple it tests all four corner predictions (`b1 = b2 + (a1 − a2)`, and the three
+rotations) at each chain length: 4 quadruples × 4 corners × 4 chain lengths = 64 trials per
+layer, against 19 candidate groups.
+
+**Retrieval sees 5 analogies where §3's cosine sees 7.** Retrieval is blind to how four
+groups are paired — every corner target is two of them minus the third, and the exclusion
+set is always the other three, so re-pairing `{w,x,y,z}` poses the same four questions with
+the sources relabelled. `cos(a1−a2, b1−b2)` *does* depend on the pairing, which is why
+`ANALOGY_QUADRUPLES` carries both pairings of two group sets as notation controls, and why
+`analogy_retrieval.py` collapses them (`distinct_by_group_set`). Counting both would double
+those group sets' weight in every pooled figure.
+
+`functional_group`, carbon-matched, 80 trials per layer, random-baseline hit@1 = 6.2%:
+
+| depth | 0.00 | 0.25 | 0.51 | 0.76 | 1.00 |
+|---|---|---|---|---|---|
+| 8B hit@1 | 42.5% | 45.0% | 71.2% | **75.0%** | 73.8% |
+| 70B hit@1 | 46.2% | 48.8% | **82.5%** | 81.2% | 81.2% |
+
+**The peak-then-fall shape reported for the four-quadruple set was the halogen quadruple.**
+With the halogens gone, both models rise and then plateau across the whole second half
+rather than falling back at the end. The earlier "falls back at
+the final layer" reading, which appeared to corroborate §2's centered gap, was one
+notation-confounded quadruple collapsing and dragging the pooled mean with it.
+
+O↔S retrieves 16/16 from the midpoint on. **The sulfur ladder, which is negative by cosine
+in §3, retrieves at rank 1–2 on every trial at 8B layer 31** — the clearest case of cosine
+and retrieval disagreeing.
+
+Two caveats that have to travel with these numbers:
+
+- **Excluding the source terms is doing real work.** Standard word2vec practice excludes the
+  three input terms from the candidate pool, and that convention is also why those results
+  flatter themselves. Here the unexcluded nearest neighbour is simply the source group in
+  **29–58%** of trials — the offset is real, but small next to the distance between groups.
+  `rank_incl` and `degenerate_top1_rate` are emitted in every output for that reason.
+- **The halogen failure is asymmetric by corner.** The two corners predicting `alkyl bromide`
+  sit at rank 11–17 while predicting chloride and iodide is rank 1 at every chain length —
+  which is what the SMILES-vs-condensed-formula confound in §3 predicts, and is invisible in
+  the cosine view.
+
+```bash
+python fc_group/analogy_retrieval.py                    # functional_group
+python fc_group/analogy_retrieval.py --entity-type pka  # any other prompt
+python fc_group/analogy_retrieval.py --no-plots         # CSVs only
+```
+
+Outputs land under `Results/`, in the same shape every other experiment here uses —
+`fc_group/Results/functional_group_analogy_retrieval/{model}/{entity_type}/`, figures at the
+leaf and CSVs under `data/`. Model and entity are in the path, so they are not repeated in
+the filenames, and each CSV holds exactly one model.
+
+| file in `data/` | contents |
+|---|---|
+| `retrieval_trials.csv` | one row per trial: ranks with and without the source terms excluded, hit@1/@2/@3, cosine to the target, the unexcluded top-1 |
+| `retrieval_layer_trend.csv` | per layer × mode: hit@1/@2/@3, mean and median rank, MRR, degenerate rate, and the matching `random_*` baselines |
+| `retrieval_by_quadruple.csv` | the same aggregates split by quadruple |
+| `retrieval_by_group.csv` | the same aggregates split by the functional group being predicted, with `n_trials` — groups are **unevenly sampled**, since one that answers two different corners gets twice the trials |
+
+Seven figures per model:
+
+| figure | shows |
+|---|---|
+| `retrieval_accuracy_pooled.png` | hit@1/@2/@3 pooled over the five distinct quadruples, on one axis so the three can be compared |
+| `retrieval_accuracy_hit{1,2,3}_by_quadruple.png` | one file per k: four quadruple lines against that k's own baseline |
+| `retrieval_rank_by_quadruple.png` | mean rank per quadruple. **No pooled mean line** — the four quadruples span six rank positions at some depths, so their average describes none of them |
+| `retrieval_rank_by_group.png` | mean rank per functional group, plus the overall mean |
+| `retrieval_rank_heatmap.png` | rank of the correct group for every corner prediction × chain length × layer |
+
+**"Random baseline", not "chance".** Ordering the candidates at random puts the answer in
+the top *k* with probability `k/n`, so each hit@k has its own baseline — 6.1% / 12.1% /
+18.2%, and 8.75 for mean rank. They are not interchangeable: reading hit@3 against the
+hit@1 line would overstate it threefold. The baselines are averaged over the *actual*
+candidate pools rather than assumed constant, because pool size is 16 or 17 depending on
+whether the quadruple reuses a group.
+
+A quadruple keeps one colour across all four by-quadruple figures, so they can be read
+side by side.
+
+Every series in these plots is a solid line distinguished by colour and marker. Dash
+patterns are deliberately not used to encode identity — at these font sizes `--` and `-.`
+are indistinguishable from `-` in a legend swatch, so a dash-encoded series ends up
+mislabelled in practice even when the code is right. The self-checks in §7 have no opinion
+on this — it is a figure property, not a data one — so it is asserted separately by
+building each figure and comparing every legend handle's linestyle, marker and colour
+against the line it labels, with solid the only non-baseline style permitted.
+
+## 7. Checking it
+
+`analogy_retrieval.py` used to exit 0 whenever it did not crash, and both bugs found while
+writing it were silent-wrong-answer bugs: a heatmap row key that collided for the two
+quadruples reusing a group (14 rows drawn for 16 trials), and an exclusion set that deleted
+the answer for a quadruple. Neither showed up in the printed table.
+
+It now **self-checks before it writes**, so a run that fails leaves no plausible-looking but
+wrong results tree behind — there is no separate verifier to remember to run:
+
+```bash
+python fc_group/analogy_retrieval.py                    # checks, then writes
+python fc_group/analogy_retrieval.py --skip-checks      # escape hatch, not a normal flag
+```
+
+It asserts trial counts; that no two quadruples share a group set (which is what the first
+seven-quadruple run needed and did not have); that no quadruple was silently skipped; that every trial is
+uniquely addressable by (quadruple, source, predicted, chain length); that candidate-pool
+sizes match the exclusion rule (`n_groups − 2` for the quadruple built from three distinct
+groups, `n_groups − 3` otherwise); that ranks and hit flags agree row by row; that the
+per-group rows partition the trials; that the random baselines equal `k/n` over the actual
+pools; and that every reported aggregate matches the trials it summarizes.
+
+That last one recomputes the aggregates with `recompute()` rather than `summarize()`. The
+near-duplication is deliberate — folding them together would make the check vacuous — but
+it is worth being clear about what it buys: it catches the wrong rows reaching `summarize`,
+rows mutated between summarizing and writing, and a typo in one copy. It does not catch a
+concept that is wrong in both.
+
+It also holds a fixed regression on 8B/`functional_group` — hit@1 34/57/59 of 80 at layers
+0/16/31, mean rank 3.79/2.17/1.35, and O↔S at 16/16. Those track the contents of
+`Results_HCC/` **and** `ANALOGY_QUADRUPLES`, so after a legitimate re-extraction or a change
+to the quadruple set the constants at the top of the file are what should change.

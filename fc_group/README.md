@@ -29,6 +29,7 @@ similarity, anisotropy baselines, t-SNE/PCA visualization).
 | `functional_group_dataset.csv` | Curated dataset (IUPAC name, formula, functional group, pKa/pKaH, TPSA, HBD/HBA, boiling point, water solubility, ...) |
 | `functional_group_analogy.py` | Diff-vector analogy geometry: within-class consistency, between-class distinctness, second-order analogies |
 | `functional_group_analogy_carbon_matched.py` | Same analysis with carbon-count-matched controls |
+| `analogy_retrieval.py` | Retrieval counterpart to the analogy cosine: does `b2 + (a1 - a2)` retrieve `b1` among all 19 groups? Reads the diff vectors the analogy script saved, so it needs no activations and no GPU |
 | `anisotropy_diagnostic.py` | How much of the diff-vector geometry is generic transformer-hidden-state anisotropy vs. genuine chemistry-specific structure |
 | `tsne_functional_groups.py` | t-SNE/PCA visualization of activations, colored by functional group / pKa / TPSA / etc. |
 | `functional_group_probe.py` | Supervised counterpart to the above: layer-wise linear probe predicting functional group from the last-token residual stream |
@@ -75,6 +76,7 @@ Useful flags:
 ```bash
 python fc_group/functional_group_analogy.py --entity-type functional_group
 python fc_group/functional_group_analogy_carbon_matched.py --entity-type functional_group
+python fc_group/analogy_retrieval.py --entity-type functional_group
 python fc_group/anisotropy_diagnostic.py --entity-type functional_group
 python fc_group/tsne_functional_groups.py --entity-type functional_group
 python fc_group/functional_group_probe.py --entity-type functional_group

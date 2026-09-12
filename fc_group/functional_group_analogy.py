@@ -191,24 +191,10 @@ def compute_second_order_analogy(mean_diff_by_group, pair_a, pair_b):
     return cosine_similarity(vec_a, vec_b)
 
 
-# Analogy quadruples to test: (pair_a, pair_b) where we check whether
-# (pair_a[0] - pair_a[1]) tracks (pair_b[0] - pair_b[1]).
-ANALOGY_QUADRUPLES = [
-    # O<->S heteroatom substitution: alcohol/thiol and ether/thioether are the
-    # only two clean matched pairs (sulfoxide/sulfone substitute at the
-    # central atom, not a heteroatom hanging off it, so they don't fit here).
-    (('thioether', 'thiol'), ('ether', 'alcohol')),
-    # Halogen-column progression: does stepping F->Cl->Br->I add a consistent
-    # "step" direction, like a periodic-table analogue of a one-year time-step?
-    (('alkyl bromide', 'alkyl chloride'), ('alkyl iodide', 'alkyl bromide')),
-    # Sulfur oxidation ladder: thioether -> sulfoxide -> sulfone is a real
-    # stepwise S-oxidation series (S, S+O, S+2O); tests whether "add one more
-    # S=O" is a consistent additive direction.
-    (('sulfoxide', 'thioether'), ('sulfone', 'sulfoxide')),
-    # A second O->N substitution pair, parallel to alcohol/amine: imine (C=NH)
-    # is the same O->N swap on aldehyde's carbonyl carbon (C=O -> C=NH).
-    (('imine', 'aldehyde'), ('amine', 'alcohol')),
-]
+# The quadruple list has one home, in the carbon-matched script. It used to be
+# duplicated here, which is exactly how two scripts end up silently testing different
+# analogy sets. The carbon-matched module does not import this one, so there is no cycle.
+from functional_group_analogy_carbon_matched import ANALOGY_QUADRUPLES  # noqa: E402
 
 
 def flatten_diff_vectors(diffs):

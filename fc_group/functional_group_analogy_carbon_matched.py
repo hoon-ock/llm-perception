@@ -256,21 +256,64 @@ def compute_second_order_analogy_by_carbon(diffs, pair_a, pair_b):
 
 # Analogy quadruples to test: (pair_a, pair_b) where we check whether
 # (pair_a[0] - pair_a[1]) tracks (pair_b[0] - pair_b[1]).
+#
+# Selection is constrained by two things beyond chemistry.
+#
+# 1. NOTATION. The functional_group prompt is "{iupac_name} ({formula}) ...", and the
+#    `formula` column mixes SMILES (ether, imine, nitro, sulfone, sulfoxide, thioether,
+#    the halides) with condensed formulas (aldehyde, amide, carboxylic acid, ester,
+#    ketone, nitrile, alkane); alcohol/amine/thiol are half of each, their 1-isomer
+#    condensed and their 2-isomer SMILES. Since every diff vector is measured against
+#    the alkane, which is condensed, notation rides along inside them: diff vectors of
+#    the same notation class sit ~0.20 more similar than cross-class ones at EVERY
+#    layer, not just layer 0. A leg whose two groups share a notation class cancels
+#    that component; a leg that crosses carries it. So a quadruple is only clean if
+#    both legs are within-class (or both cross it identically, which also cancels).
+#
+# 2. LEG SYMMETRY. Two legs can be the same transformation formally and not
+#    chemically. The hbd/hba/pka columns are the check: quadruple 1's legs are both
+#    hbd 1->0, hba 1->1, and it is the strongest result in the set.
+#
+# The halogen quadruples that used to live here are gone. alkyl chloride is the one
+# halide written as a condensed formula, so Br-Cl crossed notation while I-Br did not;
+# and the Cl-free version is no better, because three of the nine SMILES-notation
+# groups ARE halides, which entangles the halogen direction with the notation
+# direction badly enough that neither can be read off the other.
 ANALOGY_QUADRUPLES = [
-    # O<->S heteroatom substitution: alcohol/thiol and ether/thioether are the
-    # only two clean matched pairs (sulfoxide/sulfone substitute at the
-    # central atom, not a heteroatom hanging off it, so they don't fit here).
+    # 1. Alkylation of a chalcogen: thiol -> thioether and alcohol -> ether are both
+    #    "put a methyl on the heteroatom", at matched carbon count (both pairs are
+    #    isomers, C4H10S and C4H10O). Legs are symmetric -- both hbd 1->0, hba 1->1.
     (('thioether', 'thiol'), ('ether', 'alcohol')),
-    # Halogen-column progression: does stepping F->Cl->Br->I add a consistent
-    # "step" direction, like a periodic-table analogue of a one-year time-step?
-    (('alkyl bromide', 'alkyl chloride'), ('alkyl iodide', 'alkyl bromide')),
-    # Sulfur oxidation ladder: thioether -> sulfoxide -> sulfone is a real
-    # stepwise S-oxidation series (S, S+O, S+2O); tests whether "add one more
-    # S=O" is a consistent additive direction.
+    # 2. Sulfur oxidation ladder: thioether -> sulfoxide -> sulfone is a real stepwise
+    #    S-oxidation series (S, S+O, S+2O); tests whether "add one more S=O" is a
+    #    consistent additive direction. All four groups are SMILES -- notation-clean.
+    #    The only quadruple here that reuses a group (sulfoxide is both a1 and b2).
     (('sulfoxide', 'thioether'), ('sulfone', 'sulfoxide')),
-    # A second O->N substitution pair, parallel to alcohol/amine: imine (C=NH)
-    # is the same O->N swap on aldehyde's carbonyl carbon (C=O -> C=NH).
+    # 3. O->N substitution: imine (C=NH) is the same O->N swap on aldehyde's carbonyl
+    #    carbon that amine is on alcohol's sp3 carbon. Notation-mismatched (imine is
+    #    SMILES, aldehyde condensed, while amine/alcohol are both mixed) -- kept as the
+    #    original, with 5 below as its clean counterpart.
     (('imine', 'aldehyde'), ('amine', 'alcohol')),
+    # 4. The other diagonal of quadruple 1's four groups, and the one that actually
+    #    tests O<->S *substitution* rather than alkylation: swap O for S on the -XH
+    #    compound, and on the -X-Me compound. Notation-clean where 1 is not, so it is
+    #    the control on 1 -- if 1's result is largely notation, this is where it shows.
+    (('thiol', 'alcohol'), ('thioether', 'ether')),
+    # 5. The notation-clean O->N pair: -COOH -> -CONH2 is OH->NH2 on a carbonyl carbon,
+    #    -OH -> -NH2 is the same swap on an sp3 carbon. Legs are symmetric (both
+    #    hbd 1->1, hba 1->1, both a large pKa increase). Shares amine-alcohol with 3.
+    (('amide', 'carboxylic acid'), ('amine', 'alcohol')),
+    # 6. Methylation at a carbonyl: O-methylation (acid -> ester) against C-methylation
+    #    (aldehyde -> ketone). DELIBERATE NEGATIVE CONTROL -- the legs are formally the
+    #    same (H -> CH3) but chemically are not: acid->ester is hbd 1->0, hba 1->2,
+    #    pKa +20, while aldehyde->ketone is hbd 0->0, hba 1->1, pKa +3. If leg symmetry
+    #    is what makes an analogy work, this is the one that should fail.
+    (('ester', 'carboxylic acid'), ('ketone', 'aldehyde')),
+    # 7. Insert a carbonyl at the heteroatom-bearing carbon, once on the O-compound and
+    #    once on the N-compound. Symmetric legs (both hbd 1->1, hba 1->1, both a large
+    #    pKa decrease) and notation-clean, so it is the positive counterpart to 6.
+    #    With 5, closes a 2x2 over {alcohol, amine, carboxylic acid, amide}.
+    (('carboxylic acid', 'alcohol'), ('amide', 'amine')),
 ]
 
 

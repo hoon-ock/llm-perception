@@ -174,7 +174,8 @@ activation_datasets/
 fc_group/activation_datasets_functional_groups/
 fc_group/Results/
 fc_group/Results_old/
-fc_group/logs/
+fc_group/logs/*
+!fc_group/logs/.gitkeep
 fc_group/__*.csv
 fc_group/PROBE_NOTES.md
 slurm-*.out

@@ -10,7 +10,7 @@
 #SBATCH --array=0-114
 # stderr folded into stdout on purpose: the "=== task=... ===" marker is on
 # stdout, so splitting the streams makes tracebacks unattributable.
-#SBATCH --output=slurm-tsne-%A_%a.out
+#SBATCH --output=fc_group/logs/slurm-tsne-%A_%a.out
 
 # Needed so `python ... | tee` reports python's status rather than tee's.
 set -o pipefail

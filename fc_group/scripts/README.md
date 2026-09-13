@@ -6,6 +6,11 @@ Submit from the **repo root** — every path inside these scripts is repo-root-r
 sbatch fc_group/scripts/01_extract_small.sbatch
 ```
 
+Logs land in `fc_group/logs/`, not the submission directory. **SLURM does not create that
+directory** — it resolves `--output` before the script runs, so a missing `fc_group/logs/`
+loses the job's output. `.gitkeep` keeps it present through a clone; everything written into
+it is ignored.
+
 Numbered by dependency order. Nothing from `02` onward can run until `01` has produced
 activations; a task whose activations are missing reports `SUMMARY: no activation data` and
 exits non-zero rather than failing obscurely.

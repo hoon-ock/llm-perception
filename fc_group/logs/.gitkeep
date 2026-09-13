@@ -1,0 +1,3 @@
+SLURM does not create --output directories; a job whose log directory is missing
+fails at submission. This file exists so `fc_group/logs/` survives a fresh clone,
+since everything else in here is ignored.

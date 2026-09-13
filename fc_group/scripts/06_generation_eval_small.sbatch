@@ -8,7 +8,7 @@
 #SBATCH --mem=32G
 # stderr folded into stdout so the "=== model=... ===" marker stays attached to
 # any traceback below it -- same reason run_functional_group_probe.sbatch does it.
-#SBATCH --output=slurm-geneval-small-%A_%a.out
+#SBATCH --output=fc_group/logs/slurm-geneval-small-%A_%a.out
 
 set -o pipefail
 

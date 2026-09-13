@@ -23,7 +23,7 @@
 # 8-per-GPU ratio (16): at 16 the two concurrent tasks would need exactly all 32
 # of the node's cores, so anything else running pushes one to pending.
 #SBATCH --cpus-per-task=8
-#SBATCH --output=slurm-%A_%a.out
+#SBATCH --output=fc_group/logs/slurm-extract-large-%A_%a.out
 #SBATCH --error=slurm-%A_%a.err
 
 module load anaconda

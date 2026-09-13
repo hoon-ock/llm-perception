@@ -8,7 +8,7 @@
 # 5 models x 23 entity types. Append '%N' (--array=0-114%20) to cap concurrency
 # if the partition is busy; each task is a single CPU core.
 #SBATCH --array=0-114
-#SBATCH --output=slurm-probe-%A_%a.out
+#SBATCH --output=fc_group/logs/slurm-probe-%A_%a.out
 
 set -o pipefail
 

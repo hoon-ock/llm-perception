@@ -9,7 +9,7 @@
 # safetensors deserialization before .to(device); 8 cores x 3 array tasks is 24
 # of the node's 32, leaving headroom.
 #SBATCH --cpus-per-task=8
-#SBATCH --output=slurm-%A_%a.out
+#SBATCH --output=fc_group/logs/slurm-extract-small-%A_%a.out
 #SBATCH --error=slurm-%A_%a.err
 
 module load anaconda

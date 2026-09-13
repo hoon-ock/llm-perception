@@ -6,10 +6,10 @@
 # 8G, not the 32G that 04/05 request: this job reads a ~2 MB npz per layer and draws
 # matplotlib figures. It never loads a model or an activation tensor.
 #SBATCH --mem=8G
-# 5 models x 24 entity types. Append '%N' (--array=0-119%20) to cap concurrency if the
+# 5 models x 23 entity types. Append '%N' (--array=0-114%20) to cap concurrency if the
 # partition is busy; each task is a single CPU core, so there is otherwise no reason to
 # throttle.
-#SBATCH --array=0-119
+#SBATCH --array=0-114
 # stderr folded into stdout on purpose: the "=== task=... ===" marker is on stdout, so
 # splitting the streams makes tracebacks unattributable.
 #SBATCH --output=slurm-retrieval-%A_%a.out
@@ -30,7 +30,7 @@ export OMP_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 
-# ---- Preflight: fail here rather than 120 identical failures below ----
+# ---- Preflight: fail here rather than 115 identical failures below ----
 
 # Every path in this script is relative to the repo root.
 [ -f fc_group/analogy_retrieval.py ] || {
@@ -62,7 +62,7 @@ done < <(read_entity_types)
 
 # --array is static but the lists it indexes are derived at runtime, so this is the one
 # thing that cannot self-update. Catch the mismatch here.
-ARRAY_SIZE=120   # must equal the span of '#SBATCH --array=0-119' above
+ARRAY_SIZE=115   # must equal the span of '#SBATCH --array=0-114' above
 N_EXPECTED=$(( ${#ALL_MODELS[@]} * ${#ENTITIES[@]} ))
 if [ "$N_EXPECTED" -ne "$ARRAY_SIZE" ]; then
   echo "ERROR: ${#ALL_MODELS[@]} models x ${#ENTITIES[@]} entity types = $N_EXPECTED runs,"
@@ -87,7 +87,7 @@ if python fc_group/analogy_retrieval.py \
   echo "SUMMARY: ok  $MODEL | $ENTITY"
   rm -f "$RUN_LOG"
 else
-  # Three different non-zero exits, and telling them apart matters across 120 tasks.
+  # Three different non-zero exits, and telling them apart matters across 115 tasks.
   # A model whose activations 05_analogy has not reached yet has no diff-vector npz to
   # read -- expected for part of the sweep, not a crash. A failed self-check means the
   # analysis ran but its output does not hang together, which is a bug in the code, not

@@ -6,6 +6,12 @@ the numbers.
 Companion to `fc_group/PROBE_NOTES.md`, which explains **how the probe works** and reports the
 local smoke run. This file reports the **HCC sweep**: 2 models × 23 entity types × all layers.
 
+> **Every figure here predates the notation switch.** These runs used the old `{formula}`
+> column, which mixed SMILES and condensed notation across groups — a confound worth ~0.20
+> cosine at every depth. All templates now interpolate the uniform `{smiles}` column, and
+> `molecule_formula_bare` is now `molecule_smiles_bare`. Nothing below has been re-measured
+> against the new prompts.
+
 > **Scope.** Everything below is the `coarse_group` tag — target `coarse` (5 heteroatom
 > families), split `group` (leave-one-functional-group-out). That is the deliberate choice:
 > per `PROBE_NOTES.md` §4 and §6, leave-one-group-out is the only split with dynamic range.

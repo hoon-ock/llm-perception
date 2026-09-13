@@ -3,6 +3,12 @@
 Companion to `fc_group/Analysis/probe/README.md`. That one covers the supervised probe; this
 one covers the unsupervised geometry in `fc_group/Results/tsne_plots/`.
 
+> **Every figure here predates the notation switch.** These runs used the old `{formula}`
+> column, which mixed SMILES and condensed notation across groups — a confound worth ~0.20
+> cosine at every depth. All templates now interpolate the uniform `{smiles}` column, and
+> `molecule_formula_bare` is now `molecule_smiles_bare`. Nothing below has been re-measured
+> against the new prompts.
+
 > **The headline is a caveat.** The silhouette score printed on every one of these plots is
 > computed on the **2-D t-SNE coordinates**, not on the activations, and in this sample it does
 > not rank plots by how well they cluster — sometimes it ranks them backwards. §3 has the

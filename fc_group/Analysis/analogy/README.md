@@ -3,6 +3,12 @@
 Third review pass, after `Analysis/probe/` and `Analysis/tsne/`. Scope is the **declarative
 `functional_group` prompt only**; the script takes `--entity-type` if the others are wanted.
 
+> **Every figure here predates the notation switch.** These runs used the old `{formula}`
+> column, which mixed SMILES and condensed notation across groups — a confound worth ~0.20
+> cosine at every depth. All templates now interpolate the uniform `{smiles}` column, and
+> `molecule_formula_bare` is now `molecule_smiles_bare`. Nothing below has been re-measured
+> against the new prompts.
+
 > **Two things decide most of what follows.** (1) The activation space is strongly anisotropic
 > — raw pairwise cosine runs 0.78–1.00 — so `full_within_mean` cannot be quoted on its own; the
 > mean-centered numbers from `Results/anisotropy_diagnostic/` are the real ones. (2) The

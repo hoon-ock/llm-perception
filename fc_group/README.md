@@ -87,9 +87,9 @@ Common flags across the analysis scripts: `--entity-type`, `--model-name`, `--la
 for its full list.
 
 Available `entity_type` values are defined in `config_extract_activation.yaml`:
-`functional_group`, `functional_group_structure`, `pka`, `pkah`, `tpsa`,
+`functional_group`, `functional_group_smiles`, `functional_group_iupac`, `pka`, `pkah`, `tpsa`,
 `avg_carbon_oxidation_state`, `hbd`, `hba`, `boiling_point_c`, `water_solubility`,
-`molecule`, `molecule_name_bare`, `molecule_formula_bare` — each also has a `... question`
+`molecule`, `molecule_name_bare`, `molecule_smiles_bare` — each also has a `... question`
 variant using interrogative prompt templates instead of declarative ones.
 
 ## The linear probe
@@ -202,6 +202,12 @@ the probe climbs with depth (0.41 -> 0.72 -> 0.98 across layers 0/16/31).
 the 21 name+formula prompts span 0.4934-0.5724, and `molecule_formula_bare` sits apart at
 0.5197 because its prompt carries no molecule name. So sweep results carry no orange line and
 `summary_*.json` has `surface_baseline_balanced_acc: null`.
+
+> Those spans were measured when every prompt interpolated `{formula}`; the templates now use
+> `{smiles}` and `molecule_formula_bare` is `molecule_smiles_bare`. Expect the surface baseline
+> to **rise**, not just shift: a SMILES string spells the heteroatom out (`O`, `N`, `S`, `Cl`),
+> so character n-grams solve the coarse decision more easily than a condensed formula allows.
+> Probe-minus-surface is the quantity to watch, and the margin may narrow.
 
 It does not scale with layer count, so one layer recovers it for any entity type in seconds
 (measured: 6.8 s):

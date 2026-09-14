@@ -76,28 +76,40 @@ MODEL="${ALL_MODELS[$(( TASK_ID / ${#ENTITIES[@]} ))]}"
 ENTITY="${ENTITIES[$(( TASK_ID % ${#ENTITIES[@]} ))]}"
 echo "=== task=$TASK_ID model=$MODEL entity_type=$ENTITY ==="
 
-RUN_LOG=$(mktemp)
-# Both scripts take the slash form models.sh provides and normalise it themselves.
-if python fc_group/analogy_retrieval.py \
-     --analogy-dir "$ANALOGY_DIR" \
-     --model-name "$MODEL" \
-     --entity-type "$ENTITY" 2>&1 | tee "$RUN_LOG"; then
-  # analogy_retrieval.py self-checks before it writes, so reaching here means the
-  # trials, the summaries and each other all agreed. No postflight step needed.
-  echo "SUMMARY: ok  $MODEL | $ENTITY"
-  rm -f "$RUN_LOG"
-else
-  # Three different non-zero exits, and telling them apart matters across 115 tasks.
-  # A model whose activations 05_analogy has not reached yet has no diff-vector npz to
-  # read -- expected for part of the sweep, not a crash. A failed self-check means the
-  # analysis ran but its output does not hang together, which is a bug in the code, not
-  # in the environment. Anything else is an ordinary traceback.
-  if grep -qE "no diff_vectors_layer_|nothing to report" "$RUN_LOG"; then
-    echo "SUMMARY: no retrieval input  $MODEL | $ENTITY"
-  elif grep -q "FAILED SELF-CHECK" "$RUN_LOG"; then
-    echo "SUMMARY: bad-output  $MODEL | $ENTITY"
+# All three quadruple sets in one task: cross-family (inter), within-family down the
+# halogen column (halide), and within-group up the chain length (carbon). The job reads
+# a ~2 MB npz and draws figures, so the extra runs are nearly free -- and running them
+# together is what guarantees all three always come from the same diff vectors.
+# Each writes to its own tree; see --quadruple-set in analogy_retrieval.py.
+STATUS=0
+for QSET in inter halide carbon; do
+  RUN_LOG=$(mktemp)
+  # The script takes the slash form models.sh provides and normalises it itself.
+  if python fc_group/analogy_retrieval.py \
+       --analogy-dir "$ANALOGY_DIR" \
+       --model-name "$MODEL" \
+       --entity-type "$ENTITY" \
+       --quadruple-set "$QSET" 2>&1 | tee "$RUN_LOG"; then
+    # analogy_retrieval.py self-checks before it writes, so reaching here means the
+    # trials, the summaries and each other all agreed. No postflight step needed.
+    echo "SUMMARY: ok  $MODEL | $ENTITY | $QSET"
   else
-    echo "SUMMARY: crashed  $MODEL | $ENTITY"
+    # Three different non-zero exits, and telling them apart matters across 115 tasks.
+    # A model whose activations 05_analogy has not reached yet has no diff-vector npz to
+    # read -- expected for part of the sweep, not a crash. A failed self-check means the
+    # analysis ran but its output does not hang together, which is a bug in the code, not
+    # in the environment. Anything else is an ordinary traceback.
+    if grep -qE "no diff_vectors_layer_|nothing to report" "$RUN_LOG"; then
+      echo "SUMMARY: no retrieval input  $MODEL | $ENTITY | $QSET"
+    elif grep -q "FAILED SELF-CHECK" "$RUN_LOG"; then
+      echo "SUMMARY: bad-output  $MODEL | $ENTITY | $QSET"
+    else
+      echo "SUMMARY: crashed  $MODEL | $ENTITY | $QSET"
+    fi
+    STATUS=1
   fi
-  rm -f "$RUN_LOG"; exit 1
-fi
+  rm -f "$RUN_LOG"
+done
+# One non-zero exit if either set failed, so a partially-failed task is never reported
+# as a success by sacct.
+exit $STATUS

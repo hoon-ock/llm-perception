@@ -19,14 +19,14 @@ exits non-zero rather than failing obscurely.
 |---|---|---|---|
 | `00_smoke_test_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | one template, three layers — checks a model loads and emits right-shaped output before committing to a full sweep |
 | `01_extract_small` / `_large` | gpu:1 / gpu:2 | 3 / 2 | `extract_activations_subset.py` — the activations everything else reads |
-| `02_probe` | cpu, 4G | 120 | `functional_group_probe.py` |
-| `03_tsne` | cpu, 32G | 120 | `tsne_functional_groups.py` |
-| `04_anisotropy` | cpu, 32G | 120 | `anisotropy_diagnostic.py` |
-| `05_analogy` | cpu, 32G | 120 | `functional_group_analogy_carbon_matched.py` |
+| `02_probe` | cpu, 4G | 115 | `functional_group_probe.py` |
+| `03_tsne` | cpu, 32G | 115 | `tsne_functional_groups.py` |
+| `04_anisotropy` | cpu, 32G | 115 | `anisotropy_diagnostic.py` |
+| `05_analogy` | cpu, 32G | 115 | `functional_group_analogy_carbon_matched.py` |
 | `06_generation_eval_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | `generation_eval.py` — behavioural readout, needs no activations |
-| `07_retrieval` | cpu, 8G | 120 | `analogy_retrieval.py` — reads what `05_analogy` wrote, not the activations, so it must run after it. Self-checks before writing, so `SUMMARY: ok` means the output was validated |
+| `07_retrieval` | cpu, 8G | 115 | `analogy_retrieval.py` — reads what `05_analogy` wrote, not the activations, so it must run after it. Runs **both quadruple sets** per task (`inter`, `halide`), each into its own Results tree, and emits one `SUMMARY:` line per set. Self-checks before writing, so `SUMMARY: ok` means the output was validated |
 
-120 = 5 models × 24 entity types.
+115 = 5 models × 23 entity types.
 
 ## Why small/large are separate files
 

@@ -30,6 +30,7 @@ both are reported:
 """
 import argparse
 import csv
+import itertools
 import json
 import os
 import statistics
@@ -105,6 +106,34 @@ def corner_predictions(pair_a, pair_b):
     ]
 
 
+def corner_collapses(src, plus, minus):
+    """True when a corner is not an analogy at all, but a nearest-neighbour lookup.
+
+    The target is vec[src] + vec[plus] - vec[minus]. If src == minus it reduces to
+    vec[plus]; if plus == minus it reduces to vec[src]. Either way no offset is ever
+    applied, and the trial degenerates into "which group sits nearest to this one".
+
+    That matters only for quadruples that reuse a group, and it is the reason the
+    halide set needs filtering while the inter-group set does not. A within-family
+    quadruple like (Cl-F) ~ (Br-F) shares fluoride as BOTH second terms, so two of
+    its four corners collapse -- and a family of mutually similar groups answers a
+    bare nearest-neighbour question correctly whether or not any analogy structure
+    exists, so counting those corners would report family resemblance as analogy.
+
+    Audited over both sets: 0 of the inter-group set's 20 corners collapse (it is
+    clean by construction, and this filter is a no-op there), against 8 of the
+    halide set's 20.
+    """
+    return src == minus or plus == minus
+
+
+def scoreable_corners(pair_a, pair_b):
+    """The corners of a quadruple that pose a real analogy. Single source of truth --
+    run_trials scores exactly these and check_structure expects exactly these many,
+    so the two cannot disagree about what a full set of trials looks like."""
+    return [c for c in corner_predictions(pair_a, pair_b) if not corner_collapses(*c[1:])]
+
+
 def rank_of(vectors, target, predicted, exclude):
     """1-based rank of `predicted` when candidates are sorted by cosine to `target`."""
     ranked = sorted(
@@ -127,7 +156,7 @@ def run_trials(vectors, carbon_count):
         if missing:
             print(f"  skipping analogy {pair_a} vs {pair_b}: missing group(s) {missing}")
             continue
-        for predicted, src, plus, minus in corner_predictions(pair_a, pair_b):
+        for predicted, src, plus, minus in scoreable_corners(pair_a, pair_b):
             target = vectors[src] + vectors[plus] - vectors[minus]
             # Subtracting the answer out of its own candidate pool would make the
             # halogen quadruple unscoreable, since 'alkyl bromide' is both a1 and b2.
@@ -153,6 +182,23 @@ def run_trials(vectors, carbon_count):
                 # winner is just the term we started from.
                 'degenerate': int(top1_incl == src and src != predicted),
             })
+            if CELL_POOL:
+                # 'Right group, wrong rung' -- the characteristic near-miss when the
+                # pool holds cells. Omitted for the group-ladder sets, where
+                # GROUP_LABEL is the identity and this would only restate the rank.
+                label = GROUP_LABEL(predicted)
+                trials[-1]['predicted_label'] = label
+                trials[-1]['top1_same_label'] = int(GROUP_LABEL(top1_incl) == label)
+                # How many cells of the SAME label are still in the pool competing with
+                # the answer. This is the number that decides whether a trial is hard.
+                # A ladder spanning all of a group's cells excludes every one of them
+                # bar the answer, so with a high same-label rate the correct cell is the
+                # only candidate left from the right group and the trial is close to
+                # decided before the model is consulted. Carried per trial so the easy
+                # and hard ladders can be separated in the CSV rather than inferred.
+                trials[-1]['same_label_rivals'] = sum(
+                    1 for g in vectors
+                    if g not in exclude and g != predicted and GROUP_LABEL(g) == label)
     return trials
 
 
@@ -221,12 +267,243 @@ def distinct_by_group_set(quadruples):
     return kept, collapsed
 
 
-# The cosine analysis keeps all of ANALOGY_QUADRUPLES; retrieval sees only the
-# distinct ones. Reported at startup by main() rather than left to be inferred.
-RETRIEVAL_QUADRUPLES, COLLAPSED_QUADRUPLES = distinct_by_group_set(ANALOGY_QUADRUPLES)
+# The within-family counterpart to ANALOGY_QUADRUPLES. Every quadruple above pairs two
+# DIFFERENT functional-group transformations; these stay inside one family and ask
+# whether the same retrieval works across the halogen column.
+#
+# SELECTION RULE: THE TWO LEGS MUST BE THE SAME NUMBER OF STEPS DOWN THE COLUMN.
+# Index the column F=1, Cl=2, Br=3, I=4. An analogy (a1-a2) ~= (b1-b2) asserts the two
+# offsets are the same vector, so pairing a one-step leg (Cl-F) against a two-step leg
+# (Br-F) asserts something chemically false before any activation is involved -- a
+# failure would say nothing about the model, and a success would be suspect. The legs
+# available are:
+#
+#     1-step: Cl-F, Br-Cl, I-Br        2-step: Br-F, I-Cl        3-step: I-F
+#
+# I-F is the only 3-step leg, so it has nothing to pair with and drops out. Pairing
+# within each step size leaves the four below.
+#
+# Four pairings, three retrieval problems. (Br-F) ~ (I-Cl) and (Cl-F) ~ (I-Br) use the
+# same four groups, and retrieval is blind to how a group set is paired -- expand the
+# corners and every target matches term for term, since addition commutes. So
+# distinct_by_group_set collapses the 2-step pairing into the 1-step one and reports it.
+# Both are kept here anyway, the way ANALOGY_QUADRUPLES keeps both pairings of a group
+# set, so that the equivalence is documented rather than silently absent.
+#
+# What it measures, as of the pre-d45a30f activations (Llama-3.1-8B / functional_group,
+# carbon-matched hit@1 at layer 31, against a ~6% random baseline). These are the shape
+# of the result, not constants to regress against:
+#
+#     (Br-Cl) ~ (I-Br)    50%      inter-group set, pooled:  74%
+#     (Cl-F)  ~ (I-Br)    44%      this set, pooled:         31%
+#     (Cl-F)  ~ (Br-Cl)    0%
+#
+# Well above chance, but roughly half the cross-family rate -- so the halogen offset is
+# far less consistent than the offsets between different functional groups. Note which
+# quadruple fails: the two involving I-Br carry the result, and the one pairing Cl-F
+# against Br-Cl collapses to zero. One step in the column is not one step chemically,
+# and F is where that breaks -- the Pauling gap F->Cl is 0.82 against Cl->Br's 0.20.
+# Equal step COUNT is the right selection rule and still not equal step SIZE.
+#
+# One consequence worth naming: step-matching also removes every collapsed corner. A
+# corner degenerates into a nearest-neighbour lookup only when the two legs share an
+# endpoint (Br-F and I-F share fluoride), and sharing a lower endpoint while differing
+# at the upper one is exactly what unequal step sizes look like. So scoreable_corners()
+# is a no-op on this set as well as on the inter-group one -- all 12 corners here are
+# real -- and it stays as a guard against a future edit reintroducing a mismatched
+# quadruple, not because it currently fires.
+_F, _CL, _BR, _I = ('alkyl fluoride', 'alkyl chloride', 'alkyl bromide', 'alkyl iodide')
+HALIDE_QUADRUPLES = [
+    ((_CL, _F), (_BR, _CL)),   # 1-step ~ 1-step   {F, Cl, Br}
+    ((_CL, _F), (_I, _BR)),    # 1-step ~ 1-step   {F, Cl, Br, I} -- all four halides
+    ((_BR, _CL), (_I, _BR)),   # 1-step ~ 1-step   {Cl, Br, I}
+    ((_BR, _F), (_I, _CL)),    # 2-step ~ 2-step   {F, Cl, Br, I} -- collapses into the 2nd
+]
+
+# The third ladder: chain length, within one functional group. Same selection rule as
+# the halides with the rungs relabelled -- the two legs must span the same number of
+# chain-length steps, so C4-C3 pairs with C5-C4 but never with C5-C3.
+#
+# Over chain lengths 3..6 the legs are
+#
+#     1-step: C4-C3, C5-C4, C6-C5      2-step: C5-C3, C6-C4      3-step: C6-C3
+#
+# C6-C3 is the only 3-step leg and drops out, unpairable, exactly as I-F does. Pairing
+# within each step size leaves 4 per group, of which (C5-C3) ~ (C6-C4) collapses into
+# (C4-C3) ~ (C6-C5): same four rungs, and retrieval cannot tell two pairings of one set
+# apart. So 3 ladders per group.
+#
+# Generated rather than declared, unlike the other two sets: which groups and which
+# chain lengths exist is a property of the npz, not something to restate here and let
+# drift. build_carbon_quadruples is therefore called from collect() once the first
+# layer has loaded, and configure_quadruples() is handed the result.
+#
+# THE ALKANE IS NECESSARILY ABSENT. diff(alkane, C) is act(alkane,C) - act(alkane,C),
+# the zero vector, which has no direction and which cosine_similarity rejects. The
+# alkane is the reference that defines this space rather than a point in it. Laddering
+# the alkane series itself would need raw molecule vectors and a job that reads
+# activations; this set deliberately stays on the diff vectors 07_retrieval already has.
+#
+# What it measures, and how to read it: diff(g,C+1) - diff(g,C) expands to
+# [act(g,C+1) - act(g,C)] - [act(alk,C+1) - act(alk,C)], i.e. the +CH2 step NET OF the
+# alkane's own +CH2. That is the alkane-controlled question, not the raw one. It is a
+# residual -- diff vectors are ~0.89 self-similar across chain length by construction --
+# but a substantial one, and it retrieves far above chance.
+#
+# HOW TO READ IT -- the three ladders are not equally hard, and not because of the
+# chemistry. Measured at layer 31 on the pre-d45a30f activations, random baseline 1.4%:
+#
+#     ladder             same-label rivals left   hit@1
+#     (C4-C3) ~ (C5-C4)           1                29%
+#     (C5-C4) ~ (C6-C5)           1                49%
+#     (C4-C3) ~ (C6-C5)           0                95%
+#
+# The last one spans all four of a group's cells, so the exclusion set removes every
+# rung of that group except the answer. The top hit is the right functional group in
+# 100% of trials at every layer, so with no same-label rival left in the pool the
+# correct cell is the only candidate from the right group and the trial is close to
+# decided before the model is consulted. Its 95% is near-trivial.
+#
+# So: pooled hit@1 is 57%, but that splits into 95% on the 76 zero-rival trials and
+# 39% on the 152 trials that actually have to pick a rung. 39% is the honest number for
+# "is the chain-length ladder consistent" -- far above 1.4% chance, far below the
+# inter-group set's 74%. same_label_rivals is emitted per trial so this split can be
+# made from the CSV rather than rediscovered. The characteristic failure is an
+# off-by-one rung: the target overshoots to the group's next chain length.
+def build_carbon_quadruples(groups, carbons):
+    """Step-matched chain-length ladders for every group, over 'group@C' cell names."""
+    legs_by_step = {}
+    for lo, hi in itertools.combinations(sorted(carbons), 2):
+        legs_by_step.setdefault(hi - lo, []).append((hi, lo))
+    pairings = [(x, y) for step in sorted(legs_by_step)
+                for x, y in itertools.combinations(legs_by_step[step], 2)]
+    return [((cell(g, a1), cell(g, a2)), (cell(g, b1), cell(g, b2)))
+            for g in sorted(groups) for (a1, a2), (b1, b2) in pairings]
 
 
-def collect(analogy_dir, entity_type, models):
+def cell(group, carbon):
+    """Pool key for one (group, chain length). The pool spans groups on purpose: a
+    within-group pool holds 4 cells, of which a ladder excludes 2 or 3, so every trial
+    would score rank 1 by arithmetic rather than by anything the model did."""
+    return f'{group}@{carbon}'
+
+
+def cell_group(key):
+    """'alcohol@4' -> 'alcohol'. Chain lengths are integers and group names never
+    contain '@', so the last '@' splits it unambiguously."""
+    return key.rsplit('@', 1)[0]
+
+
+def carbon_quad_label(pair_a, pair_b):
+    """Name a chain-length ladder by its rungs, with the functional group dropped.
+
+    'alcohol@4 - alcohol@3' would give one label per (group, ladder) -- 57 of them, and
+    a by-quadruple figure with 57 lines is not a figure. Every group spans the same
+    chain lengths, so dropping just the group name leaves 3 labels shared across all of
+    them, and the functional groups come back as the by-GROUP figure instead.
+
+    Deliberately ABSOLUTE rungs ('C4 - C3 ~ C5 - C4') rather than offsets from the
+    ladder's own base. Relative naming would call (C4-C3)~(C5-C4) and (C5-C4)~(C6-C5)
+    the same thing -- both are two consecutive 1-steps -- and merge them into one line.
+    They are different questions: C3->C4 is a far larger relative change to the molecule
+    than C5->C6, so whether the ladder holds at the short end or the long end is exactly
+    the kind of thing this figure should be able to show.
+    """
+    fmt = lambda pair: ' - '.join(f'C{k.rsplit("@", 1)[1]}' for k in pair)
+    return (fmt(pair_a), fmt(pair_b))
+
+
+# Per set: the quadruple list (None where it is generated from the data), how a
+# quadruple is labelled in quad_rows, how a pool key maps to the thing the by-group
+# figure should show, and the mode name its primary rows carry.
+QUADRUPLE_SETS = {
+    # cell_pool: does the candidate pool hold (group, chain length) cells rather than
+    # groups? Only then is group_label non-trivial, and only then do the label columns
+    # carry information -- for the other two, GROUP_LABEL is the identity, so
+    # top1_same_label would just restate rank_incl == 1. Emitting them anyway would add
+    # dead columns to two established outputs.
+    'inter':  {'quadruples': ANALOGY_QUADRUPLES, 'quad_label': quadruple_key,
+               'group_label': lambda k: k, 'primary_mode': 'carbon_matched',
+               'cell_pool': False},
+    'halide': {'quadruples': HALIDE_QUADRUPLES, 'quad_label': quadruple_key,
+               'group_label': lambda k: k, 'primary_mode': 'carbon_matched',
+               'cell_pool': False},
+    'carbon': {'quadruples': None, 'quad_label': carbon_quad_label,
+               'group_label': cell_group, 'primary_mode': 'ladder',
+               'cell_pool': True},
+}
+
+# Set by configure_quadruples() before anything reads them. Module-level rather than
+# threaded through every call because run_trials, collect, ordered_pairs, the plot_*
+# functions and check_structure all already reach for them as globals; rebinding in one
+# place is what keeps that unchanged.
+RETRIEVAL_QUADRUPLES, COLLAPSED_QUADRUPLES, QUADRUPLE_STYLE = None, None, None
+QUAD_LABEL, GROUP_LABEL, PRIMARY_MODE, CELL_POOL = None, None, None, False
+
+
+def configure_quadruples(name, quadruples=None):
+    """Choose the quadruple set, and derive everything keyed off it.
+
+    Called from main() rather than evaluated at import, because argparse has not run at
+    import time. Everything downstream reads these as module globals at call time, so
+    this one rebinding reaches all of it.
+
+    `quadruples` overrides the registry's list, for the sets that are generated from the
+    npz rather than declared -- collect() calls this a second time once it knows which
+    groups and chain lengths are actually present.
+    """
+    global RETRIEVAL_QUADRUPLES, COLLAPSED_QUADRUPLES, QUADRUPLE_STYLE
+    global QUAD_LABEL, GROUP_LABEL, PRIMARY_MODE, CELL_POOL
+    spec = QUADRUPLE_SETS[name]
+    QUAD_LABEL, GROUP_LABEL = spec['quad_label'], spec['group_label']
+    PRIMARY_MODE, CELL_POOL = spec['primary_mode'], spec['cell_pool']
+    quadruples = spec['quadruples'] if quadruples is None else quadruples
+    if quadruples is None:   # generated set, not yet built -- collect() will call back
+        RETRIEVAL_QUADRUPLES, COLLAPSED_QUADRUPLES, QUADRUPLE_STYLE = [], [], {}
+        return
+    # The cosine analysis keeps all of the quadruples; retrieval sees only the distinct
+    # ones. Reported at startup by main() rather than left to be inferred.
+    RETRIEVAL_QUADRUPLES, COLLAPSED_QUADRUPLES = distinct_by_group_set(quadruples)
+
+    # Styling is per LABEL, not per quadruple: the carbon set has 57 quadruples sharing
+    # 3 ladder labels, and it is the labels that become lines in a figure.
+    labels = list(dict.fromkeys(QUAD_LABEL(pa, pb) for pa, pb in RETRIEVAL_QUADRUPLES))
+    assert len(QUADRUPLE_PALETTE) >= len(labels), (
+        f"{len(labels)} quadruple labels but only {len(QUADRUPLE_PALETTE)} colours -- "
+        f"add entries to QUADRUPLE_PALETTE and QUADRUPLE_MARKERS")
+    assert len(QUADRUPLE_MARKERS) >= len(labels), "add entries to QUADRUPLE_MARKERS"
+    assert len(set(QUADRUPLE_PALETTE[:len(labels)])) == len(labels), (
+        "QUADRUPLE_PALETTE has duplicate colours in the range actually used")
+    # Keyed off label order, so a label keeps one colour across every figure that draws
+    # it -- the accuracy-by-quadruple and rank-by-quadruple plots are meant to be read
+    # side by side.
+    QUADRUPLE_STYLE = {
+        label: (QUADRUPLE_PALETTE[i], QUADRUPLE_MARKERS[i])
+        for i, label in enumerate(labels)
+    }
+
+
+def report_quadruples():
+    """Announce the quadruple set once it is known.
+
+    Called from main() for the declared sets and from collect() for the generated one,
+    which cannot be described until an npz has been read. A reader comparing a
+    5-quadruple retrieval run against a 7-quadruple cosine run should not have to infer
+    the difference from trial counts.
+    """
+    labels = dict.fromkeys(QUAD_LABEL(pa, pb) for pa, pb in RETRIEVAL_QUADRUPLES)
+    print(f"  {len(RETRIEVAL_QUADRUPLES)} distinct quadruple(s) under "
+          f"{len(labels)} label(s): " + '; '.join(f'{a} ~ {b}' for a, b in labels))
+    if COLLAPSED_QUADRUPLES:
+        print(f"  collapsed {len(COLLAPSED_QUADRUPLES)} quadruple(s) posing duplicate "
+              f"retrieval problems (same rungs, different pairing)")
+        for dup, kept in COLLAPSED_QUADRUPLES[:3]:
+            print(f"    {dup[0] + '  ~  ' + dup[1]:46s} -> {kept[0]}  ~  {kept[1]}")
+        if len(COLLAPSED_QUADRUPLES) > 3:
+            print(f"    ... and {len(COLLAPSED_QUADRUPLES) - 3} more of the same shape")
+
+
+def collect(analogy_dir, entity_type, models, quadruple_set):
     trial_rows, trend_rows, quad_rows, group_rows = [], [], [], []
 
     for model in models:
@@ -243,19 +520,30 @@ def collect(analogy_dir, entity_type, models):
                 os.path.join(model_dir, 'data', f'diff_vectors_layer_{layer}.npz'))
             carbons = sorted(set.intersection(*(set(by_c) for by_c in diffs.values())))
 
-            by_mode = {
-                # Primary: one candidate pool per chain length, so the retrieval never
-                # compares a C3 diff vector against a C6 one.
-                'carbon_matched': [
-                    t for C in carbons
-                    for t in run_trials({g: by_c[C] for g, by_c in diffs.items()}, C)
-                ],
-                # Secondary: chain lengths averaged first, matching the lumped/
-                # carbon-matched split the analogy script already reports.
-                'lumped': run_trials(
-                    {g: np.mean(list(by_c.values()), axis=0) for g, by_c in diffs.items()},
-                    None),
-            }
+            if PRIMARY_MODE == 'ladder':
+                # Chain length IS the ladder here, so there is no carbon-matched/lumped
+                # split to make: one pool holding every (group, chain length) cell, and
+                # quadruples built from whatever the npz turned out to contain.
+                if not RETRIEVAL_QUADRUPLES:
+                    configure_quadruples(
+                        quadruple_set, build_carbon_quadruples(sorted(diffs), carbons))
+                    report_quadruples()
+                pool = {cell(g, C): v for g, by_c in diffs.items() for C, v in by_c.items()}
+                by_mode = {'ladder': run_trials(pool, None)}
+            else:
+                by_mode = {
+                    # Primary: one candidate pool per chain length, so the retrieval never
+                    # compares a C3 diff vector against a C6 one.
+                    'carbon_matched': [
+                        t for C in carbons
+                        for t in run_trials({g: by_c[C] for g, by_c in diffs.items()}, C)
+                    ],
+                    # Secondary: chain lengths averaged first, matching the lumped/
+                    # carbon-matched split the analogy script already reports.
+                    'lumped': run_trials(
+                        {g: np.mean(list(by_c.values()), axis=0) for g, by_c in diffs.items()},
+                        None),
+                }
 
             for mode, trials in by_mode.items():
                 if not trials:
@@ -266,12 +554,19 @@ def collect(analogy_dir, entity_type, models):
                     trial_rows.append({**common, **t})
                 trend_rows.append({**common, **summarize(trials)})
 
-                for pair_a, pair_b in RETRIEVAL_QUADRUPLES:
-                    sub = [t for t in trials
-                           if (t['pair_a1'], t['pair_a2']) == pair_a
-                           and (t['pair_b1'], t['pair_b2']) == pair_b]
+                # By LABEL, not by quadruple. For inter/halide the two coincide; for
+                # the carbon set 57 quadruples share 3 ladder labels, and pooling them
+                # is what makes the by-quadruple figure a comparison of ladder shapes
+                # rather than 57 unreadable lines.
+                labelled = {}
+                for t in trials:
+                    key = QUAD_LABEL((t['pair_a1'], t['pair_a2']),
+                                     (t['pair_b1'], t['pair_b2']))
+                    labelled.setdefault(key, []).append(t)
+                for (label_a, label_b) in dict.fromkeys(
+                        QUAD_LABEL(pa, pb) for pa, pb in RETRIEVAL_QUADRUPLES):
+                    sub = labelled.get((label_a, label_b))
                     if sub:
-                        label_a, label_b = quadruple_key(pair_a, pair_b)
                         quad_rows.append({
                             **common, 'pair_a': label_a, 'pair_b': label_b,
                             **summarize(sub),
@@ -281,9 +576,18 @@ def collect(analogy_dir, entity_type, models):
                 # Sampling is uneven -- a group that answers two different corners
                 # gets twice the trials -- so n_trials rides along with every row
                 # and a mean over 8 is never silently compared against one over 4.
-                for group in sorted({t['predicted_group'] for t in trials}):
-                    sub = [t for t in trials if t['predicted_group'] == group]
-                    group_rows.append({**common, 'group': group, **summarize(sub)})
+                # Computed rather than stored, so the group-ladder sets' trial rows
+                # keep exactly the columns they always had.
+                for group in sorted({GROUP_LABEL(t['predicted_group']) for t in trials}):
+                    sub = [t for t in trials
+                           if GROUP_LABEL(t['predicted_group']) == group]
+                    row = {**common, 'group': group, **summarize(sub)}
+                    if CELL_POOL:
+                        # The rate at which the top hit was the right functional group
+                        # even when it was the wrong chain length.
+                        row['top1_same_label_rate'] = (
+                            sum(t['top1_same_label'] for t in sub) / len(sub))
+                    group_rows.append(row)
 
     return trial_rows, trend_rows, quad_rows, group_rows
 
@@ -303,6 +607,9 @@ def write_csv(path, rows, fieldnames=None):
 # Self-checks
 # ============================
 
+# Corners an analogy has before filtering. Not the per-quadruple trial count any more:
+# scoreable_corners() drops the ones that collapse to a nearest-neighbour lookup, so the
+# structure check derives its expectation from that helper rather than from this.
 N_CORNERS = 4
 TOL = 1e-9
 
@@ -363,16 +670,24 @@ def check_structure(trials, trend, n_groups):
     for (layer, mode), rows in sorted(by_key.items()):
         where = f"L{layer}/{mode}"
         carbons = {r['carbon_count'] for r in rows}
-        n_carbons = len(carbons) if mode == 'carbon_matched' else 1
-        if mode == 'lumped' and carbons != {''}:
-            problems.append(f"{where}: lumped trials carry a carbon_count: {sorted(carbons)}")
+        # Only the per-chain-length mode multiplies the trial count by chain length.
+        # The lumped pool and the carbon set's single ladder pool each run the
+        # quadruples once, and both carry an empty carbon_count.
+        per_carbon = mode == 'carbon_matched' and PRIMARY_MODE == 'carbon_matched'
+        n_carbons = len(carbons) if per_carbon else 1
+        if not per_carbon and carbons != {''}:
+            problems.append(f"{where}: {mode} trials carry a carbon_count: {sorted(carbons)}")
 
-        # 1. every quadruple contributes every corner at every chain length
-        expected = len(RETRIEVAL_QUADRUPLES) * N_CORNERS * n_carbons
+        # 1. every quadruple contributes every SCOREABLE corner at every chain length.
+        #    Not N_CORNERS flat: a quadruple that reuses a group can have corners that
+        #    collapse to a nearest-neighbour lookup, and run_trials drops those. Derived
+        #    from the same helper run_trials uses, so the two cannot drift.
+        per_quad = [len(scoreable_corners(pa, pb)) for pa, pb in RETRIEVAL_QUADRUPLES]
+        expected = sum(per_quad) * n_carbons
         if len(rows) != expected:
             problems.append(
                 f"{where}: {len(rows)} trials, expected "
-                f"{len(RETRIEVAL_QUADRUPLES)}x{N_CORNERS}x{n_carbons} = {expected}")
+                f"sum({per_quad}) x {n_carbons} = {expected}")
 
         # 2. every trial must be uniquely addressable. (quadruple, predicted) alone
         #    collides for quadruples that reuse a group -- the 14-rows-for-16-trials
@@ -487,11 +802,14 @@ def check_groups(trials, group_rows):
     for grow in group_rows:
         key = (grow['layer'], grow['mode'])
         rows = by_key.get(key, [])
-        sub = [r for r in rows if r['predicted_group'] == grow['group']]
+        # Against the LABEL, not the raw pool key: for a cell pool the group rows
+        # aggregate 'alcohol@3'..'alcohol@6' under 'alcohol'. GROUP_LABEL is the
+        # identity for the group-ladder sets, so this is unchanged for them.
+        sub = [r for r in rows if GROUP_LABEL(r['predicted_group']) == grow['group']]
         if not sub:
             problems.append(
-                f"L{key[0]}/{key[1]}: group '{grow['group']}' is summarized but is "
-                f"never a predicted_group in the trials")
+                f"L{key[0]}/{key[1]}: group '{grow['group']}' is summarized but no "
+                f"trial predicts anything under that label")
             continue
         seen[key] = seen.get(key, 0) + len(sub)
         for field, want in recompute(sub).items():
@@ -543,7 +861,7 @@ def check_reference(trials, trend):
     return problems
 
 
-def check_invariants(rows, model, entity_type):
+def check_invariants(rows, model, entity_type, quadruple_set):
     """Raise unless the trials, the summaries and each other all agree.
 
     Runs before anything is written, so a run that fails this writes nothing rather
@@ -556,8 +874,17 @@ def check_invariants(rows, model, entity_type):
 
     problems = check_structure(trial_rows, trend_rows, n_groups)
     problems += check_groups(trial_rows, group_rows)
+    # Every check above applies to any quadruple set. This one does not: REFERENCE_HIT1
+    # and friends are counts measured on the inter-group quadruples, and check_reference's
+    # own note already says changing the quadruple set moves them legitimately. Skipping
+    # is announced rather than silent -- "the reference case passed" and "the reference
+    # case was not applicable" must not look alike in a sweep's logs.
     if model == REFERENCE_MODEL and entity_type == REFERENCE_ENTITY:
-        problems += check_reference(trial_rows, trend_rows)
+        if quadruple_set == 'inter':
+            problems += check_reference(trial_rows, trend_rows)
+        else:
+            print(f"  reference self-check skipped: REFERENCE_HIT1/MEAN_RANK/PERFECT_OS are "
+                  f"inter-group counts and do not apply to --quadruple-set {quadruple_set}")
 
     if problems:
         raise SystemExit(
@@ -586,19 +913,8 @@ GROUP_MARKERS = ['o', 's', '^', 'v', 'D', 'P', 'X', '*', '<', '>', 'h', 'p']
 QUADRUPLE_PALETTE = ['#c0392b', '#2980b9', '#16a085', '#8e44ad',
                      '#e67e22', '#7f8c8d', '#d81b60']
 QUADRUPLE_MARKERS = ['o', 's', '^', 'D', 'v', 'P', 'X']
-assert len(QUADRUPLE_PALETTE) >= len(RETRIEVAL_QUADRUPLES), (
-    f"{len(RETRIEVAL_QUADRUPLES)} quadruples but only {len(QUADRUPLE_PALETTE)} colours -- "
-    f"add entries to QUADRUPLE_PALETTE and QUADRUPLE_MARKERS")
-assert len(QUADRUPLE_MARKERS) >= len(RETRIEVAL_QUADRUPLES), "add entries to QUADRUPLE_MARKERS"
-assert len(set(QUADRUPLE_PALETTE[:len(RETRIEVAL_QUADRUPLES)])) == len(RETRIEVAL_QUADRUPLES), (
-    "QUADRUPLE_PALETTE has duplicate colours in the range actually used")
-# Keyed off RETRIEVAL_QUADRUPLES order, so a quadruple keeps one colour across every
-# figure that draws it -- the accuracy-by-quadruple and rank-by-quadruple plots are
-# meant to be read side by side.
-QUADRUPLE_STYLE = {
-    quadruple_key(pa, pb): (QUADRUPLE_PALETTE[i], QUADRUPLE_MARKERS[i])
-    for i, (pa, pb) in enumerate(RETRIEVAL_QUADRUPLES)
-}
+# The assertions on these, and QUADRUPLE_STYLE itself, live in configure_quadruples():
+# they depend on which quadruple set was chosen, which is not known until argparse runs.
 
 
 def ordered_pairs(rows):
@@ -610,8 +926,14 @@ def ordered_pairs(rows):
 
 
 def carbon_matched(rows, model):
-    """The carbon-matched rows for one model, in layer order."""
-    return sorted((r for r in rows if r['model'] == model and r['mode'] == 'carbon_matched'),
+    """The primary-mode rows for one model, in layer order.
+
+    'carbon_matched' for the two group-ladder sets, 'ladder' for the carbon set, which
+    has no carbon-matched/lumped split to choose between. Named for the common case
+    rather than renamed everywhere, since every caller wants the same thing: the rows
+    the figures are drawn from.
+    """
+    return sorted((r for r in rows if r['model'] == model and r['mode'] == PRIMARY_MODE),
                   key=lambda r: r['layer'])
 
 
@@ -720,7 +1042,7 @@ def plot_rank_by_group(trend_rows, group_rows, model, entity_type, path):
 
 def plot_rank_heatmap(trial_rows, model, entity_type, path):
     """Rank grid, quadruple x corner x chain length, one panel per layer."""
-    rows = [t for t in trial_rows if t['model'] == model and t['mode'] == 'carbon_matched']
+    rows = [t for t in trial_rows if t['model'] == model and t['mode'] == PRIMARY_MODE]
     layers = sorted({t['layer'] for t in rows})
     if not layers:
         return
@@ -729,9 +1051,28 @@ def plot_rank_heatmap(trial_rows, model, entity_type, path):
     # both a1 and b2; sulfur: 'sulfoxide' is both a1 and b2) predict the *same*
     # group, so keying on (quadruple, predicted) alone collapses them and one trial
     # silently overwrites the other -- 14 rows drawn for 16 trials.
-    labels = sorted({(t['pair_a1'], t['pair_a2'], t['pair_b1'], t['pair_b2'],
-                      t['source_group'], t['predicted_group']) for t in rows})
-    carbons = sorted({t['carbon_count'] for t in rows})
+    #
+    # Which two axes the grid spans depends on what the pool holds. For the group
+    # ladders it is corner x chain length, the two dimensions a trial varies over. The
+    # carbon set has no chain-length dimension left -- chain length IS the ladder, and
+    # every trial carries an empty carbon_count -- so its grid spans corner x functional
+    # group instead, which is the same figure asking 'which groups fail, on which
+    # corner'. Sharing one code path keeps the two readable side by side.
+    if CELL_POOL:
+        def row_key(t):
+            strip = lambda k: k.rsplit('@', 1)[1]
+            return (*(f'C{strip(k)}' for k in (t['pair_a1'], t['pair_a2'],
+                                               t['pair_b1'], t['pair_b2'])),
+                    f"C{strip(t['source_group'])}", f"C{strip(t['predicted_group'])}")
+        col_key, col_fmt = (lambda t: GROUP_LABEL(t['predicted_group'])), (lambda c: str(c))
+    else:
+        def row_key(t):
+            return (t['pair_a1'], t['pair_a2'], t['pair_b1'], t['pair_b2'],
+                    t['source_group'], t['predicted_group'])
+        col_key, col_fmt = (lambda t: t['carbon_count']), (lambda c: f'C{c}')
+
+    labels = sorted({row_key(t) for t in rows})
+    carbons = sorted({col_key(t) for t in rows})
 
     fig, axes = plt.subplots(1, len(layers),
                              figsize=(2.6 * len(layers) + 4, 0.32 * len(labels) + 2),
@@ -741,9 +1082,7 @@ def plot_rank_heatmap(trial_rows, model, entity_type, path):
         for t in rows:
             if t['layer'] != layer:
                 continue
-            key = (t['pair_a1'], t['pair_a2'], t['pair_b1'], t['pair_b2'],
-                   t['source_group'], t['predicted_group'])
-            grid[labels.index(key), carbons.index(t['carbon_count'])] = t['rank_excl']
+            grid[labels.index(row_key(t)), carbons.index(col_key(t))] = t['rank_excl']
         ax = axes[0][col]
         im = ax.imshow(grid, cmap='RdYlGn_r', vmin=1, vmax=max(3, np.nanmax(grid)),
                        aspect='auto')
@@ -752,7 +1091,8 @@ def plot_rank_heatmap(trial_rows, model, entity_type, path):
                 if not np.isnan(grid[i, j]):
                     ax.text(j, i, int(grid[i, j]), ha='center', va='center', fontsize=6)
         ax.set_xticks(range(len(carbons)))
-        ax.set_xticklabels([f'C{c}' for c in carbons], fontsize=7)
+        ax.set_xticklabels([col_fmt(c) for c in carbons], fontsize=7,
+                           rotation=90 if CELL_POOL else 0)
         ax.set_title(f'layer {layer}', fontsize=9)
         if col == 0:
             ax.set_yticks(range(len(labels)))
@@ -801,10 +1141,11 @@ def main():
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--analogy-dir', default=DEFAULT_ANALOGY)
-    p.add_argument('--output-dir', default=DEFAULT_OUTPUT_ROOT,
+    p.add_argument('--output-dir', default=None,
                    help="Root of the output tree. A run sweeps several models, so this is "
                         "the root and '{model}/{entity_type}/' is appended, rather than "
-                        "being the leaf directory itself. Default: %(default)s")
+                        f"being the leaf directory itself. Default: {DEFAULT_OUTPUT_ROOT}, "
+                        "with a '_{quadruple-set}' suffix for any non-default set.")
     p.add_argument('--entity-type', default='functional_group',
                    help="prompt type, matching a directory under --analogy-dir")
     # --model-name, matching the other scripts at fc_group/ (the README documents it as
@@ -813,6 +1154,12 @@ def main():
     p.add_argument('--model-name', action='append', default=None,
                    help="Repeatable. Accepts either naming form. "
                         "Default: every model in fc_group/model_registry.py")
+    p.add_argument('--quadruple-set', choices=sorted(QUADRUPLE_SETS), default='inter',
+                   help="'inter' (default) is the original cross-family set from "
+                        "ANALOGY_QUADRUPLES. 'halide' is the within-family counterpart over "
+                        "the alkyl halides. Both score against the same full candidate pool "
+                        "and yield the same trial count, so their numbers are comparable. "
+                        "A non-default set writes to its own output tree.")
     p.add_argument('--no-plots', action='store_true')
     p.add_argument('--skip-checks', action='store_true',
                    help="Skip the self-checks. They are cheap and they are what catches "
@@ -820,13 +1167,19 @@ def main():
                         "an escape hatch, not a normal flag.")
     args = p.parse_args()
 
-    # Say this once, up front: a reader comparing a 5-quadruple retrieval run against a
-    # 7-quadruple cosine run should not have to infer the difference from trial counts.
-    if COLLAPSED_QUADRUPLES:
-        print(f"collapsed {len(COLLAPSED_QUADRUPLES)} quadruple(s) posing duplicate "
-              f"retrieval problems (same four groups, different pairing):")
-        for dup, kept in COLLAPSED_QUADRUPLES:
-            print(f"  {dup[0] + '  ~  ' + dup[1]:46s} -> {kept[0]}  ~  {kept[1]}")
+    configure_quadruples(args.quadruple_set)
+    # Its own tree per set: the halide run writes the same seven figures under the same
+    # names, so sharing a directory would have each run overwrite the other's results.
+    # Resolved here rather than as the argparse default so that an explicitly passed
+    # --output-dir is still distinguishable from having taken the default.
+    output_dir = args.output_dir or (
+        DEFAULT_OUTPUT_ROOT if args.quadruple_set == 'inter'
+        else f'{DEFAULT_OUTPUT_ROOT}_{args.quadruple_set}')
+    print(f"quadruple set '{args.quadruple_set}' -> {output_dir}")
+    if RETRIEVAL_QUADRUPLES:
+        report_quadruples()
+    else:
+        print("  quadruples are generated from the npz; reported once the first layer loads")
 
     models = [m.replace('/', '-') for m in (args.model_name or MODELS)]
     unknown = [m for m in models if m not in MODELS]
@@ -835,7 +1188,7 @@ def main():
             f"unknown model(s) {unknown}; known: {MODELS}\n"
             f"  (add it to fc_group/model_registry.py first)")
     trial_rows, trend_rows, quad_rows, group_rows = collect(
-        args.analogy_dir, args.entity_type, models)
+        args.analogy_dir, args.entity_type, models, args.quadruple_set)
     if not trend_rows:
         raise SystemExit(f"nothing to report for entity_type={args.entity_type!r}")
 
@@ -845,15 +1198,15 @@ def main():
         # Checked before anything is written, so a run that fails leaves no
         # plausible-looking but wrong results tree behind.
         if not args.skip_checks:
-            n_groups = check_invariants(rows, model, args.entity_type)
-            n_cm = sum(1 for r in rows[0] if r['mode'] == 'carbon_matched'
+            n_groups = check_invariants(rows, model, args.entity_type, args.quadruple_set)
+            n_cm = sum(1 for r in rows[0] if r['mode'] == PRIMARY_MODE
                        and r['layer'] == min(x['layer'] for x in rows[0]))
             print(f"self-check ok  {model} / {args.entity_type}: "
-                  f"{len(RETRIEVAL_QUADRUPLES)} quadruples, {n_cm} carbon-matched trials "
-                  f"per layer over {n_groups} candidate groups")
+                  f"{len(RETRIEVAL_QUADRUPLES)} quadruples, {n_cm} trials "
+                  f"per layer over {n_groups} candidates")
         # entity_type is used raw as a directory name, spaces and all, matching the
         # Results tree this reads from ('functional_group question' et al).
-        out_dir = os.path.join(args.output_dir, model, args.entity_type)
+        out_dir = os.path.join(output_dir, model, args.entity_type)
         write_model_outputs(out_dir, args.entity_type, model, rows, not args.no_plots)
 
     print(f"\n=== {args.entity_type}: retrieval vs random baseline (carbon-matched) ===")

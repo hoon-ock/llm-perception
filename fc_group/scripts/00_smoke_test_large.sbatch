@@ -7,7 +7,7 @@
 #SBATCH --time=04:00:00
 #SBATCH --mem=200G
 # stderr folded into stdout so the "=== model=... ===" marker stays attached to
-# any traceback below it -- same reason run_functional_group_probe.sbatch does it.
+# any traceback below it -- same reason 02_probe.sbatch does it.
 #SBATCH --output=fc_group/logs/slurm-smoke-large-%A_%a.out
 
 set -o pipefail
@@ -24,14 +24,14 @@ export HF_HOME=/work/ock/hoon/hf_cache
 # download, tokenizer, model load, forward pass, hidden-state indexing and the
 # file write -- while finishing in minutes instead of hours.
 #
-# The five models here are the >=32B half of the registry, loaded in 4-bit and
+# The two models here are the >=32B half of the registry, loaded in 4-bit and
 # sharded across the four allocated GPUs. The <=8B half runs at full precision on
-# a single GPU in run_smoke_test.sbatch; --gres cannot vary per array task, which
-# is why these are two files rather than one array of ten.
+# a single GPU in 00_smoke_test_small.sbatch; --gres cannot vary per array task,
+# which is why these are two files rather than one array of five.
 # Model list comes from fc_group/scripts/models.sh, which derives the names
 # from fc_group/model_registry.py and checks the small/large split against it.
-# Four sbatch files used to carry their own copy of this list; that is what
-# let the analyses quietly cover 2 models while extraction covered 10.
+# Four sbatch files used to carry their own copy of this list; forgetting one
+# produced a sweep quietly narrower than intended rather than an error.
 source fc_group/scripts/models.sh || exit 1
 MODELS=("${LARGE_MODELS[@]}")
 

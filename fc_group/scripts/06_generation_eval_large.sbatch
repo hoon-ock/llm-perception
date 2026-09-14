@@ -7,7 +7,7 @@
 #SBATCH --time=08:00:00
 #SBATCH --mem=200G
 # stderr folded into stdout so the "=== model=... ===" marker stays attached to
-# any traceback below it -- same reason run_functional_group_probe.sbatch does it.
+# any traceback below it -- same reason 02_probe.sbatch does it.
 #SBATCH --output=fc_group/logs/slurm-geneval-large-%A_%a.out
 
 set -o pipefail
@@ -28,11 +28,11 @@ export HF_HOME=/work/ock/hoon/hf_cache
 # one GPU and the >=32B half runs 4-bit across four.
 #
 # Run fc_group/check_model_registry.py first -- this is one of the jobs that
-# would pull every model in the registry (~480 GB not yet cached).
+# would pull every model in the registry (three 8B plus two 70B, not yet cached).
 # Model list comes from fc_group/scripts/models.sh, which derives the names
 # from fc_group/model_registry.py and checks the small/large split against it.
-# Four sbatch files used to carry their own copy of this list; that is what
-# let the analyses quietly cover 2 models while extraction covered 10.
+# Four sbatch files used to carry their own copy of this list; forgetting one
+# produced a sweep quietly narrower than intended rather than an error.
 source fc_group/scripts/models.sh || exit 1
 MODELS=("${LARGE_MODELS[@]}")
 

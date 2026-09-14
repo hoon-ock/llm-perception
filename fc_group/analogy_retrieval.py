@@ -617,10 +617,17 @@ TOL = 1e-9
 # ANALOGY_QUADRUPLES:
 # adding or removing a quadruple changes the trial count and every pooled number with it.
 # Regenerate them deliberately when either changes; do not nudge them to make a run pass.
+#
+# Measured on the SMILES prompts -- the '{iupac_name} ({smiles})' templates d45a30f put in
+# place of the '{formula}' ones, whose activations that commit invalidated wholesale. The
+# previous values ({0: 34, 16: 57, 31: 59} / {0: 3.79, 16: 2.17, 31: 1.35}) belong to the
+# formula prompts and predate it; they are recorded here so a future delta can be dated
+# rather than re-derived from the log. L0 is where the notation shows: spelling the
+# heteroatom out gives the shallow layers far more purchase on the analogy.
 REFERENCE_MODEL = 'meta-llama-Llama-3.1-8B'
 REFERENCE_ENTITY = 'functional_group'
-REFERENCE_HIT1 = {0: 34, 16: 57, 31: 59}             # out of 80 carbon-matched trials
-REFERENCE_MEAN_RANK = {0: 3.79, 16: 2.17, 31: 1.35}  # rounded to 2dp
+REFERENCE_HIT1 = {0: 43, 16: 55, 31: 64}             # out of 80 carbon-matched trials
+REFERENCE_MEAN_RANK = {0: 2.41, 16: 1.88, 31: 1.20}  # rounded to 2dp
 REFERENCE_PERFECT_OS = [16, 31]  # layers where thioether-thiol ~ ether-alcohol is 16/16
 
 INVARIANT_HEADER = 'FAILED SELF-CHECK'

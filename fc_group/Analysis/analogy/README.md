@@ -228,6 +228,16 @@ those group sets' weight in every pooled figure.
 | 8B hit@1 | 42.5% | 45.0% | 71.2% | **75.0%** | 73.8% |
 | 70B hit@1 | 46.2% | 48.8% | **82.5%** | 81.2% | 81.2% |
 
+> **Three of those 8B cells have been re-measured on the SMILES prompts** — the first
+> numbers in this file to be replaced rather than merely annotated. Depth 0.00 goes
+> 42.5% → **53.8%** (mean rank 3.79 → 2.41), depth 0.51 goes 71.2% → **68.8%**, and depth
+> 1.00 goes 73.8% → **80.0%**. The shape is unchanged; what moves is the floor. Layer 0 is
+> where notation lives, and a SMILES string spells the heteroatom out where a condensed
+> formula hid it, so the shallow layers now solve analogies that character identity alone
+> is enough to solve. Read the depth-0.00 column as an orthographic baseline, not as
+> evidence that the untrained embedding knows chemistry. The other cells, and every 70B
+> cell, are still old-prompt figures.
+
 **The peak-then-fall shape reported for the four-quadruple set was the halogen quadruple.**
 With the halogens gone, both models rise and then plateau across the whole second half
 rather than falling back at the end. The earlier "falls back at

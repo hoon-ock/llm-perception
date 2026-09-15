@@ -19,14 +19,18 @@ exits non-zero rather than failing obscurely.
 |---|---|---|---|
 | `00_smoke_test_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | one template, three layers — checks a model loads and emits right-shaped output before committing to a full sweep |
 | `01_extract_small` / `_large` | gpu:1 / gpu:2 | 3 / 2 | `extract_activations_subset.py` — the activations everything else reads |
-| `02_probe` | cpu, 4G | 115 | `functional_group_probe.py` |
+| `02_probe` | cpu, 4G | 115 | `functional_group_probe.py`. Also emits `confusion_{tag}.csv` (where every prediction landed, every layer) and `oof_proba_{tag}.npz` (the class probabilities behind them) with **no flag change** — `08` reads the latter. `--no-save-proba` opts out of the npz |
 | `03_tsne` | cpu, 32G | 115 | `tsne_functional_groups.py` |
 | `04_anisotropy` | cpu, 32G | 115 | `anisotropy_diagnostic.py` |
 | `05_analogy` | cpu, 32G | 115 | `functional_group_analogy_carbon_matched.py` |
 | `06_generation_eval_small` / `_large` | gpu:1 / gpu:4 | 3 / 2 | `generation_eval.py` — behavioural readout, needs no activations |
-| `07_retrieval` | cpu, 8G | 115 | `analogy_retrieval.py` — reads what `05_analogy` wrote, not the activations, so it must run after it. Runs **both quadruple sets** per task (`inter`, `halide`), each into its own Results tree, and emits one `SUMMARY:` line per set. Self-checks before writing, so `SUMMARY: ok` means the output was validated |
+| `07_retrieval` | cpu, 8G | 115 | `analogy_retrieval.py` — reads what `05_analogy` wrote, not the activations, so it must run after it. Runs **all three quadruple sets** per task (`inter`, `halide`, `carbon`), each into its own Results tree, and emits one `SUMMARY:` line per set. Self-checks before writing, so `SUMMARY: ok` means the output was validated |
+| `08_ambiguity` | cpu, 8G | 115 | `ambiguity_metric.py` — reads the `oof_proba_*.npz` that `02_probe` wrote, so it must run after it. Writes the mean probability on each family per held-out group, which is how the four convention-labelled groups (`amide`, `nitro`, `sulfoxide`, `sulfone`) are read. `SUMMARY: no probe output` means that model/entity_type's probe results predate the npz — rerun `02_probe`, not a crash |
 
 115 = 5 models × 23 entity types.
+
+> **On this branch that product is currently 125, not 115.** `config_extract_activation.yaml` carries two extra entity types (`functional_group_rag`, `functional_group_rag_mismatched`) as an uncommitted change, and `read_entity_types` in `models.sh` returns every entity in the config with no filter. So `02`–`05`, `07` and `08` all abort on their own
+> `len(models) × len(entities) == ARRAY_SIZE` guard until that is resolved — the guard working as designed, but the whole matrix is blocked meanwhile. The fix belongs in `models.sh` rather than in the array literals: `scripts/rag/README.md` states the shared scripts are meant to stay byte-identical to `main`, which means the RAG arms should be filtered out of `read_entity_types` and left to `scripts/rag/`, not folded into the main sweep.
 
 ## Why small/large are separate files
 
@@ -61,6 +65,12 @@ grep -h SUMMARY slurm-*.out | sort | uniq -c
 
 ```bash
 sbatch --export=ALL,PROBE_TARGET=fine,PROBE_SPLIT=molecule fc_group/scripts/02_probe.sbatch
+```
+
+`08_ambiguity` takes its depth from the environment the same way. Bare, it writes the plain probability table in seconds; `AMBIGUITY_FULL=1` adds the temperature-calibrated contrast with bootstrap CIs and the centroid-axis projection — the half that answers "could this just be how hard `select_C` regularized each model", and the only half that reads activations:
+
+```bash
+sbatch --export=ALL,AMBIGUITY_FULL=1 fc_group/scripts/08_ambiguity.sbatch
 ```
 
 Cap concurrency on a busy partition by appending `%N` to the array, e.g. `--array=0-119%20`.

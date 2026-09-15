@@ -346,7 +346,8 @@ def select_C(X, y, groups, c_grid, pca_components, seed):
 
 
 def run_cv(X, y, mol_idx, folds, c_grid, pca_components, seed, label_map=None):
-    """Fit the probe over one fold list; returns per-fold rows and OOF predictions.
+    """Fit the probe over one fold list; returns per-fold rows, OOF predictions
+    and the OOF class probabilities behind them.
 
     `label_map`, when given, is an integer array indexed by training-class id that
     returns the id of the class actually being *scored* -- it is what makes the
@@ -360,11 +361,28 @@ def run_cv(X, y, mol_idx, folds, c_grid, pca_components, seed, label_map=None):
     chosen for the task the model is actually fitting, and the inner folds do not
     hold a whole group out, so the mapped score there would be both easier and
     less discriminative.
+
+    `oof_proba` is in the EVALUATION class space, one column per scored class.
+    Under `label_map` that means the training classes' probabilities are summed
+    within each evaluation class -- the family mass. Be aware that its argmax is
+    not `oof_pred`: the prediction argmaxes in the *fine* space and only then
+    maps, which is the deliberate choice documented on `per_molecule_acc` below
+    ("what did it actually call this molecule"). The two agree whenever
+    `label_map is None`, which is what the coarse target uses and what
+    `ambiguity_metric.py` asserts against.
+
+    A fold need not see every training class -- leave-one-group-out withholds one
+    entirely -- so columns are scattered by `est.classes_` rather than assumed to
+    be 0..K-1. A class absent from a fold's training set correctly keeps zero
+    probability on that fold's rows.
     """
     def to_eval(v):
         return v if label_map is None else label_map[v]
 
+    n_eval_classes = (int(np.max(y)) + 1 if label_map is None
+                      else int(np.max(label_map)) + 1)
     oof_pred = np.full(len(y), -1, dtype=int)
+    oof_proba = np.zeros((len(y), n_eval_classes), dtype=np.float64)
     oof_mask = np.zeros(len(y), dtype=bool)
     fold_rows = []
 
@@ -376,6 +394,13 @@ def run_cv(X, y, mol_idx, folds, c_grid, pca_components, seed, label_map=None):
         pred = to_eval(classes[proba.argmax(axis=1)])
         y_te = to_eval(y[te])
         oof_pred[te] = pred
+        # Sum each training class's probability into the evaluation class it maps
+        # to. `np.add.at` on the transposed view is what makes this a sum rather
+        # than a last-writer-wins scatter, which matters only under `label_map`
+        # (several fine classes share a family) but is correct either way.
+        block = np.zeros((len(te), n_eval_classes), dtype=np.float64)
+        np.add.at(block.T, to_eval(classes), proba.T)
+        oof_proba[te] = block
         oof_mask[te] = True
 
         # Per-molecule score: sum the class probabilities over a molecule's
@@ -401,7 +426,7 @@ def run_cv(X, y, mol_idx, folds, c_grid, pca_components, seed, label_map=None):
             'per_molecule_acc': float(np.mean(mol_correct)),
         })
 
-    return fold_rows, oof_pred, oof_mask
+    return fold_rows, oof_pred, oof_proba, oof_mask
 
 
 def run_null(X, y_mol, mol_idx, folds, C, pca_components, num_samples, seed,
@@ -505,6 +530,68 @@ def plot_confusion(y_true, y_pred, class_names, layer, target, split, output_pat
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
     plt.close()
+
+
+def confusion_rows(y_true, y_pred, class_names, layer):
+    """Every populated cell of one layer's confusion matrix, in long format.
+
+    The heatmap above is for looking at; this is the same content for counting
+    with. "How often did a nitrogen molecule get called an oxygen one" is a
+    question about one off-diagonal cell, and answering it from the predictions
+    CSV means re-deriving which rows belong to which class by hand.
+
+    Deliberately generic over the class set rather than singling out the pairs
+    that happen to be chemically interesting. The coarse target's nitrogen/oxygen
+    and sulfur/oxygen cells are the ones worth reading -- amide and nitro carry a
+    carbonyl, sulfoxide and sulfone carry S=O, and all four are labelled by the
+    atom that NAMES them rather than by what they contain -- but encoding that
+    here would put chemistry into a function that also has to serve the 20-class
+    fine target. Every populated pair is emitted; the interesting ones surface on
+    their own, at the top of the stdout listing, because they are the frequent ones.
+
+    Only non-zero cells: at 20 classes a full matrix is 400 rows per layer, nearly
+    all of them zero, which would bury the handful of cells that carry information.
+    `n_true_total` travels with each row so a rate is still computable without the
+    zeros. The diagonal IS included, which makes the file a complete accounting of
+    every prediction rather than an error list -- and is what lets the self-check
+    tie its total back to the accuracy reported elsewhere.
+
+    Row-major order, i.e. the order you would read the matrix in, so a diff between
+    two runs lines up cell for cell.
+    """
+    labels = np.arange(len(class_names))
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+    totals = cm.sum(axis=1)
+    return [{
+        'layer': layer,
+        'true_class': class_names[i],
+        'pred_class': class_names[j],
+        'n': int(cm[i, j]),
+        'n_true_total': int(totals[i]),
+        'rate': float(cm[i, j] / totals[i]),
+        'correct': int(i == j),
+    } for i, j in zip(*np.nonzero(cm))]
+
+
+def check_confusion(rows, y_true, y_pred, where):
+    """The cells must account for every prediction, and agree with the accuracy.
+
+    Cheap, and it ties the new file to numbers the untouched code path already
+    produces: if the cells summed to the wrong total, or the diagonal disagreed
+    with `accuracy_score` on the same arrays, the confusion CSV would be a
+    plausible-looking artifact describing something other than this run.
+    """
+    problems = []
+    total = sum(r['n'] for r in rows)
+    if total != len(y_true):
+        problems.append(f"{where}: cells sum to {total}, expected {len(y_true)} rows")
+    if total:
+        diag = sum(r['n'] for r in rows if r['correct']) / total
+        acc = accuracy_score(y_true, y_pred)
+        if abs(diag - acc) > 1e-12:
+            problems.append(f"{where}: diagonal share {diag!r} but accuracy_score "
+                            f"gives {acc!r} on the same predictions")
+    return problems
 
 
 def plot_logo_by_group(fold_rows, layer, n_classes, output_path):
@@ -626,6 +713,11 @@ def parse_args():
                    help="Comma-separated layers for the null, or 'all'. Default: five layers "
                         "spread over depth -- the permutation null is essentially "
                         "layer-independent, and running it everywhere dominates the runtime.")
+    p.add_argument('--no-save-proba', action='store_true',
+                   help="Skip data/oof_proba_{tag}.npz, the out-of-fold class "
+                        "probabilities every layer. Saving is the default because it is "
+                        "what ambiguity_metric.py reads and it costs well under a "
+                        "megabyte; this flag is the escape hatch, not the norm.")
     p.add_argument('--surface-baseline', action='store_true',
                    help="Also fit the probe on char n-grams of the raw prompt strings.")
     p.add_argument('--output-dir', default=None)
@@ -715,7 +807,8 @@ def main():
                     f"target={target!r}: {dupes} map to more than one {eval_col} value")
             label_maps[target] = eval_le.transform(pairs.loc[train_le.classes_].values)
 
-    results = {job: {'fold_rows': [], 'oof': {}, 'null': [], 'surface': None}
+    results = {job: {'fold_rows': [], 'oof': {}, 'null': [], 'surface': None,
+                     'row_meta': None}
                for job in jobs}
     fold_cache = {}
     # Run-once flag rather than `layer == layers[0]`: the surface baseline does
@@ -752,7 +845,7 @@ def main():
             y_rows = expand(y_mol[target], mol_idx)
 
             label_map = label_maps[target]
-            fold_rows, oof_pred, oof_mask = run_cv(
+            fold_rows, oof_pred, oof_proba, oof_mask = run_cv(
                 X, y_rows, mol_idx, folds, c_grid, args.pca_components, args.seed,
                 label_map=label_map)
 
@@ -765,8 +858,20 @@ def main():
                 'pooled_balanced_acc': pooled,
                 'y_true': y_eval[oof_mask],
                 'y_pred': oof_pred[oof_mask],
+                'y_proba': oof_proba[oof_mask],
                 'fold_rows': fold_rows,
             }
+            # Which molecule each surviving OOF row belongs to. Recorded once per
+            # job rather than per layer: the folds are cached across layers, so
+            # `oof_mask` cannot vary. It is recorded at all because the OOF arrays
+            # are in global row order with the unscoreable rows masked out -- not
+            # fold order -- and re-deriving that alignment downstream from the
+            # dataset is exactly the kind of thing that silently goes wrong.
+            if results[key]['row_meta'] is None:
+                results[key]['row_meta'] = {
+                    'molecule_index': mol_idx[oof_mask],
+                    'fine_group': df[FINE_COLUMN].values[mol_idx[oof_mask]],
+                }
             print(f"  layer {layer:3d} | {target:6s} | {split:8s} | "
                   f"balanced_acc={pooled:.4f} | "
                   f"per_molecule={np.mean([r['per_molecule_acc'] for r in fold_rows]):.4f}")
@@ -807,6 +912,10 @@ def main():
         tag = f'{target}_{split}'
         class_names = [str(c) for c in encoders[target].classes_]
         n_classes = len(class_names)
+        # Layer-invariant: the folds are cached across layers, so every layer's
+        # OOF rows are the same rows with the same truths. Taking y_true from the
+        # best layer is therefore a choice of convenience, not of layer.
+        save_proba = not args.no_save_proba and res['row_meta'] is not None
 
         save_long_format_csv(
             res['fold_rows'],
@@ -828,6 +937,48 @@ def main():
             'y_pred': [class_names[i] for i in best['y_pred']],
         }).to_csv(os.path.join(output_dir, 'data',
                                f'predictions_{tag}_layer_{best_layer}.csv'), index=False)
+
+        # The out-of-fold class probabilities, every layer in one file. The
+        # predictions CSV above keeps only the argmax at the best layer, which
+        # cannot answer "how much mass went to the runner-up" -- the question
+        # ambiguity_metric.py exists to ask of amide, nitro, sulfoxide and
+        # sulfone, whose coarse family is a naming convention rather than an
+        # elemental fact. float16 because these are probabilities read back for
+        # ratios and a softmax temperature fit, not for bitwise reproduction;
+        # it holds the whole 80-layer 70B sweep in well under a megabyte.
+        if save_proba:
+            meta = res['row_meta']
+            np.savez_compressed(
+                os.path.join(output_dir, 'data', f'oof_proba_{tag}.npz'),
+                proba=np.stack([res['oof'][L]['y_proba']
+                                for L in sorted(res['oof'])]).astype(np.float16),
+                layers=np.array(sorted(res['oof']), dtype=int),
+                class_names=np.array(class_names, dtype=object),
+                y_true=best['y_true'],
+                molecule_index=meta['molecule_index'],
+                fine_group=np.array(meta['fine_group'], dtype=object),
+            )
+            print(f"  wrote data/oof_proba_{tag}.npz "
+                  f"({len(res['oof'])} layers x {len(best['y_true'])} rows "
+                  f"x {n_classes} classes)")
+
+        # Where every prediction landed, at every layer. The confusion heatmap is
+        # drawn only at the best layer and only as pixels; this is the same content
+        # as countable rows, across depth.
+        conf_by_layer, conf_all, conf_problems = {}, [], []
+        for L in sorted(res['oof']):
+            o = res['oof'][L]
+            conf_by_layer[L] = confusion_rows(o['y_true'], o['y_pred'], class_names, L)
+            conf_problems += check_confusion(conf_by_layer[L], o['y_true'], o['y_pred'],
+                                             f'{tag} L{L}')
+            conf_all += conf_by_layer[L]
+        if conf_problems:
+            raise SystemExit("FAILED SELF-CHECK (confusion cells):\n"
+                             + "\n".join(f"  {p}" for p in conf_problems))
+        save_long_format_csv(
+            conf_all,
+            ['layer', 'true_class', 'pred_class', 'n', 'n_true_total', 'rate', 'correct'],
+            os.path.join(output_dir, 'data', f'confusion_{tag}.csv'))
 
         p_value = (None if not null_scores else
                    float((np.sum(np.array(null_scores) >= layer_scores[best_layer]) + 1)
@@ -863,6 +1014,27 @@ def main():
         print(f"{target}/{split}: best layer {best_layer} balanced_acc="
               f"{layer_scores[best_layer]:.4f} (chance {1.0 / n_classes:.4f}"
               + (f", null {np.mean(null_scores):.4f}, p={p_value:.3f})" if null_scores else ")"))
+
+        # Where the errors went, biggest first. Printed rather than left to the CSV
+        # because it is the first thing worth knowing about a probe that is not at
+        # ceiling, and on the coarse target it is where the nitrogen->oxygen and
+        # sulfur->oxygen confusions show up -- the four groups whose family is a
+        # naming convention rather than an elemental fact.
+        errors = sorted((r for r in conf_by_layer[best_layer] if not r['correct']),
+                        key=lambda r: -r['n'])
+        n_rows = len(best['y_true'])
+        if not errors:
+            print(f"  no misclassifications at layer {best_layer} ({n_rows} rows)")
+        else:
+            n_err = sum(r['n'] for r in errors)
+            print(f"  where the {n_err} error(s) went (prompt-level, {n_rows} rows, "
+                  f"{len(errors)} populated off-diagonal cell(s)):")
+            for r in errors[:10]:
+                print(f"    {r['true_class']:>16s} -> {r['pred_class']:<16s} "
+                      f"{r['n']:4d}/{r['n_true_total']:<5d} ({r['rate']:6.1%} of that class)")
+            if len(errors) > 10:
+                print(f"    ... and {len(errors) - 10} more cell(s), see "
+                      f"data/confusion_{tag}.csv")
 
     print(f"\nWrote results to {output_dir}")
 

@@ -133,7 +133,15 @@ classifier removes its output unit, so held-out accuracy would be 0 by construct
 nothing. Use `fine_to_coarse` instead.
 
 Reported per layer: balanced accuracy (headline), macro-F1, plain accuracy, and a per-molecule
-score that sums class probabilities over a molecule's prompt templates before the argmax.
+score that sums class probabilities over a molecule's prompt templates before the argmax. The
+full out-of-fold probability table goes to `data/oof_proba_{tag}.npz` at every layer
+(`--no-save-proba` opts out); `ambiguity_metric.py` is what reads it.
+
+**Where the errors went** is reported too, printed after each experiment's summary line and
+saved to `data/confusion_{tag}.csv` — the confusion matrix as countable rows (`layer`,
+`true_class`, `pred_class`, `n`, `n_true_total`, `rate`, `correct`) at every layer, not just the
+best one the heatmap draws. Every populated pair is emitted, so on the coarse target the
+nitrogen→oxygen and sulfur→oxygen confusions surface on their own.
 `--num-null-samples` runs a label-permutation null shuffled over the **92 molecules** (not the
 expanded rows, which would leak templates of the same molecule across the split); it defaults
 to five layers spread over depth. `--null-layers all` overrides that.
@@ -258,6 +266,26 @@ appears only as `torch.load(..., map_location="cpu")`. A GPU would idle for the 
 competing with the extraction jobs that need one. Extra cores do not help either -- measured on
 a 920x8192 fold, one preprocess+fit takes 0.35s at 1 thread and 0.33s at 8, because the matrices
 are too small for BLAS parallelism and lbfgs is serial. Throughput comes from the array width.
+
+### Beyond accuracy: `ambiguity_metric.py`
+
+Four groups are labelled by naming convention rather than composition -- `amide` and `nitro`
+carry oxygen but are `nitrogen`; `sulfoxide` and `sulfone` carry oxygen but are `sulfur`. Under
+leave-one-group-out they are genuinely underdetermined, and every amide/nitro error in every
+model goes to `oxygen` and nowhere else. Accuracy cannot see that. This script scores *how much*
+mass lands on the defensible rival, as a contrast against the group's own oxygen-free family
+controls, so a probe that is merely flat everywhere scores zero:
+
+```bash
+python fc_group/ambiguity_metric.py --model-name meta-llama/Llama-3.1-8B
+```
+
+By default it writes one table and one heatmap: the mean probability on each family, per
+held-out group. Amide puts 0.173 on oxygen against amine's 0.041 and imine's 0.017 -- the whole
+result, with no ratio or calibration in the way. `--full` adds the calibrated contrast with
+bootstrap CIs and a centroid-axis projection, which is what answers a reviewer asking whether
+the effect is an artifact of how hard `select_C` regularized each model. See `PROBE_NOTES.md`
+§10 for that and for the two ways it can mislead.
 
 ## Multi-model support
 

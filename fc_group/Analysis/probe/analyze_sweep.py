@@ -27,8 +27,24 @@ DEFAULT_RESULTS = os.path.join(REPO, 'fc_group', 'Results', 'functional_group_pr
 DEFAULT_OUT = os.path.join(HERE, 'data')
 
 MODEL_8B = 'meta-llama-Llama-3.1-8B'
+MODEL_CHEM = 'phenixace-Chem-R-Faithful'
+MODEL_R1 = 'deepseek-ai-DeepSeek-R1-Distill-Llama-8B'
 MODEL_70B = 'meta-llama-Llama-3.1-70B'
-MODELS = [MODEL_8B, MODEL_70B]
+
+# The default set is the three 8B derivatives of one base, so every contrast varies
+# fine-tuning against a shared architecture, tokenizer and depth. --models still
+# accepts the 70B names for the scale pair this script was first written for.
+MODELS = [MODEL_8B, MODEL_CHEM, MODEL_R1]
+# Section 4 is a PAIRED bootstrap and stays a pair however many models are loaded;
+# base vs chemistry-tuned is the contrast the functional-group paper is built on.
+DEFAULT_PAIR = (MODEL_CHEM, MODEL_8B)
+
+# Every default model now ends in "8B", so the old name[-3:] label collides.
+SHORT = {MODEL_8B: 'base', MODEL_CHEM: 'chem', MODEL_R1: 'r1', MODEL_70B: '70B'}
+
+
+def short(model):
+    return SHORT.get(model, model[-5:])
 
 # 92 molecules minus alkane's 4. `none (alkane)` is the only hydrocarbon, so it is
 # skipped as a leave-one-group-out fold and its molecules never enter the pooled
@@ -50,10 +66,10 @@ def family(entity_type):
     return 'declarative'
 
 
-def load_curves(results_dir, tag):
+def load_curves(results_dir, tag, models=MODELS):
     """{model: {entity_type: {layer: balanced_acc}}} from every summary_{tag}.json."""
     out = {}
-    for model in MODELS:
+    for model in models:
         out[model] = {}
         pattern = os.path.join(results_dir, model, '*', 'data', f'summary_{tag}.json')
         for path in sorted(glob.glob(pattern)):
@@ -169,7 +185,7 @@ def bootstrap_diff(y_true, pred_a, pred_b, n_boot, rng):
     return acc_a, acc_b, acc_a - acc_b, float(lo), float(hi)
 
 
-def load_surface(results_dir, tag):
+def load_surface(results_dir, tag, models=MODELS):
     """Mean surface baseline over the group folds, wherever it was measured.
 
     The sweep runs without --surface-baseline, so this is present for only a subset
@@ -177,7 +193,7 @@ def load_surface(results_dir, tag):
     rather than silently omitting.
     """
     out = []
-    for model in MODELS:
+    for model in models:
         pattern = os.path.join(
             results_dir, model, '*', 'data', f'surface_baseline_{tag}.csv')
         for path in sorted(glob.glob(pattern)):
@@ -210,13 +226,17 @@ def main():
     p.add_argument('--out-dir', default=DEFAULT_OUT)
     p.add_argument('--tag', default='coarse_group',
                    help="{target}_{split}, e.g. coarse_group or fine_to_coarse_group")
+    p.add_argument('--models', nargs='+', default=MODELS)
+    p.add_argument('--pair', nargs=2, default=list(DEFAULT_PAIR),
+                   metavar=('MODEL_A', 'MODEL_B'),
+                   help='the two models section 4 bootstraps against each other')
     p.add_argument('--n-boot', type=int, default=20000)
     p.add_argument('--seed', type=int, default=0)
     args = p.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
     rng = np.random.default_rng(args.seed)
-    curves = load_curves(args.results_dir, args.tag)
+    curves = load_curves(args.results_dir, args.tag, args.models)
 
     # ---- 1. long-format layer curves -------------------------------------------
     long_rows = [
@@ -250,10 +270,15 @@ def main():
     # half depth while question prompts saturate at the very top, so the pooled modal
     # layer is a blend of two distributions rather than a description of either.
     depth_rows = []
-    for model in MODELS:
+    for model in args.models:
         for fam in ('declarative', 'question', 'bare'):
             rows = [r for r in summary_rows
                     if r['model'] == model and r['family'] == fam]
+            # The sweep covers 23 entity types across three prompt families, but a
+            # targeted run may hold only one of them. Skip what was not run rather
+            # than reporting the mode of an empty set.
+            if not rows:
+                continue
             jumps = Counter(r['max_jump_layer'] for r in rows)
             sats = Counter(r['layer_90'] for r in rows)
             jl, jn = jumps.most_common(1)[0]
@@ -280,14 +305,43 @@ def main():
                'sat_max_layer', 'sat_median_depth', 'median_floor_to_peak_span',
                'min_floor_to_peak_span'])
 
+    # ---- 3b. where the errors go -------------------------------------------------
+    # The probe writes a full confusion matrix per layer, but only inside the gitignored
+    # Results tree. The paper quotes the nitrogen->oxygen counts -- the direction the
+    # convention-labelled groups fail in -- so they have to survive into a committed CSV.
+    conf_rows = []
+    for model in args.models:
+        for path in sorted(glob.glob(os.path.join(
+                args.results_dir, model, '*', 'data', f'confusion_{args.tag}.csv'))):
+            entity_type = path.split(os.sep)[-3]
+            with open(path) as fh:
+                for r in csv.DictReader(fh):
+                    if int(r['n']) == 0 or r['true_class'] == r['pred_class']:
+                        continue
+                    conf_rows.append({
+                        'model': model, 'entity_type': entity_type, 'tag': args.tag,
+                        'layer': int(r['layer']), 'true_class': r['true_class'],
+                        'pred_class': r['pred_class'], 'n': int(r['n']),
+                        'n_true_total': int(r['n_true_total']),
+                        'rate': round(float(r['rate']), 6),
+                    })
+    conf_rows.sort(key=lambda r: (r['model'], r['layer'], -r['n']))
+    write_csv(os.path.join(args.out_dir, 'confusion_errors.csv'), conf_rows,
+              ['model', 'entity_type', 'tag', 'layer', 'true_class', 'pred_class', 'n',
+               'n_true_total', 'rate'])
+
     # ---- 4. paired model comparison ---------------------------------------------
-    shared = sorted(set(curves[MODEL_8B]) & set(curves[MODEL_70B]))
+    name_a, name_b = args.pair
+    for name in (name_a, name_b):
+        if name not in curves:
+            raise SystemExit(f"--pair names {name}, which --models did not load")
+    shared = sorted(set(curves[name_a]) & set(curves[name_b]))
     diff_rows = []
     for entity_type in shared:
         layer_a, true_a, pred_a = load_predictions(
-            args.results_dir, MODEL_8B, entity_type, args.tag)
+            args.results_dir, name_a, entity_type, args.tag)
         layer_b, true_b, pred_b = load_predictions(
-            args.results_dir, MODEL_70B, entity_type, args.tag)
+            args.results_dir, name_b, entity_type, args.tag)
         # The pairing is only meaningful if both files describe the same molecules in
         # the same order. Assert it rather than assume it.
         if not np.array_equal(true_a, true_b):
@@ -296,24 +350,28 @@ def main():
             true_a, pred_a, pred_b, args.n_boot, rng)
         diff_rows.append({
             'entity_type': entity_type, 'family': family(entity_type),
-            'layer_8b': layer_a, 'layer_70b': layer_b,
-            'bacc_8b': acc_a, 'bacc_70b': acc_b, 'diff_8b_minus_70b': diff,
+            'model_a': name_a, 'model_b': name_b,
+            'layer_a': layer_a, 'layer_b': layer_b,
+            'bacc_a': acc_a, 'bacc_b': acc_b, 'diff_a_minus_b': diff,
             'ci_lo': lo, 'ci_hi': hi,
             'ci_excludes_zero': int(not (lo < 0 < hi)),
         })
     write_csv(os.path.join(args.out_dir, 'model_diff_bootstrap.csv'), diff_rows,
-              ['entity_type', 'family', 'layer_8b', 'layer_70b', 'bacc_8b', 'bacc_70b',
-               'diff_8b_minus_70b', 'ci_lo', 'ci_hi', 'ci_excludes_zero'])
+              ['entity_type', 'family', 'model_a', 'model_b', 'layer_a', 'layer_b',
+               'bacc_a', 'bacc_b', 'diff_a_minus_b', 'ci_lo', 'ci_hi',
+               'ci_excludes_zero'])
 
     # ---- 5. surface baselines ----------------------------------------------------
-    surface_rows = load_surface(args.results_dir, args.tag)
+    surface_rows = load_surface(args.results_dir, args.tag, args.models)
     write_csv(os.path.join(args.out_dir, 'surface_baseline.csv'), surface_rows,
               ['model', 'entity_type', 'family', 'n_folds', 'mean_balanced_acc'])
 
     # ---- console report ----------------------------------------------------------
     print(f"\n=== depth: where each model gains ({args.tag}) ===")
-    for model in MODELS:
+    for model in args.models:
         rows = [r for r in summary_rows if r['model'] == model]
+        if not rows:
+            continue
         jumps = Counter(r['max_jump_layer'] for r in rows)
         sat = Counter(r['layer_90'] for r in rows)
         n_layers = rows[0]['n_layers']
@@ -343,13 +401,15 @@ def main():
     # than a >0.02 threshold, so an absolute claim ("all of them peak at the end")
     # can be checked here instead of inferred from a rounded-off table.
     print(f"\n=== prompt family: accuracy and late-layer behaviour ===")
-    for model in MODELS:
+    for model in args.models:
         for fam in ('declarative', 'question', 'bare'):
             rows = [r for r in summary_rows
                     if r['model'] == model and r['family'] == fam]
+            if not rows:
+                continue
             drops = [r['drop_best_minus_last'] for r in rows]
             steps = [r['final_step'] for r in rows]
-            print(f"  {model[-3:]:>3s} {fam:12s} n={len(rows):2d}  "
+            print(f"  {short(model):>5s} {fam:12s} n={len(rows):2d}  "
                   f"mean best={np.mean([r['best'] for r in rows]):.3f}  "
                   f"mean slide={np.mean(drops):.3f} (max {max(drops):.3f})  "
                   f"mean final step={np.mean(steps):+.3f}  "
@@ -357,29 +417,37 @@ def main():
     negative = [r for r in summary_rows if r['final_step'] < 0]
     print(f"  -> {len(negative)}/{len(summary_rows)} curves end on a negative final step; "
           f"sharpest: " + ", ".join(
-              f"{r['model'][-3:]} {r['entity_type']} {r['final_step']:+.3f}"
+              f"{short(r['model'])} {r['entity_type']} {r['final_step']:+.3f}"
               for r in sorted(negative, key=lambda r: r['final_step'])[:3]))
 
-    print(f"\n=== 8B vs 70B, paired ({args.n_boot} molecule-level draws, seed {args.seed}) ===")
+    la, lb = short(name_a), short(name_b)
+    print(f"\n=== {la} vs {lb}, paired ({args.n_boot} molecule-level draws, "
+          f"seed {args.seed}) ===")
     sig = [r for r in diff_rows if r['ci_excludes_zero']]
     print(f"  CI excludes 0 for {len(sig)}/{len(diff_rows)} entity types: "
-          f"8B ahead in {sum(1 for r in sig if r['diff_8b_minus_70b'] > 0)}, "
-          f"70B ahead in {sum(1 for r in sig if r['diff_8b_minus_70b'] < 0)}")
+          f"{la} ahead in {sum(1 for r in sig if r['diff_a_minus_b'] > 0)}, "
+          f"{lb} ahead in {sum(1 for r in sig if r['diff_a_minus_b'] < 0)}")
+    for r in diff_rows:
+        print(f"  {r['entity_type']:24s} {la} {r['bacc_a']:.3f} L{r['layer_a']:<3d}"
+              f" vs {lb} {r['bacc_b']:.3f} L{r['layer_b']:<3d}"
+              f"  diff={r['diff_a_minus_b']:+.3f} "
+              f"CI[{r['ci_lo']:+.3f},{r['ci_hi']:+.3f}]")
     for fam in ('question', 'declarative', 'bare'):
-        vals = [r['diff_8b_minus_70b'] for r in diff_rows if r['family'] == fam]
+        vals = [r['diff_a_minus_b'] for r in diff_rows if r['family'] == fam]
         if len(vals) < 2:
             continue
         mean, sd = float(np.mean(vals)), float(np.std(vals, ddof=1))
         t = mean / (sd / len(vals) ** 0.5)
-        print(f"  {fam:12s} n={len(vals):2d}  mean(8B-70B)={mean:+.4f}  sd={sd:.4f}  "
-              f"t={t:+.2f}  8B ahead {sum(1 for v in vals if v > 0)}/{len(vals)}")
+        print(f"  {fam:12s} n={len(vals):2d}  mean({la}-{lb})={mean:+.4f}  sd={sd:.4f}  "
+              f"t={t:+.2f}  {la} ahead {sum(1 for v in vals if v > 0)}/{len(vals)}")
 
     measured = [r for r in surface_rows]
     if measured:
         vals = [r['mean_balanced_acc'] for r in measured]
         by_model = Counter(r['model'] for r in measured)
         print(f"\n=== surface baseline (character n-grams, no model) ===")
-        print(f"  measured for {len(measured)} of {2 * len(shared)} tasks "
+        print(f"  measured for {len(measured)} of "
+              f"{len(args.models) * len(shared)} tasks "
               f"({dict(by_model)}); range {min(vals):.3f}-{max(vals):.3f}")
 
 

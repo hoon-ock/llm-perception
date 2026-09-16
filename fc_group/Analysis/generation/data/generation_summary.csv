@@ -1,0 +1,7 @@
+model,entity_type,scoring,n_prompts,n_molecules,n_templates,n_classes,chance,accuracy,balanced_accuracy,log_loss,mean_top1_margin
+meta-llama-Llama-3.1-8B,functional_group,raw,920,92,10,20,0.05,0.836957,0.820625,0.53298,2.025843
+meta-llama-Llama-3.1-8B,functional_group,length_normalized,920,92,10,20,0.05,0.401087,0.4,0.53298,2.025843
+phenixace-Chem-R-Faithful,functional_group,raw,920,92,10,20,0.05,0.978261,0.984375,0.075148,6.773189
+phenixace-Chem-R-Faithful,functional_group,length_normalized,920,92,10,20,0.05,0.720652,0.731875,0.075148,6.773189
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,raw,920,92,10,20,0.05,0.804348,0.789375,0.601872,3.245405
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,length_normalized,920,92,10,20,0.05,0.522826,0.503125,0.601872,3.245405

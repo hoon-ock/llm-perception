@@ -1,0 +1,2 @@
+model_a,model_b,entity_type,scoring,acc_a,acc_b,diff_a_minus_b,ci_lo,ci_hi,ci_excludes_zero,n_molecules,n_boot,seed
+phenixace-Chem-R-Faithful,meta-llama-Llama-3.1-8B,functional_group,strict,0.825,0.584783,0.240217,0.16413,0.315217,1,92,20000,0

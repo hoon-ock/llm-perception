@@ -1,0 +1,4 @@
+model,entity_type,n_prompts,n_classes_present,strict_accuracy,balanced_strict_accuracy,commit_rate,conditional_accuracy,containment_accuracy,malformed_rate,underspecified_rate,non_answer_rate,answer_wrong_rate
+meta-llama-Llama-3.1-8B,functional_group,920,20,0.584783,0.551875,0.636957,0.918089,0.65,0.131522,0.082609,0.148913,0.052174
+phenixace-Chem-R-Faithful,functional_group,920,20,0.825,0.80875,0.83913,0.983161,0.840217,0.006522,0.093478,0.06087,0.01413
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,920,20,0.78913,0.764375,0.828261,0.952756,0.797826,0.015217,0.057609,0.098913,0.03913

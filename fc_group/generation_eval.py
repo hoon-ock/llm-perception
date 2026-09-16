@@ -18,8 +18,25 @@ Two readouts:
     resolution-at-ceiling metrics the probe lacks, since run_cv keeps only the
     argmax of predict_proba.
 
-  free generation (secondary) -- greedy continuation, logged verbatim, for
-    qualitative error analysis only. Never scored by string match.
+  free generation (secondary) -- greedy continuation, logged verbatim AND scored by
+    what it commits to. The caution this note used to carry ("never scored by string
+    match") was aimed at containment: "hydroxyl", "an alcohol group" and "-OH" are all
+    right, and a gold-string-anywhere match would also credit
+
+        'The functional-group identity of Pentanal (CCCCC=O) is ' -> '\nA. aldehyde\nB. ketone'
+
+    which lists the options and answers nothing. So free_generation_scoring.py sorts each
+    continuation into one of five outcomes -- a committed answer right or wrong, a
+    superclass ("carbonyl"), no group named, or a malformed shape -- deciding format
+    failures before any class match. That matters because the format failures are not
+    spread evenly: 13% of the base model's continuations enumerate options and the
+    fine-tunes' under 2%, so containment would pay the weakest model most.
+
+    Every rate is also broken down by prompt template, which is where the variance in this
+    readout lives. Greedy decoding is deterministic -- repeating a prompt returns the same
+    string, so repeats would buy nothing -- but the 10 templates phrase the same question
+    10 ways and the models are far from indifferent to which: the base model runs 0.196 to
+    0.880 strict accuracy across them, against 0.685 to 0.957 for the chemistry-tuned one.
 
 No activation extraction is needed, so this runs on any prompt condition
 immediately.
@@ -42,6 +59,7 @@ from transformers import AutoModelForCausalLM  # noqa: E402
 from extract_activations_subset import (  # noqa: E402
     generate_prompts, load_config, load_model, load_tokenizer,
 )
+from free_generation_scoring import adjudicate_rows, build_block  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_CONFIG = os.path.join(HERE, 'config_extract_activation.yaml')
@@ -342,6 +360,13 @@ def main():
                    'n_templates': len(templates), 'n_molecules': len(df),
                    'ablate_molecule': bool(args.ablate_molecule),
                    **summarize(rows, labels)}
+        # The behavioural half, adjudicated here rather than left for an offline pass, so one
+        # sbatch run leaves a complete per-model record instead of half of one. Costs nothing
+        # -- regex over the strings already in memory. With --no-generation there is nothing
+        # to score and the key is simply absent.
+        if generations:
+            summary['free_generation'] = build_block(
+                model_name, adjudicate_rows(generations, model_name), entity_type)
         with open(os.path.join(out, 'summary.json'), 'w') as fh:
             json.dump(summary, fh, indent=2)
 

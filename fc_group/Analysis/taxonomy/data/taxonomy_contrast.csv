@@ -1,0 +1,16 @@
+model,entity_type,layer,n_groups,contrast_naming,contrast_reactivity,delta_reactivity_minus_naming
+meta-llama-Llama-3.1-8B,functional_group,0,19,0.295724,0.829429,0.533706
+meta-llama-Llama-3.1-8B,functional_group,8,19,0.512771,1.01877,0.505999
+meta-llama-Llama-3.1-8B,functional_group,16,19,0.973453,1.233435,0.259982
+meta-llama-Llama-3.1-8B,functional_group,24,19,1.646436,1.649927,0.003491
+meta-llama-Llama-3.1-8B,functional_group,31,19,1.748379,1.542933,-0.205446
+phenixace-Chem-R-Faithful,functional_group,0,19,0.334182,0.578936,0.244754
+phenixace-Chem-R-Faithful,functional_group,8,19,0.761515,1.161832,0.400317
+phenixace-Chem-R-Faithful,functional_group,16,19,0.963292,1.385907,0.422615
+phenixace-Chem-R-Faithful,functional_group,24,19,1.31379,1.680695,0.366904
+phenixace-Chem-R-Faithful,functional_group,31,19,1.473883,1.74196,0.268077
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,0,19,0.36512,0.729812,0.364692
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,8,19,0.689069,1.05462,0.365551
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,16,19,1.138933,1.479831,0.340898
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,24,19,1.450229,1.602738,0.152509
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,31,19,1.609891,1.608015,-0.001875

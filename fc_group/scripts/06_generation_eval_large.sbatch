@@ -21,7 +21,14 @@ export HF_HOME=/work/ock/hoon/hf_cache
 
 # Behavioural readout across the whole registry: score every functional-group
 # name as a continuation of the declarative prompt and take the argmax, then
-# also log what the model freely generates. No activations involved.
+# also score what the model freely generates -- by what it commits to, not by
+# whether the gold word appears, since 13% of the base model's continuations
+# enumerate the options ("A. aldehyde / B. ketone") and answer nothing. Every
+# rate is broken down by prompt template as well, which is where this readout's
+# variance sits: greedy decoding is deterministic, so repeats would be identical,
+# but the 10 templates move the base model between 0.196 and 0.880.
+# summary.json therefore carries both readouts -- no offline pass is needed.
+# No activations involved.
 #
 # Same model split and allocation as the smoke test, for the same reason:
 # --gres cannot vary per array task, so the <=8B half runs full precision on

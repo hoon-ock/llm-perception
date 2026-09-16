@@ -6,6 +6,15 @@ the numbers.
 Companion to `fc_group/PROBE_NOTES.md`, which explains **how the probe works** and reports the
 local smoke run. This file reports the **HCC sweep**: 2 models × 23 entity types × all layers.
 
+> **The model set changed under this document.** `MODELS` was the scale pair
+> (`Llama-3.1-8B` + `Llama-3.1-70B`); it is now the three 8B derivatives of one base
+> — `Llama-3.1-8B`, `phenixace/Chem-R-Faithful`, `deepseek-ai/DeepSeek-R1-Distill-Llama-8B`
+> — so every contrast varies fine-tuning against a shared architecture, tokenizer and depth.
+> `--models` and `--pair` still accept the 70B names. **The prose below was written against
+> the 8B/70B pair and has not been rewritten; `data/*.csv` has been regenerated and now holds
+> the three-model run.** Treat the CSVs as current and the narrative as historical. The
+> three-model findings are written up in `../taxonomy/`, `../geometry/` and `../ambiguity/`.
+
 > **Every figure here predates the notation switch.** These runs used the old `{formula}`
 > column, which mixed SMILES and condensed notation across groups — a confound worth ~0.20
 > cosine at every depth. All templates now interpolate the uniform `{smiles}` column, and

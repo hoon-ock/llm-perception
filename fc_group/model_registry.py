@@ -19,15 +19,36 @@ MODEL_CONFIGS = {
         "num_layers": 32,
         "default_layers": [0, 16, 31],
     },
-    # Chemistry-specialised, and built on Llama-3.1-8B -- the config fingerprint
-    # matches it exactly (vocab 128256, rope_theta 500000, 4096/32, 8 kv heads,
-    # max_position_embeddings 131072). Sharing a base with a model already in this
-    # registry is the point: it makes chemistry-tuned vs base a controlled
-    # comparison, same architecture and same tokenizer, with no second model to
-    # add. The other chemistry Llamas considered (KALE-LM-Chem, ChemDFM) sit at
-    # max_position 8192, i.e. Llama-3-8B, which would have confounded domain
-    # training with the 3 -> 3.1 difference.
+    # The chemistry arm is three checkpoints in two tiers.
+    #
+    # Tier 1 -- controlled. Chem-R-8B and Chem-R-Faithful are both built on
+    # Llama-3.1-8B (via -Instruct), so the config fingerprint matches the base
+    # entry above exactly: vocab 128256, rope_theta 500000, 4096/32, 8 kv heads,
+    # max_position_embeddings 131072. Sharing a base with a model already here is
+    # the point -- chemistry-tuned vs base varies one thing, with the same
+    # architecture and the same tokenizer. Chem-R-Faithful is in turn GRPO-trained
+    # *from* Chem-R-8B with fabrication-gated rewards, so holding both separates
+    # domain tuning from faithfulness tuning; with only the Faithful checkpoint
+    # the two are confounded in the single arm that carries the result.
+    "weidawang/Chem-R-8B": {
+        "hidden_dim": 4096,
+        "num_layers": 32,
+        "default_layers": [0, 16, 31],
+    },
     "phenixace/Chem-R-Faithful": {
+        "hidden_dim": 4096,
+        "num_layers": 32,
+        "default_layers": [0, 16, 31],
+    },
+    # Tier 2 -- off-base, for external validity only. ChemDFM-v1.5-8B is an
+    # independently trained chemistry model of the same size and the same shape
+    # (4096/32, so every depth- and width-indexed analysis here still applies),
+    # but it sits on Llama-3-8B, not 3.1: max_position_embeddings 8192,
+    # rope_scaling null, vocab_size 128264. It answers "does the effect survive a
+    # different lab's checkpoint" and nothing narrower -- a ChemDFM-vs-base gap
+    # confounds domain training with the 3 -> 3.1 difference and must never be
+    # reported as a controlled contrast. That is what Tier 1 is for.
+    "OpenDFM/ChemDFM-v1.5-8B": {
         "hidden_dim": 4096,
         "num_layers": 32,
         "default_layers": [0, 16, 31],

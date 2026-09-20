@@ -298,17 +298,31 @@ add a new model. It just needs an entry in `model_registry.py`:
 MODEL_CONFIGS = {
     "meta-llama/Llama-3.1-8B":                   {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
     "deepseek-ai/DeepSeek-R1-Distill-Llama-8B":  {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
+    "weidawang/Chem-R-8B":                       {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
     "phenixace/Chem-R-Faithful":                 {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
+    "OpenDFM/ChemDFM-v1.5-8B":                   {"hidden_dim": 4096, "num_layers": 32, "default_layers": [0, 16, 31]},
     "meta-llama/Llama-3.1-70B":                  {"hidden_dim": 8192, "num_layers": 80, "default_layers": [0, 40, 79]},
     "deepseek-ai/DeepSeek-R1-Distill-Llama-70B": {"hidden_dim": 8192, "num_layers": 80, "default_layers": [0, 40, 79]},
 }
 ```
 
 The set is deliberately all-Llama: base (Llama-3.1), reasoning-distilled (DeepSeek-R1-Distill)
-and chemistry-tuned (Chem-R-Faithful, itself a Llama-3.1-8B derivative) at 8B, plus the 8B/70B
-scale pair. Every contrast therefore varies one thing against a shared architecture and
-tokenizer. Qwen-family models were dropped for that reason and because `qwen3` needs
+and chemistry-tuned (Chem-R-8B and Chem-R-Faithful, both Llama-3.1-8B derivatives) at 8B, plus
+the 8B/70B scale pair. Every contrast therefore varies one thing against a shared architecture
+and tokenizer. Qwen-family models were dropped for that reason and because `qwen3` needs
 transformers >= 4.51, which the cluster environment predates.
+
+`OpenDFM/ChemDFM-v1.5-8B` is the one exception and is marked as such in `model_registry.py`.
+It is the same shape (4096/32) but sits on Llama-3-8B rather than 3.1, so a ChemDFM-vs-base
+gap confounds domain training with the 3 -> 3.1 difference. It is there for external validity
+-- does the effect survive an independently trained chemistry model -- and must not be read as
+a controlled contrast. Chem-R-8B is what carries that.
+
+**Registered is not the same as swept.** `scripts/models.sh` used to assert that
+`SMALL_MODELS + LARGE_MODELS` equalled `MODEL_CONFIGS`; it is now a subset check, so a model
+can be registered (which `get_model_config` requires) while being run by its own jobs outside
+the five-model sweep. `models.sh` prints a `note:` line naming any registered model not in the
+sweep. `scripts/chem/` is the first track to use this — see its README.
 
 Two constraints on a new model. It must expose `model.model.layers` (true for
 Llama/Mistral/Qwen-family causal LMs in `transformers`, not guaranteed for every

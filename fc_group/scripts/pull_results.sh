@@ -81,6 +81,12 @@ MODELS=(
   meta-llama-Llama-3.1-8B
   deepseek-ai-DeepSeek-R1-Distill-Llama-8B
   phenixace-Chem-R-Faithful
+  # The chemistry-comparison track (fc_group/scripts/chem/). Listed here even
+  # though it is not part of the five-model sweep: this list is what decides
+  # whether results come down off Swan at all, and a model missing from it fails
+  # silently -- the jobs run, the results are written, and nothing is pulled.
+  weidawang-Chem-R-8B
+  OpenDFM-ChemDFM-v1.5-8B
 )
 
 DRY=""

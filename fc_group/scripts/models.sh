@@ -7,23 +7,20 @@
 # lists, and forgetting one produced a sweep that was quietly narrower than
 # intended rather than an error.
 #
-# The names come from fc_group/model_registry.py, which is already the source of
-# truth for hidden_dim/num_layers and already raises on an unregistered model.
-# The size split does not live there because it is a scheduling decision, not a
-# property of the model: it is what decides gpu:1 at full precision versus gpu:2
-# in 4-bit. So it is declared here and then checked against the registry, which
-# is the part that matters -- adding a model to the registry without giving it a
-# size class fails loudly instead of dropping it from every sweep.
-
-ALL_MODELS=()
-while IFS= read -r line; do
-  [ -n "$line" ] && ALL_MODELS+=("$line")
-done < <(python -c "
-import sys
-sys.path.insert(0, 'fc_group')
-from model_registry import MODEL_CONFIGS
-print('\n'.join(MODEL_CONFIGS))
-") || { echo "ERROR: could not read models from fc_group/model_registry.py"; exit 1; }
+# The sweep is declared here; fc_group/model_registry.py is the catalogue it
+# draws from. That direction matters, and it used to be the other way round:
+# ALL_MODELS was generated from MODEL_CONFIGS and asserted equal to
+# SMALL+LARGE, which made "registered" and "swept" the same thing. It no longer
+# is -- a model can be registered so `get_model_config` resolves it (the probe,
+# t-SNE, anisotropy and ambiguity scripts all raise KeyError otherwise) while
+# being run by its own job outside this sweep, as fc_group/scripts/chem/ does.
+# So the check below is a subset check rather than an equality one. The part
+# that was ever load-bearing -- a typo'd or unregistered name failing loudly
+# instead of silently narrowing the sweep -- is unchanged.
+#
+# The size split lives here and not in the registry because it is a scheduling
+# decision, not a property of the model: it is what decides gpu:1 at full
+# precision versus gpu:2 in 4-bit.
 
 # <=8B: fits on one GPU at full precision.
 SMALL_MODELS=(
@@ -38,17 +35,37 @@ LARGE_MODELS=(
   "deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
 )
 
-# The consistency check this file exists for.
-_registry_sorted=$(printf '%s\n' "${ALL_MODELS[@]}" | sort)
-_split_sorted=$(printf '%s\n' "${SMALL_MODELS[@]}" "${LARGE_MODELS[@]}" | sort)
-if [ "$_registry_sorted" != "$_split_sorted" ]; then
-  echo "ERROR: SMALL_MODELS + LARGE_MODELS does not match fc_group/model_registry.py"
-  echo "  only in registry: $(comm -23 <(echo "$_registry_sorted") <(echo "$_split_sorted") | tr '\n' ' ')"
-  echo "  only in split:    $(comm -13 <(echo "$_registry_sorted") <(echo "$_split_sorted") | tr '\n' ' ')"
-  echo "  Add the model to SMALL_MODELS or LARGE_MODELS in fc_group/scripts/models.sh."
+ALL_MODELS=("${SMALL_MODELS[@]}" "${LARGE_MODELS[@]}")
+
+_REGISTRY_MODELS=()
+while IFS= read -r line; do
+  [ -n "$line" ] && _REGISTRY_MODELS+=("$line")
+done < <(python -c "
+import sys
+sys.path.insert(0, 'fc_group')
+from model_registry import MODEL_CONFIGS
+print('\n'.join(MODEL_CONFIGS))
+") || { echo "ERROR: could not read models from fc_group/model_registry.py"; exit 1; }
+
+_registry_sorted=$(printf '%s\n' "${_REGISTRY_MODELS[@]}" | sort)
+_sweep_sorted=$(printf '%s\n' "${ALL_MODELS[@]}" | sort)
+
+# Every swept model must be registered, or its depth lookup fails mid-job.
+_unregistered=$(comm -13 <(echo "$_registry_sorted") <(echo "$_sweep_sorted"))
+if [ -n "$_unregistered" ]; then
+  echo "ERROR: swept but not in fc_group/model_registry.py: $(echo "$_unregistered" | tr '\n' ' ')"
+  echo "  Add it to MODEL_CONFIGS, or fix the spelling in SMALL_MODELS/LARGE_MODELS."
   exit 1
 fi
-unset _registry_sorted _split_sorted
+
+# Registered but not swept is legal now, so say so rather than staying silent: a
+# model dropping out of a sweep unnoticed is the failure the old equality check
+# existed to prevent, and this keeps that warning without forbidding the case.
+_unswept=$(comm -23 <(echo "$_registry_sorted") <(echo "$_sweep_sorted"))
+if [ -n "$_unswept" ]; then
+  echo "note: registered, not in this sweep: $(echo "$_unswept" | tr '\n' ' ')"
+fi
+unset _registry_sorted _sweep_sorted _unregistered _unswept _REGISTRY_MODELS
 
 # Entity types come from the extraction config for the same reason -- one source
 # of truth, so this cannot drift from what was actually extracted.

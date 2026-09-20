@@ -27,6 +27,11 @@ rather than folded into "wrong" or, worse, credited as right:
 Format failures are settled *before* any class match, which is what stops an enumeration
 containing the gold word from scoring as correct.
 
+`underspecified` is reported twice over: as its own rate, and folded into
+`superclass_credit_accuracy` alongside `answer_correct`. Naming the family but not the
+member is a different failure from naming nothing, and the gap between that and
+`strict_accuracy` is how much of a model's shortfall is resolution rather than knowledge.
+
 Imported by both `generation_eval.py`, which adjudicates on the HPC as it generates, and
 `Analysis/generation/score_generations.py`, which re-derives from a stored `generations.csv`.
 One copy, because two would drift. Standard library only, so importing it on a GPU node costs
@@ -98,6 +103,14 @@ PREAMBLE = re.compile(r'\b(?:Okay|Alright|Hmm)\b\s*,?\s*so\b', re.I)
 # without settling on another ("as a thiol, but wait, no,"). It committed to nothing, so
 # crediting the name it happened to utter first would be reading a coin-flip as an answer.
 RETRACTION = re.compile(r'\bbut\s+wait\b|\bwait\s*,?\s*no\b|\bactually\s*,?\s*no\b', re.I)
+# Chem-R emits CamelCase class names -- `CarboxylicAcid`, `PrimaryAmine` -- an SFT output
+# convention rather than a different answer. `\bcarboxylic acid\b` cannot match the first,
+# and `\bamine\b` cannot match inside the second because `yA` carries no word boundary.
+# Opening the boundary is a *fallback*, not a rewrite: `SulfOxide` already matches
+# `\bsulfoxide\b` under re.I, and splitting unconditionally breaks 8 rows that currently
+# score correct. Tried only when the as-written reading named nothing, so it can add a
+# commitment and never retract one.
+CAMEL_BOUNDARY = re.compile(r'(?<=[a-z])(?=[A-Z])')
 
 RESPONSE_TYPES = ('answer_correct', 'answer_wrong', 'underspecified',
                   'non_answer', 'malformed')
@@ -163,6 +176,15 @@ def adjudicate(generation, iupac_name, true_label, pattern, forms):
 
     clause = first_clause(text)
     found = mentions(clause, pattern, forms)
+    if not found:
+        # Re-read with CamelCase boundaries opened. All three names are rebound together so
+        # that hedged()'s gap offsets and gold_present's text stay consistent with the
+        # reading that produced `found`.
+        alt = CAMEL_BOUNDARY.sub(' ', text)
+        alt_clause = first_clause(alt)
+        alt_found = mentions(alt_clause, pattern, forms)
+        if alt_found:
+            text, clause, found = alt, alt_clause, alt_found
     contained = int(bool(gold_present(text, true_label, pattern, forms)))
 
     if len({label for label, _, _, _ in found}) > 1:
@@ -235,6 +257,21 @@ def summarize(model, rows, entity_type):
         'commit_rate': round(committed / n, 6),
         'conditional_accuracy': (round(counts['answer_correct'] / committed, 6)
                                  if committed else None),
+        # Partial credit for naming the family without resolving it: "carbonyl" for an
+        # ester, "alkyl halide" for a chloride. The gap to strict_accuracy is how much of
+        # a model's shortfall is failing to resolve a class it has already located, rather
+        # than not locating one at all -- and the two are not the same failure. Note this
+        # is NOT bounded by containment_accuracy: a superclass name usually does not
+        # contain the gold string, so the two permissive readings are not nested.
+        #
+        # Deliberately unconditional on whether the superclass actually contains the gold
+        # class, matching how `adjudicate` assigns `underspecified` in the first place. It
+        # costs a little: SUPERCLASS also matches "alkyl group"/"alkyl chain", which names
+        # a carbon skeleton rather than a family, and 7 base and 11 R1-Distill rows are
+        # credited for saying it about a halide. No model commits the strong error of
+        # naming a family that excludes the gold class, so the looseness stays bounded.
+        'superclass_credit_accuracy': round(
+            (counts['answer_correct'] + counts['underspecified']) / n, 6),
         # The naive "gold appears anywhere" score, carried as a declared upper bound the
         # way `raw` and `length_normalized` are carried side by side in
         # analyze_generation.py. The gap to strict_accuracy is how much a containment
@@ -253,7 +290,7 @@ def summarize_by_template(rows):
     The 10 templates ask the same chemical question in 10 phrasings, so the spread across
     them is the model's sensitivity to wording rather than to chemistry. It is worth having
     because it is large and lopsided: on the committed data the base model runs 0.196 to
-    0.880 across templates while the chemistry-tuned model runs 0.685 to 0.957. The single
+    0.880 across templates while the chemistry-tuned model runs 0.685 to 1.000. The single
     worst case, template 8, is 75% malformed for the base model -- almost all of its format
     collapse sits in one phrasing, which an overall rate averages away.
 

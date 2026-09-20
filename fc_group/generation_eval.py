@@ -36,7 +36,7 @@ Two readouts:
     readout lives. Greedy decoding is deterministic -- repeating a prompt returns the same
     string, so repeats would buy nothing -- but the 10 templates phrase the same question
     10 ways and the models are far from indifferent to which: the base model runs 0.196 to
-    0.880 strict accuracy across them, against 0.685 to 0.957 for the chemistry-tuned one.
+    0.880 strict accuracy across them, against 0.685 to 1.000 for the chemistry-tuned one.
 
 No activation extraction is needed, so this runs on any prompt condition
 immediately.

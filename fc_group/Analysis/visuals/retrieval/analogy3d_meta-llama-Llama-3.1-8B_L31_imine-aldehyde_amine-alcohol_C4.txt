@@ -1,0 +1,35 @@
+imine : aldehyde  ::  amine : alcohol      C4
+==============================================================================
+
+figure                    analogy3d_meta-llama-Llama-3.1-8B_L31_imine-aldehyde_amine-alcohol_C4.png
+model                     meta-llama-Llama-3.1-8B
+layer                     31
+pool                      carbon_matched -- chain length C4 only, no averaging over C3-C6
+
+RETRIEVAL  (full 4096-D; copied from retrieval_trials.csv, never recomputed here)
+  rank of amine                     1 of 16
+  cosine to the constructed point   0.777
+  corners at hit@1                  4 of 4
+  degenerate corners                0
+  mean cosine over corners          0.744
+
+PROJECTION  (mean-centered top-3 PCA over all 19 groups; plot units)
+  variance held by PC-1..3          60%
+  of the constructed point in view  53%
+  3D rank of amine                  1   (agrees with the 4096-D rank)
+  X lands                           7.7 from amine
+  nearest rival                     12.6 from nitro
+  camera (elev / azim)              20 / 30
+
+COMPOUNDS AT C4
+  a1  imine             butyraldehyde imine
+  a2  aldehyde          butyraldehyde
+  b1  amine             n-butylamine + sec-butylamine   (2-isomer mean)
+  b2  alcohol           n-butyl alcohol + sec-butanol   (2-isomer mean)
+
+NOTES
+  The axes carry no tick labels: the PC coordinates are in no unit a reader
+  wants off an axis. All three share one scale, so the distances above are
+  comparable with each other, and the grid on the panel shows that scale.
+  amine and alcohol are the mean of their n- and sec- isomers at this chain
+  length -- the one place this panel is still an average.

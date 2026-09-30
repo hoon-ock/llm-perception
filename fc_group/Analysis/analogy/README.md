@@ -3,6 +3,15 @@
 Third review pass, after `Analysis/probe/` and `Analysis/tsne/`. Scope is the **declarative
 `functional_group` prompt only**; the script takes `--entity-type` if the others are wanted.
 
+> **The model set changed under this document.** `MODELS` was the scale pair
+> (`Llama-3.1-8B` + `Llama-3.1-70B`); it is now the three 8B derivatives of one base
+> — `Llama-3.1-8B`, `phenixace/Chem-R-Faithful`, `deepseek-ai/DeepSeek-R1-Distill-Llama-8B`
+> — so every contrast varies fine-tuning against a shared architecture, tokenizer and depth.
+> `--models` and `--pair` still accept the 70B names. **The prose below was written against
+> the 8B/70B pair and has not been rewritten; `data/*.csv` has been regenerated and now holds
+> the three-model run.** Treat the CSVs as current and the narrative as historical. The
+> three-model findings are written up in `../taxonomy/`, `../geometry/` and `../ambiguity/`.
+
 > **Every figure here predates the notation switch.** These runs used the old `{formula}`
 > column, which mixed SMILES and condensed notation across groups — a confound worth ~0.20
 > cosine at every depth. All templates now interpolate the uniform `{smiles}` column, and
@@ -339,3 +348,115 @@ It also holds a fixed regression on 8B/`functional_group` — hit@1 34/57/59 of 
 0/16/31, mean rank 3.79/2.17/1.35, and O↔S at 16/16. Those track the contents of
 `Results/` **and** `ANALOGY_QUADRUPLES`, so after a legitimate re-extraction or a change
 to the quadruple set the constants at the top of the file are what should change.
+
+## 8. The 3D projection snapshot
+
+`snapshot_quiver3d.py` writes `data/analogy_quiver3d.csv`, the coordinates
+`Analysis/paper/make_visuals_retrieval_3d.py` draws under `visuals/retrieval/` as one PNG
+plus one `.txt` per selected cell, stems `analogy3d_{model}_L{layer}_{quadruple}_C{N}`. The
+numbers live in the `.txt`; the image carries only what identifies it. It is a separate script rather than another writer inside
+`analyze_analogy.py` because it needs two Results trees and numpy, and because the three CSVs
+that script emits feed the paper's tables — they should not move when this one is regenerated.
+
+```bash
+python fc_group/Analysis/analogy/snapshot_quiver3d.py \
+    [--layer 31] [--mode carbon_matched|lumped] [--top-n N] [--all-cells]
+```
+
+### Every point is a compound
+
+The default pool is **carbon-matched**: one chain length at a time, so `ether` at C5 is methyl
+butyl ether rather than an average over C3–C6, and the `molecules` column names it. Seven of
+the ten groups these quadruples use are a single compound at a fixed chain length. **Alcohol,
+thiol and amine are not** — each carries an `n-`/`sec-` isomer pair at every chain length in
+`functional_group_dataset.csv`, so those three vectors are a 2-molecule mean. `n_molecules`
+records which, and any figure showing one says so on its face. `--mode lumped` restores the
+chain-length average, in which no point is a molecule at all.
+
+### Which cells it picks
+
+`rank_cells` orders the layer's trials per **(quadruple, chain length)** cell on three
+criteria, in order: every scoreable corner at hit@1; then *no* corner flagged `degenerate`;
+then highest mean cosine as a tiebreak. Six of the twenty cells pass at base/L31:
+
+| quadruple | C | hit@1 | degen | mean cos | recon | drawn |
+|---|---|---|---|---|---|---|
+| thioether : thiol :: ether : alcohol | 5 | 4/4 | 0 | 0.836 | 0.47 | yes |
+| thioether : thiol :: ether : alcohol | 6 | 4/4 | 0 | 0.805 | 0.42 | yes |
+| ester : carboxylic acid :: ketone : aldehyde | 4 | 4/4 | 0 | 0.796 | 0.64 | yes |
+| imine : aldehyde :: amine : alcohol | 4 | 4/4 | 0 | 0.744 | 0.53 | yes |
+| imine : aldehyde :: amine : alcohol | 5 | 4/4 | 0 | 0.739 | 0.56 | yes |
+| imine : aldehyde :: amine : alcohol | 6 | 4/4 | 0 | 0.715 | 0.55 | yes |
+| thioether : thiol :: ether : alcohol | 4, 3 | 4/4 | 1 | 0.811, 0.792 | — | no |
+| ester : carboxylic acid :: ketone : aldehyde | 3, 6, 5 | 4/4 | 1, 1, 2 | 0.734, 0.733, 0.702 | — | no |
+| amide : carboxylic acid :: amine : alcohol | 4 | 4/4 | 2 | 0.742 | — | no |
+| amide : carboxylic acid :: amine : alcohol | 5, 6, 3 | 3/4 | 0, 1, 2 | 0.740, 0.679, 0.698 | — | no |
+| imine : aldehyde :: amine : alcohol | 3 | 2/4 | 0 | 0.696 | — | no |
+| sulfoxide : thioether :: sulfone : sulfoxide | 3 | 2/4 | 3 | 0.731 | — | no |
+| sulfoxide : thioether :: sulfone : sulfoxide | 5, 4, 6 | 1/4 | 3 | 0.739, 0.739, 0.726 | — | no |
+
+The second criterion is the one that matters. A cell can be 4/4 on hit@1 and still be mostly
+degenerate — the constructed point's unexcluded nearest neighbour is the source group itself,
+so the offset never left the neighbourhood it started in and the exclusion did the work.
+Ranking on hit@1 alone would put six such cells on the figure.
+
+Keying per **cell** rather than per quadruple matters too: `ester` is 0 degenerate at C4 and 2
+at C5, and averaging those together is exactly what the lumped pool used to do. Under lumped,
+that quadruple had 2 degenerate corners and the rule dropped it. At C4 it is clean and it is
+drawn — with its panel marked `DELIBERATE NEGATIVE CONTROL`
+(`functional_group_analogy_carbon_matched.py:306-311`): formally matched legs (H → CH3) that
+are chemically mismatched, and the one that should fail if leg symmetry is what makes an
+analogy work. It does not fail. That is a result, not a reason to hide it, but it must not
+read as a plain success. `NEGATIVE_CONTROLS` is named in the script and asserted against
+`ANALOGY_QUADRUPLES`, so editing the quadruple list breaks loudly rather than silently
+dropping the annotation.
+
+### The projection is mean-centered, and the cosine tables are not
+
+`functional_group_analogy_carbon_matched.fit_uncentered_3d_basis` deliberately does not
+center: the origin there reads as "no change from the alkane baseline", a real zero. This
+snapshot deliberately does, and the two should not be reconciled — they answer different
+questions.
+
+An uncentered basis is dominated by the anisotropic mean direction (PC-1 coordinates run −32
+to −9 against ±16 on the other two), so every group's arrow points the same way and the
+parallelogram the analogy *is* collapses. Offsets are translation-invariant, so centering
+costs the parallelogram nothing; what it gives up is the origin's reading, which this figure
+does not use. Measured over the three quadruples that retrieve perfectly at base/L31:
+
+| basis | variance kept | 3D rank of the true answer |
+|---|---|---|
+| uncentered | 0.73 | 1, **3**, 1 |
+| **centered (this file)** | 0.57–0.61 | **1, 1, 1** |
+| quadruple-local (span of both offsets) | 0.17–0.27 | 1, **3**, 1 |
+
+The uncentered basis does not merely blur the imine/amine quadruple — it inverts it, putting
+`alkyl fluoride` nearest the constructed point and dropping the true `amine` to rank 3 in a
+case that is rank 1 in full 4096-D. This is the same position §1 takes about raw cosine: an
+uncentered number here is largely quoting the anisotropy.
+
+### Columns
+
+One row per plotted point. Cell-level fields repeat on every row of that cell, as in
+`layer_trend.csv`.
+
+| column | |
+|---|---|
+| `cell_rank` | 1-based position in the ranking above |
+| `carbon_count` | the chain length this cell is drawn at; empty under `--mode lumped` |
+| `role` | `a1`/`a2`/`b1`/`b2`, `predicted` for the constructed point (`group` empty), `other` for the rest of the pool |
+| `group`, `molecules`, `n_molecules` | the functional group, the compound(s) behind it, and how many |
+| `is_negative_control` | 1 for the ester quadruple |
+| `svd1..3` | the centered PCA coordinates, the only thing the figure positions anything by |
+| `explained_var` | variance the three components hold, over all 19 groups at that chain length |
+| `recon_frac` | how much of the constructed point those three dimensions hold — 0.42 to 0.64 across the six. Under half of some panels is on the page |
+| `rank_excl`, `cos_to_target` | **copied** from `retrieval_trials.csv` for the `b1 = b2 + (a1 − a2)` corner, never recomputed, so a panel cannot disagree with `f4_retrieval` about an outcome |
+| `rank3d_excl` | that rank recomputed from the three plotted coordinates, by Euclidean distance — what a reader's eye does with a scatter. When it disagrees with `rank_excl` the projection is misleading, and the script warns and the panel says so on its face |
+| `dist3d_true`, `dist3d_rival`, `rival_group` | the same comparison as a margin, so the figure can show that the answer *won* rather than only that the residual was short |
+| `n_corners`, `n_hit1`, `n_degenerate`, `mean_cos` | the selection criteria, carried so the ranking can be audited from the CSV |
+
+### Limits
+
+Base model and one layer at a time. `--model`, `--layer`, `--mode`, `--top-n` and
+`--all-cells` widen it; nothing downstream assumes a particular number of cells, since the
+figure writes one file per cell.

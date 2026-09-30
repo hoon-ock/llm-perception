@@ -1,0 +1,48 @@
+{
+  "models": [
+    "meta-llama-Llama-3.1-8B",
+    "weidawang-Chem-R-8B",
+    "phenixace-Chem-R-Faithful",
+    "OpenDFM-ChemDFM-v1.5-8B",
+    "deepseek-ai-DeepSeek-R1-Distill-Llama-8B"
+  ],
+  "layers": [
+    0,
+    8,
+    16,
+    24,
+    31
+  ],
+  "headline_layer": 31,
+  "n_boot": 5000,
+  "seed": 0,
+  "primary_predictor": "rival_margin",
+  "primary_outcome": "superclass_credit",
+  "reliability_floor": 0.5,
+  "probe_fine_surface_baseline": 1.0,
+  "outcomes": [
+    "strict",
+    "superclass_credit",
+    "commit",
+    "conditional_acc",
+    "underspecified",
+    "non_answer",
+    "malformed"
+  ],
+  "predictors": [
+    "rival_margin",
+    "silhouette",
+    "within_cos",
+    "retr_hit1",
+    "retr_mrr",
+    "retr_mean_rank",
+    "retr_median_rank",
+    "ladder_hit1",
+    "ladder_mrr",
+    "ladder_mean_rank",
+    "ladder_top1_same_label",
+    "probe_fine_recall",
+    "probe_fine_mean_p_true",
+    "within_score"
+  ]
+}

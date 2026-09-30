@@ -2,3 +2,5 @@ model,entity_type,family,n_folds,mean_balanced_acc
 meta-llama-Llama-3.1-8B,functional_group,declarative,19,0.47500000000000003
 phenixace-Chem-R-Faithful,functional_group,declarative,19,0.47500000000000003
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,declarative,19,0.47500000000000003
+weidawang-Chem-R-8B,functional_group,declarative,19,0.47500000000000003
+OpenDFM-ChemDFM-v1.5-8B,functional_group,declarative,19,0.47500000000000003

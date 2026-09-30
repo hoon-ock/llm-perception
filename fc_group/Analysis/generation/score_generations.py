@@ -21,9 +21,9 @@ own outcome rather than as free credit.
 The result is a third ranking, distinct from both the forced choice and the probe:
 
     model        forced choice   free generation (strict)
-    chem              0.978              0.824
-    base              0.837              0.541
-    reason            0.804              0.777
+    chem              0.978              0.843
+    base              0.837              0.585
+    reason            0.804              0.789
 
 The base model can rank the right class better than R1 and cannot produce it. That gap
 is the point of this file.
@@ -196,6 +196,7 @@ def main():
 
     for s in summary_rows:
         print(f"{s['model']:44s} strict={s['strict_accuracy']:.3f} "
+              f"+superclass={s['superclass_credit_accuracy']:.3f} "
               f"commit={s['commit_rate']:.3f} given-commit={s['conditional_accuracy']:.3f} "
               f"| malformed={s['malformed_rate']:.3f} underspec={s['underspecified_rate']:.3f} "
               f"non-answer={s['non_answer_rate']:.3f} "

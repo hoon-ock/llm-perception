@@ -1,0 +1,38 @@
+ester : carboxylic acid  ::  ketone : aldehyde      C4
+==============================================================================
+
+figure                    analogy3d_meta-llama-Llama-3.1-8B_L31_ester-carboxylic-acid_ketone-aldehyde_C4.png
+model                     meta-llama-Llama-3.1-8B
+layer                     31
+pool                      carbon_matched -- chain length C4 only, no averaging over C3-C6
+
+RETRIEVAL  (full 4096-D; copied from retrieval_trials.csv, never recomputed here)
+  rank of ketone                    1 of 16
+  cosine to the constructed point   0.830
+  corners at hit@1                  4 of 4
+  degenerate corners                0
+  mean cosine over corners          0.796
+
+PROJECTION  (mean-centered top-3 PCA over all 19 groups; plot units)
+  variance held by PC-1..3          60%
+  of the constructed point in view  64%
+  3D rank of ketone                 1   (agrees with the 4096-D rank)
+  X lands                           2.8 from ketone
+  nearest rival                     12.3 from alcohol
+  camera (elev / azim)              32 / 105
+
+COMPOUNDS AT C4
+  a1  ester             methyl propionate
+  a2  carboxylic acid   butyric acid
+  b1  ketone            methyl ethyl ketone (MEK)
+  b2  aldehyde          butyraldehyde
+
+NOTES
+  The axes carry no tick labels: the PC coordinates are in no unit a reader
+  wants off an axis. All three share one scale, so the distances above are
+  comparable with each other, and the grid on the panel shows that scale.
+  This quadruple is the set's DELIBERATE NEGATIVE CONTROL
+  (functional_group_analogy_carbon_matched.py:306-311): the two legs are
+  formally matched (H -> CH3) but chemically are not, and it is the one
+  that should fail if leg symmetry is what makes an analogy work. It does
+  not fail. That is a result, not a plain success.

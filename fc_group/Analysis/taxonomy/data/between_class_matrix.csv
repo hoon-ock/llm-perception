@@ -2564,3 +2564,1713 @@ deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,31,sulfone,thiol,0.580
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,31,sulfoxide,thioether,0.789809,1,0
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,31,sulfoxide,thiol,0.652321,1,0
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,31,thioether,thiol,0.796677,1,1
+weidawang-Chem-R-8B,functional_group,0,alcohol,aldehyde,0.676437,1,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,alkyl bromide,0.737807,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,alkyl chloride,0.735752,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,alkyl fluoride,0.809883,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,alkyl iodide,0.727569,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,amide,0.551048,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,amine,0.921311,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,carboxylic acid,0.600407,1,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,ester,0.765425,1,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,ether,0.769537,1,1
+weidawang-Chem-R-8B,functional_group,0,alcohol,imine,0.578689,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,ketone,0.797379,1,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,nitrile,0.174237,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,nitro,0.65504,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,sulfone,0.81172,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,sulfoxide,0.768629,0,0
+weidawang-Chem-R-8B,functional_group,0,alcohol,thioether,0.771682,0,1
+weidawang-Chem-R-8B,functional_group,0,alcohol,thiol,0.845689,0,1
+weidawang-Chem-R-8B,functional_group,0,aldehyde,alkyl bromide,0.527166,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,alkyl chloride,0.528251,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,alkyl fluoride,0.56447,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,alkyl iodide,0.504829,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,amide,0.707176,0,1
+weidawang-Chem-R-8B,functional_group,0,aldehyde,amine,0.622737,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,carboxylic acid,0.700626,1,1
+weidawang-Chem-R-8B,functional_group,0,aldehyde,ester,0.671183,1,1
+weidawang-Chem-R-8B,functional_group,0,aldehyde,ether,0.522134,1,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,imine,0.646065,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,ketone,0.685273,1,1
+weidawang-Chem-R-8B,functional_group,0,aldehyde,nitrile,0.267593,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,nitro,0.720928,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,sulfone,0.745465,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,sulfoxide,0.629655,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,thioether,0.463663,0,0
+weidawang-Chem-R-8B,functional_group,0,aldehyde,thiol,0.504149,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,alkyl chloride,0.883119,1,1
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,alkyl fluoride,0.913773,1,1
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,alkyl iodide,0.838209,1,1
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,amide,0.438765,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,amine,0.78278,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,carboxylic acid,0.452936,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,ester,0.623141,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,ether,0.858957,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,imine,0.537421,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,ketone,0.580257,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,nitrile,0.189058,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,nitro,0.498466,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,sulfone,0.660332,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,sulfoxide,0.661481,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,thioether,0.786956,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl bromide,thiol,0.773059,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,alkyl fluoride,0.900325,1,1
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,alkyl iodide,0.743861,1,1
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,amide,0.511882,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,amine,0.7577,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,carboxylic acid,0.55149,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,ester,0.637467,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,ether,0.793707,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,imine,0.606754,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,ketone,0.583957,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,nitrile,0.160558,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,nitro,0.553078,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,sulfone,0.696773,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,sulfoxide,0.678611,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,thioether,0.80831,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl chloride,thiol,0.714536,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,alkyl iodide,0.848168,1,1
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,amide,0.460109,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,amine,0.818647,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,carboxylic acid,0.482187,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,ester,0.643274,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,ether,0.843961,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,imine,0.576148,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,ketone,0.626149,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,nitrile,0.194412,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,nitro,0.577068,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,sulfone,0.689478,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,sulfoxide,0.679249,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,thioether,0.795915,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl fluoride,thiol,0.774202,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,amide,0.336755,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,amine,0.725055,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,carboxylic acid,0.344473,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,ester,0.548947,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,ether,0.86243,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,imine,0.405112,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,ketone,0.514915,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,nitrile,0.214478,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,nitro,0.498423,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,sulfone,0.587405,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,sulfoxide,0.560273,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,thioether,0.712422,0,0
+weidawang-Chem-R-8B,functional_group,0,alkyl iodide,thiol,0.683038,0,0
+weidawang-Chem-R-8B,functional_group,0,amide,amine,0.590228,1,0
+weidawang-Chem-R-8B,functional_group,0,amide,carboxylic acid,0.962559,0,1
+weidawang-Chem-R-8B,functional_group,0,amide,ester,0.69869,0,1
+weidawang-Chem-R-8B,functional_group,0,amide,ether,0.408196,0,0
+weidawang-Chem-R-8B,functional_group,0,amide,imine,0.751294,1,0
+weidawang-Chem-R-8B,functional_group,0,amide,ketone,0.69049,0,1
+weidawang-Chem-R-8B,functional_group,0,amide,nitrile,0.191828,1,0
+weidawang-Chem-R-8B,functional_group,0,amide,nitro,0.709373,1,0
+weidawang-Chem-R-8B,functional_group,0,amide,sulfone,0.710445,0,0
+weidawang-Chem-R-8B,functional_group,0,amide,sulfoxide,0.680561,0,0
+weidawang-Chem-R-8B,functional_group,0,amide,thioether,0.490042,0,0
+weidawang-Chem-R-8B,functional_group,0,amide,thiol,0.485507,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,carboxylic acid,0.592266,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,ester,0.754758,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,ether,0.801468,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,imine,0.610111,1,1
+weidawang-Chem-R-8B,functional_group,0,amine,ketone,0.763456,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,nitrile,0.154869,1,1
+weidawang-Chem-R-8B,functional_group,0,amine,nitro,0.625381,1,1
+weidawang-Chem-R-8B,functional_group,0,amine,sulfone,0.807657,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,sulfoxide,0.78542,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,thioether,0.815517,0,0
+weidawang-Chem-R-8B,functional_group,0,amine,thiol,0.877388,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,ester,0.714608,1,1
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,ether,0.437515,1,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,imine,0.720937,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,ketone,0.702059,1,1
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,nitrile,0.170429,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,nitro,0.669761,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,sulfone,0.736492,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,sulfoxide,0.697983,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,thioether,0.536246,0,0
+weidawang-Chem-R-8B,functional_group,0,carboxylic acid,thiol,0.505021,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,ether,0.67106,1,0
+weidawang-Chem-R-8B,functional_group,0,ester,imine,0.607581,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,ketone,0.951349,1,1
+weidawang-Chem-R-8B,functional_group,0,ester,nitrile,0.151509,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,nitro,0.677219,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,sulfone,0.94421,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,sulfoxide,0.975486,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,thioether,0.761825,0,0
+weidawang-Chem-R-8B,functional_group,0,ester,thiol,0.679256,0,0
+weidawang-Chem-R-8B,functional_group,0,ether,imine,0.436746,0,0
+weidawang-Chem-R-8B,functional_group,0,ether,ketone,0.602359,1,0
+weidawang-Chem-R-8B,functional_group,0,ether,nitrile,0.162841,0,0
+weidawang-Chem-R-8B,functional_group,0,ether,nitro,0.487892,0,0
+weidawang-Chem-R-8B,functional_group,0,ether,sulfone,0.713575,0,0
+weidawang-Chem-R-8B,functional_group,0,ether,sulfoxide,0.692443,0,0
+weidawang-Chem-R-8B,functional_group,0,ether,thioether,0.842922,0,1
+weidawang-Chem-R-8B,functional_group,0,ether,thiol,0.755646,0,1
+weidawang-Chem-R-8B,functional_group,0,imine,ketone,0.617096,0,0
+weidawang-Chem-R-8B,functional_group,0,imine,nitrile,0.246281,1,1
+weidawang-Chem-R-8B,functional_group,0,imine,nitro,0.662711,1,1
+weidawang-Chem-R-8B,functional_group,0,imine,sulfone,0.614645,0,0
+weidawang-Chem-R-8B,functional_group,0,imine,sulfoxide,0.610389,0,0
+weidawang-Chem-R-8B,functional_group,0,imine,thioether,0.511405,0,0
+weidawang-Chem-R-8B,functional_group,0,imine,thiol,0.512442,0,0
+weidawang-Chem-R-8B,functional_group,0,ketone,nitrile,0.12658,0,0
+weidawang-Chem-R-8B,functional_group,0,ketone,nitro,0.677026,0,0
+weidawang-Chem-R-8B,functional_group,0,ketone,sulfone,0.899541,0,0
+weidawang-Chem-R-8B,functional_group,0,ketone,sulfoxide,0.923663,0,0
+weidawang-Chem-R-8B,functional_group,0,ketone,thioether,0.667517,0,0
+weidawang-Chem-R-8B,functional_group,0,ketone,thiol,0.67121,0,0
+weidawang-Chem-R-8B,functional_group,0,nitrile,nitro,0.340383,1,1
+weidawang-Chem-R-8B,functional_group,0,nitrile,sulfone,0.174548,0,0
+weidawang-Chem-R-8B,functional_group,0,nitrile,sulfoxide,0.147865,0,0
+weidawang-Chem-R-8B,functional_group,0,nitrile,thioether,0.136872,0,0
+weidawang-Chem-R-8B,functional_group,0,nitrile,thiol,0.144457,0,0
+weidawang-Chem-R-8B,functional_group,0,nitro,sulfone,0.732341,0,0
+weidawang-Chem-R-8B,functional_group,0,nitro,sulfoxide,0.649851,0,0
+weidawang-Chem-R-8B,functional_group,0,nitro,thioether,0.515488,0,0
+weidawang-Chem-R-8B,functional_group,0,nitro,thiol,0.510323,0,0
+weidawang-Chem-R-8B,functional_group,0,sulfone,sulfoxide,0.941682,1,1
+weidawang-Chem-R-8B,functional_group,0,sulfone,thioether,0.803129,1,0
+weidawang-Chem-R-8B,functional_group,0,sulfone,thiol,0.715279,1,0
+weidawang-Chem-R-8B,functional_group,0,sulfoxide,thioether,0.802977,1,0
+weidawang-Chem-R-8B,functional_group,0,sulfoxide,thiol,0.739903,1,0
+weidawang-Chem-R-8B,functional_group,0,thioether,thiol,0.788574,1,1
+weidawang-Chem-R-8B,functional_group,8,alcohol,aldehyde,0.596688,1,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,alkyl bromide,0.579049,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,alkyl chloride,0.560027,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,alkyl fluoride,0.595886,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,alkyl iodide,0.511877,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,amide,0.635912,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,amine,0.846376,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,carboxylic acid,0.677684,1,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,ester,0.727197,1,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,ether,0.657375,1,1
+weidawang-Chem-R-8B,functional_group,8,alcohol,imine,0.648736,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,ketone,0.830275,1,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,nitrile,0.613675,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,nitro,0.531806,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,sulfone,0.648746,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,sulfoxide,0.660821,0,0
+weidawang-Chem-R-8B,functional_group,8,alcohol,thioether,0.622896,0,1
+weidawang-Chem-R-8B,functional_group,8,alcohol,thiol,0.810397,0,1
+weidawang-Chem-R-8B,functional_group,8,aldehyde,alkyl bromide,0.434124,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,alkyl chloride,0.429628,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,alkyl fluoride,0.403821,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,alkyl iodide,0.442665,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,amide,0.732789,0,1
+weidawang-Chem-R-8B,functional_group,8,aldehyde,amine,0.544652,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,carboxylic acid,0.729144,1,1
+weidawang-Chem-R-8B,functional_group,8,aldehyde,ester,0.590793,1,1
+weidawang-Chem-R-8B,functional_group,8,aldehyde,ether,0.382421,1,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,imine,0.70467,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,ketone,0.636227,1,1
+weidawang-Chem-R-8B,functional_group,8,aldehyde,nitrile,0.62301,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,nitro,0.43207,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,sulfone,0.503342,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,sulfoxide,0.518592,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,thioether,0.39949,0,0
+weidawang-Chem-R-8B,functional_group,8,aldehyde,thiol,0.533533,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,alkyl chloride,0.93044,1,1
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,alkyl fluoride,0.905689,1,1
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,alkyl iodide,0.88548,1,1
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,amide,0.455232,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,amine,0.559905,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,carboxylic acid,0.470697,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,ester,0.509462,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,ether,0.792381,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,imine,0.578933,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,ketone,0.54256,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,nitrile,0.526693,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,nitro,0.740169,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,sulfone,0.515049,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,sulfoxide,0.544636,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,thioether,0.744943,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl bromide,thiol,0.629078,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,alkyl fluoride,0.909991,1,1
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,alkyl iodide,0.859982,1,1
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,amide,0.461615,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,amine,0.547252,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,carboxylic acid,0.471613,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,ester,0.469927,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,ether,0.796165,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,imine,0.553203,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,ketone,0.537206,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,nitrile,0.51349,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,nitro,0.738847,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,sulfone,0.494781,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,sulfoxide,0.516066,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,thioether,0.753201,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl chloride,thiol,0.591313,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,alkyl iodide,0.858274,1,1
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,amide,0.451681,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,amine,0.576558,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,carboxylic acid,0.446484,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,ester,0.495339,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,ether,0.842321,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,imine,0.551057,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,ketone,0.547759,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,nitrile,0.525303,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,nitro,0.739908,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,sulfone,0.552037,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,sulfoxide,0.57317,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,thioether,0.80803,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl fluoride,thiol,0.647925,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,amide,0.413466,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,amine,0.527746,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,carboxylic acid,0.414041,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,ester,0.43594,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,ether,0.745164,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,imine,0.562371,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,ketone,0.461935,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,nitrile,0.455005,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,nitro,0.735793,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,sulfone,0.473032,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,sulfoxide,0.503182,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,thioether,0.67173,0,0
+weidawang-Chem-R-8B,functional_group,8,alkyl iodide,thiol,0.600452,0,0
+weidawang-Chem-R-8B,functional_group,8,amide,amine,0.670388,1,0
+weidawang-Chem-R-8B,functional_group,8,amide,carboxylic acid,0.838426,0,1
+weidawang-Chem-R-8B,functional_group,8,amide,ester,0.740068,0,1
+weidawang-Chem-R-8B,functional_group,8,amide,ether,0.469803,0,0
+weidawang-Chem-R-8B,functional_group,8,amide,imine,0.718372,1,0
+weidawang-Chem-R-8B,functional_group,8,amide,ketone,0.709591,0,1
+weidawang-Chem-R-8B,functional_group,8,amide,nitrile,0.67965,1,0
+weidawang-Chem-R-8B,functional_group,8,amide,nitro,0.528387,1,0
+weidawang-Chem-R-8B,functional_group,8,amide,sulfone,0.655404,0,0
+weidawang-Chem-R-8B,functional_group,8,amide,sulfoxide,0.65461,0,0
+weidawang-Chem-R-8B,functional_group,8,amide,thioether,0.493853,0,0
+weidawang-Chem-R-8B,functional_group,8,amide,thiol,0.583584,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,carboxylic acid,0.61246,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,ester,0.646753,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,ether,0.626042,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,imine,0.732689,1,1
+weidawang-Chem-R-8B,functional_group,8,amine,ketone,0.758614,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,nitrile,0.614259,1,1
+weidawang-Chem-R-8B,functional_group,8,amine,nitro,0.54138,1,1
+weidawang-Chem-R-8B,functional_group,8,amine,sulfone,0.655065,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,sulfoxide,0.673424,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,thioether,0.6315,0,0
+weidawang-Chem-R-8B,functional_group,8,amine,thiol,0.799746,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,ester,0.717615,1,1
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,ether,0.423506,1,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,imine,0.635672,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,ketone,0.727371,1,1
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,nitrile,0.648712,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,nitro,0.538313,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,sulfone,0.609295,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,sulfoxide,0.589965,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,thioether,0.441309,0,0
+weidawang-Chem-R-8B,functional_group,8,carboxylic acid,thiol,0.598789,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,ether,0.597366,1,0
+weidawang-Chem-R-8B,functional_group,8,ester,imine,0.663891,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,ketone,0.771959,1,1
+weidawang-Chem-R-8B,functional_group,8,ester,nitrile,0.61601,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,nitro,0.512124,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,sulfone,0.751621,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,sulfoxide,0.741896,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,thioether,0.586326,0,0
+weidawang-Chem-R-8B,functional_group,8,ester,thiol,0.676334,0,0
+weidawang-Chem-R-8B,functional_group,8,ether,imine,0.579113,0,0
+weidawang-Chem-R-8B,functional_group,8,ether,ketone,0.600087,1,0
+weidawang-Chem-R-8B,functional_group,8,ether,nitrile,0.482055,0,0
+weidawang-Chem-R-8B,functional_group,8,ether,nitro,0.680542,0,0
+weidawang-Chem-R-8B,functional_group,8,ether,sulfone,0.596914,0,0
+weidawang-Chem-R-8B,functional_group,8,ether,sulfoxide,0.612692,0,0
+weidawang-Chem-R-8B,functional_group,8,ether,thioether,0.843663,0,1
+weidawang-Chem-R-8B,functional_group,8,ether,thiol,0.669588,0,1
+weidawang-Chem-R-8B,functional_group,8,imine,ketone,0.667294,0,0
+weidawang-Chem-R-8B,functional_group,8,imine,nitrile,0.668071,1,1
+weidawang-Chem-R-8B,functional_group,8,imine,nitro,0.54821,1,1
+weidawang-Chem-R-8B,functional_group,8,imine,sulfone,0.646253,0,0
+weidawang-Chem-R-8B,functional_group,8,imine,sulfoxide,0.673843,0,0
+weidawang-Chem-R-8B,functional_group,8,imine,thioether,0.588799,0,0
+weidawang-Chem-R-8B,functional_group,8,imine,thiol,0.685454,0,0
+weidawang-Chem-R-8B,functional_group,8,ketone,nitrile,0.645412,0,0
+weidawang-Chem-R-8B,functional_group,8,ketone,nitro,0.574274,0,0
+weidawang-Chem-R-8B,functional_group,8,ketone,sulfone,0.702202,0,0
+weidawang-Chem-R-8B,functional_group,8,ketone,sulfoxide,0.697345,0,0
+weidawang-Chem-R-8B,functional_group,8,ketone,thioether,0.604614,0,0
+weidawang-Chem-R-8B,functional_group,8,ketone,thiol,0.707741,0,0
+weidawang-Chem-R-8B,functional_group,8,nitrile,nitro,0.501095,1,1
+weidawang-Chem-R-8B,functional_group,8,nitrile,sulfone,0.569265,0,0
+weidawang-Chem-R-8B,functional_group,8,nitrile,sulfoxide,0.562754,0,0
+weidawang-Chem-R-8B,functional_group,8,nitrile,thioether,0.521773,0,0
+weidawang-Chem-R-8B,functional_group,8,nitrile,thiol,0.613178,0,0
+weidawang-Chem-R-8B,functional_group,8,nitro,sulfone,0.591373,0,0
+weidawang-Chem-R-8B,functional_group,8,nitro,sulfoxide,0.575407,0,0
+weidawang-Chem-R-8B,functional_group,8,nitro,thioether,0.681569,0,0
+weidawang-Chem-R-8B,functional_group,8,nitro,thiol,0.546781,0,0
+weidawang-Chem-R-8B,functional_group,8,sulfone,sulfoxide,0.942024,1,1
+weidawang-Chem-R-8B,functional_group,8,sulfone,thioether,0.676975,1,0
+weidawang-Chem-R-8B,functional_group,8,sulfone,thiol,0.723039,1,0
+weidawang-Chem-R-8B,functional_group,8,sulfoxide,thioether,0.686083,1,0
+weidawang-Chem-R-8B,functional_group,8,sulfoxide,thiol,0.745653,1,0
+weidawang-Chem-R-8B,functional_group,8,thioether,thiol,0.683185,1,1
+weidawang-Chem-R-8B,functional_group,16,alcohol,aldehyde,0.709863,1,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,alkyl bromide,0.590707,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,alkyl chloride,0.594543,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,alkyl fluoride,0.596903,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,alkyl iodide,0.601794,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,amide,0.683744,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,amine,0.777661,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,carboxylic acid,0.7163,1,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,ester,0.64489,1,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,ether,0.676367,1,1
+weidawang-Chem-R-8B,functional_group,16,alcohol,imine,0.59405,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,ketone,0.711536,1,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,nitrile,0.644771,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,nitro,0.617537,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,sulfone,0.601948,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,sulfoxide,0.652977,0,0
+weidawang-Chem-R-8B,functional_group,16,alcohol,thioether,0.601512,0,1
+weidawang-Chem-R-8B,functional_group,16,alcohol,thiol,0.769397,0,1
+weidawang-Chem-R-8B,functional_group,16,aldehyde,alkyl bromide,0.61645,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,alkyl chloride,0.583233,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,alkyl fluoride,0.551576,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,alkyl iodide,0.607104,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,amide,0.755426,0,1
+weidawang-Chem-R-8B,functional_group,16,aldehyde,amine,0.650195,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,carboxylic acid,0.784434,1,1
+weidawang-Chem-R-8B,functional_group,16,aldehyde,ester,0.629596,1,1
+weidawang-Chem-R-8B,functional_group,16,aldehyde,ether,0.543374,1,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,imine,0.745108,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,ketone,0.728115,1,1
+weidawang-Chem-R-8B,functional_group,16,aldehyde,nitrile,0.760149,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,nitro,0.615273,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,sulfone,0.610718,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,sulfoxide,0.656202,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,thioether,0.560687,0,0
+weidawang-Chem-R-8B,functional_group,16,aldehyde,thiol,0.672171,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,alkyl chloride,0.948552,1,1
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,alkyl fluoride,0.889978,1,1
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,alkyl iodide,0.935088,1,1
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,amide,0.525825,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,amine,0.583331,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,carboxylic acid,0.544104,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,ester,0.518407,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,ether,0.689406,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,imine,0.590754,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,ketone,0.473927,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,nitrile,0.660953,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,nitro,0.729296,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,sulfone,0.591681,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,sulfoxide,0.611865,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,thioether,0.787014,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl bromide,thiol,0.707078,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,alkyl fluoride,0.920794,1,1
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,alkyl iodide,0.915671,1,1
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,amide,0.506743,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,amine,0.574261,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,carboxylic acid,0.518372,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,ester,0.479452,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,ether,0.69868,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,imine,0.547102,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,ketone,0.462935,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,nitrile,0.625911,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,nitro,0.727497,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,sulfone,0.57688,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,sulfoxide,0.597106,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,thioether,0.769835,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl chloride,thiol,0.67992,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,alkyl iodide,0.895417,1,1
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,amide,0.49262,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,amine,0.567658,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,carboxylic acid,0.496688,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,ester,0.473336,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,ether,0.735489,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,imine,0.533669,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,ketone,0.432882,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,nitrile,0.610873,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,nitro,0.707955,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,sulfone,0.555265,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,sulfoxide,0.587619,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,thioether,0.785887,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl fluoride,thiol,0.671518,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,amide,0.497695,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,amine,0.573269,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,carboxylic acid,0.523186,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,ester,0.484913,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,ether,0.681948,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,imine,0.577926,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,ketone,0.451891,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,nitrile,0.627786,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,nitro,0.73879,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,sulfone,0.579098,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,sulfoxide,0.606831,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,thioether,0.782651,0,0
+weidawang-Chem-R-8B,functional_group,16,alkyl iodide,thiol,0.715348,0,0
+weidawang-Chem-R-8B,functional_group,16,amide,amine,0.749393,1,0
+weidawang-Chem-R-8B,functional_group,16,amide,carboxylic acid,0.847273,0,1
+weidawang-Chem-R-8B,functional_group,16,amide,ester,0.749619,0,1
+weidawang-Chem-R-8B,functional_group,16,amide,ether,0.539647,0,0
+weidawang-Chem-R-8B,functional_group,16,amide,imine,0.721339,1,0
+weidawang-Chem-R-8B,functional_group,16,amide,ketone,0.709911,0,1
+weidawang-Chem-R-8B,functional_group,16,amide,nitrile,0.761069,1,0
+weidawang-Chem-R-8B,functional_group,16,amide,nitro,0.636304,1,0
+weidawang-Chem-R-8B,functional_group,16,amide,sulfone,0.699016,0,0
+weidawang-Chem-R-8B,functional_group,16,amide,sulfoxide,0.688475,0,0
+weidawang-Chem-R-8B,functional_group,16,amide,thioether,0.583273,0,0
+weidawang-Chem-R-8B,functional_group,16,amide,thiol,0.649117,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,carboxylic acid,0.599328,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,ester,0.506905,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,ether,0.568434,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,imine,0.705502,1,1
+weidawang-Chem-R-8B,functional_group,16,amine,ketone,0.594247,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,nitrile,0.697362,1,1
+weidawang-Chem-R-8B,functional_group,16,amine,nitro,0.627524,1,1
+weidawang-Chem-R-8B,functional_group,16,amine,sulfone,0.617575,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,sulfoxide,0.643682,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,thioether,0.619332,0,0
+weidawang-Chem-R-8B,functional_group,16,amine,thiol,0.758024,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,ester,0.79463,1,1
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,ether,0.496563,1,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,imine,0.608282,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,ketone,0.729111,1,1
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,nitrile,0.688233,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,nitro,0.609975,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,sulfone,0.66439,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,sulfoxide,0.626129,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,thioether,0.522472,0,0
+weidawang-Chem-R-8B,functional_group,16,carboxylic acid,thiol,0.637156,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,ether,0.655385,1,0
+weidawang-Chem-R-8B,functional_group,16,ester,imine,0.582389,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,ketone,0.710822,1,1
+weidawang-Chem-R-8B,functional_group,16,ester,nitrile,0.626676,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,nitro,0.574332,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,sulfone,0.68358,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,sulfoxide,0.666417,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,thioether,0.604513,0,0
+weidawang-Chem-R-8B,functional_group,16,ester,thiol,0.570823,0,0
+weidawang-Chem-R-8B,functional_group,16,ether,imine,0.560795,0,0
+weidawang-Chem-R-8B,functional_group,16,ether,ketone,0.479266,1,0
+weidawang-Chem-R-8B,functional_group,16,ether,nitrile,0.575424,0,0
+weidawang-Chem-R-8B,functional_group,16,ether,nitro,0.641164,0,0
+weidawang-Chem-R-8B,functional_group,16,ether,sulfone,0.585928,0,0
+weidawang-Chem-R-8B,functional_group,16,ether,sulfoxide,0.642327,0,0
+weidawang-Chem-R-8B,functional_group,16,ether,thioether,0.808145,0,1
+weidawang-Chem-R-8B,functional_group,16,ether,thiol,0.595237,0,1
+weidawang-Chem-R-8B,functional_group,16,imine,ketone,0.646037,0,0
+weidawang-Chem-R-8B,functional_group,16,imine,nitrile,0.740664,1,1
+weidawang-Chem-R-8B,functional_group,16,imine,nitro,0.58812,1,1
+weidawang-Chem-R-8B,functional_group,16,imine,sulfone,0.618783,0,0
+weidawang-Chem-R-8B,functional_group,16,imine,sulfoxide,0.714501,0,0
+weidawang-Chem-R-8B,functional_group,16,imine,thioether,0.65094,0,0
+weidawang-Chem-R-8B,functional_group,16,imine,thiol,0.68963,0,0
+weidawang-Chem-R-8B,functional_group,16,ketone,nitrile,0.627282,0,0
+weidawang-Chem-R-8B,functional_group,16,ketone,nitro,0.539552,0,0
+weidawang-Chem-R-8B,functional_group,16,ketone,sulfone,0.623363,0,0
+weidawang-Chem-R-8B,functional_group,16,ketone,sulfoxide,0.67877,0,0
+weidawang-Chem-R-8B,functional_group,16,ketone,thioether,0.49473,0,0
+weidawang-Chem-R-8B,functional_group,16,ketone,thiol,0.646103,0,0
+weidawang-Chem-R-8B,functional_group,16,nitrile,nitro,0.63677,1,1
+weidawang-Chem-R-8B,functional_group,16,nitrile,sulfone,0.647243,0,0
+weidawang-Chem-R-8B,functional_group,16,nitrile,sulfoxide,0.631296,0,0
+weidawang-Chem-R-8B,functional_group,16,nitrile,thioether,0.623635,0,0
+weidawang-Chem-R-8B,functional_group,16,nitrile,thiol,0.666482,0,0
+weidawang-Chem-R-8B,functional_group,16,nitro,sulfone,0.742658,0,0
+weidawang-Chem-R-8B,functional_group,16,nitro,sulfoxide,0.706729,0,0
+weidawang-Chem-R-8B,functional_group,16,nitro,thioether,0.673957,0,0
+weidawang-Chem-R-8B,functional_group,16,nitro,thiol,0.634669,0,0
+weidawang-Chem-R-8B,functional_group,16,sulfone,sulfoxide,0.865704,1,1
+weidawang-Chem-R-8B,functional_group,16,sulfone,thioether,0.648169,1,0
+weidawang-Chem-R-8B,functional_group,16,sulfone,thiol,0.643474,1,0
+weidawang-Chem-R-8B,functional_group,16,sulfoxide,thioether,0.736915,1,0
+weidawang-Chem-R-8B,functional_group,16,sulfoxide,thiol,0.743932,1,0
+weidawang-Chem-R-8B,functional_group,16,thioether,thiol,0.776269,1,1
+weidawang-Chem-R-8B,functional_group,24,alcohol,aldehyde,0.542004,1,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,alkyl bromide,0.369508,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,alkyl chloride,0.393777,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,alkyl fluoride,0.420607,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,alkyl iodide,0.370183,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,amide,0.469668,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,amine,0.63535,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,carboxylic acid,0.547335,1,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,ester,0.47307,1,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,ether,0.575862,1,1
+weidawang-Chem-R-8B,functional_group,24,alcohol,imine,0.358318,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,ketone,0.528981,1,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,nitrile,0.370025,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,nitro,0.443524,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,sulfone,0.419331,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,sulfoxide,0.512508,0,0
+weidawang-Chem-R-8B,functional_group,24,alcohol,thioether,0.436074,0,1
+weidawang-Chem-R-8B,functional_group,24,alcohol,thiol,0.62301,0,1
+weidawang-Chem-R-8B,functional_group,24,aldehyde,alkyl bromide,0.363308,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,alkyl chloride,0.347844,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,alkyl fluoride,0.349735,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,alkyl iodide,0.369055,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,amide,0.669447,0,1
+weidawang-Chem-R-8B,functional_group,24,aldehyde,amine,0.497296,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,carboxylic acid,0.663462,1,1
+weidawang-Chem-R-8B,functional_group,24,aldehyde,ester,0.553037,1,1
+weidawang-Chem-R-8B,functional_group,24,aldehyde,ether,0.392166,1,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,imine,0.638365,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,ketone,0.662278,1,1
+weidawang-Chem-R-8B,functional_group,24,aldehyde,nitrile,0.568021,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,nitro,0.444903,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,sulfone,0.385832,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,sulfoxide,0.481565,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,thioether,0.376321,0,0
+weidawang-Chem-R-8B,functional_group,24,aldehyde,thiol,0.440797,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,alkyl chloride,0.808197,1,1
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,alkyl fluoride,0.705137,1,1
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,alkyl iodide,0.780098,1,1
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,amide,0.311961,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,amine,0.391779,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,carboxylic acid,0.323909,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,ester,0.326729,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,ether,0.465084,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,imine,0.339683,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,ketone,0.229377,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,nitrile,0.406291,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,nitro,0.5181,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,sulfone,0.398608,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,sulfoxide,0.411786,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,thioether,0.591112,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl bromide,thiol,0.500244,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,alkyl fluoride,0.766106,1,1
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,alkyl iodide,0.776647,1,1
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,amide,0.297698,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,amine,0.416327,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,carboxylic acid,0.30381,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,ester,0.300057,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,ether,0.463579,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,imine,0.328883,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,ketone,0.21794,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,nitrile,0.386574,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,nitro,0.472945,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,sulfone,0.363755,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,sulfoxide,0.403647,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,thioether,0.570707,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl chloride,thiol,0.49147,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,alkyl iodide,0.741054,1,1
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,amide,0.309495,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,amine,0.417292,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,carboxylic acid,0.327893,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,ester,0.328601,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,ether,0.534649,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,imine,0.328587,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,ketone,0.22556,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,nitrile,0.390944,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,nitro,0.464979,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,sulfone,0.382149,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,sulfoxide,0.412516,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,thioether,0.566811,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl fluoride,thiol,0.45412,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,amide,0.301136,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,amine,0.397117,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,carboxylic acid,0.319709,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,ester,0.297483,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,ether,0.440537,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,imine,0.383493,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,ketone,0.228703,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,nitrile,0.426789,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,nitro,0.511505,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,sulfone,0.367305,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,sulfoxide,0.412425,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,thioether,0.557732,0,0
+weidawang-Chem-R-8B,functional_group,24,alkyl iodide,thiol,0.493645,0,0
+weidawang-Chem-R-8B,functional_group,24,amide,amine,0.622185,1,0
+weidawang-Chem-R-8B,functional_group,24,amide,carboxylic acid,0.716318,0,1
+weidawang-Chem-R-8B,functional_group,24,amide,ester,0.640914,0,1
+weidawang-Chem-R-8B,functional_group,24,amide,ether,0.37519,0,0
+weidawang-Chem-R-8B,functional_group,24,amide,imine,0.609161,1,0
+weidawang-Chem-R-8B,functional_group,24,amide,ketone,0.648725,0,1
+weidawang-Chem-R-8B,functional_group,24,amide,nitrile,0.531762,1,0
+weidawang-Chem-R-8B,functional_group,24,amide,nitro,0.477496,1,0
+weidawang-Chem-R-8B,functional_group,24,amide,sulfone,0.436666,0,0
+weidawang-Chem-R-8B,functional_group,24,amide,sulfoxide,0.48456,0,0
+weidawang-Chem-R-8B,functional_group,24,amide,thioether,0.393354,0,0
+weidawang-Chem-R-8B,functional_group,24,amide,thiol,0.438919,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,carboxylic acid,0.408931,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,ester,0.32272,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,ether,0.430923,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,imine,0.58279,1,1
+weidawang-Chem-R-8B,functional_group,24,amine,ketone,0.42066,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,nitrile,0.492232,1,1
+weidawang-Chem-R-8B,functional_group,24,amine,nitro,0.477154,1,1
+weidawang-Chem-R-8B,functional_group,24,amine,sulfone,0.359801,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,sulfoxide,0.413827,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,thioether,0.432612,0,0
+weidawang-Chem-R-8B,functional_group,24,amine,thiol,0.588448,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,ester,0.733646,1,1
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,ether,0.348082,1,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,imine,0.403282,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,ketone,0.642975,1,1
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,nitrile,0.442298,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,nitro,0.438857,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,sulfone,0.47058,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,sulfoxide,0.456633,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,thioether,0.352576,0,0
+weidawang-Chem-R-8B,functional_group,24,carboxylic acid,thiol,0.444425,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,ether,0.593325,1,0
+weidawang-Chem-R-8B,functional_group,24,ester,imine,0.389106,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,ketone,0.674932,1,1
+weidawang-Chem-R-8B,functional_group,24,ester,nitrile,0.431947,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,nitro,0.434387,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,sulfone,0.552184,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,sulfoxide,0.540621,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,thioether,0.444753,0,0
+weidawang-Chem-R-8B,functional_group,24,ester,thiol,0.354749,0,0
+weidawang-Chem-R-8B,functional_group,24,ether,imine,0.367998,0,0
+weidawang-Chem-R-8B,functional_group,24,ether,ketone,0.348062,1,0
+weidawang-Chem-R-8B,functional_group,24,ether,nitrile,0.365653,0,0
+weidawang-Chem-R-8B,functional_group,24,ether,nitro,0.466489,0,0
+weidawang-Chem-R-8B,functional_group,24,ether,sulfone,0.499751,0,0
+weidawang-Chem-R-8B,functional_group,24,ether,sulfoxide,0.553319,0,0
+weidawang-Chem-R-8B,functional_group,24,ether,thioether,0.616949,0,1
+weidawang-Chem-R-8B,functional_group,24,ether,thiol,0.404529,0,1
+weidawang-Chem-R-8B,functional_group,24,imine,ketone,0.504689,0,0
+weidawang-Chem-R-8B,functional_group,24,imine,nitrile,0.593273,1,1
+weidawang-Chem-R-8B,functional_group,24,imine,nitro,0.434893,1,1
+weidawang-Chem-R-8B,functional_group,24,imine,sulfone,0.338893,0,0
+weidawang-Chem-R-8B,functional_group,24,imine,sulfoxide,0.472084,0,0
+weidawang-Chem-R-8B,functional_group,24,imine,thioether,0.391719,0,0
+weidawang-Chem-R-8B,functional_group,24,imine,thiol,0.407414,0,0
+weidawang-Chem-R-8B,functional_group,24,ketone,nitrile,0.41822,0,0
+weidawang-Chem-R-8B,functional_group,24,ketone,nitro,0.388752,0,0
+weidawang-Chem-R-8B,functional_group,24,ketone,sulfone,0.450935,0,0
+weidawang-Chem-R-8B,functional_group,24,ketone,sulfoxide,0.53815,0,0
+weidawang-Chem-R-8B,functional_group,24,ketone,thioether,0.32919,0,0
+weidawang-Chem-R-8B,functional_group,24,ketone,thiol,0.424319,0,0
+weidawang-Chem-R-8B,functional_group,24,nitrile,nitro,0.477488,1,1
+weidawang-Chem-R-8B,functional_group,24,nitrile,sulfone,0.379831,0,0
+weidawang-Chem-R-8B,functional_group,24,nitrile,sulfoxide,0.395278,0,0
+weidawang-Chem-R-8B,functional_group,24,nitrile,thioether,0.410273,0,0
+weidawang-Chem-R-8B,functional_group,24,nitrile,thiol,0.406746,0,0
+weidawang-Chem-R-8B,functional_group,24,nitro,sulfone,0.552219,0,0
+weidawang-Chem-R-8B,functional_group,24,nitro,sulfoxide,0.526733,0,0
+weidawang-Chem-R-8B,functional_group,24,nitro,thioether,0.425186,0,0
+weidawang-Chem-R-8B,functional_group,24,nitro,thiol,0.402674,0,0
+weidawang-Chem-R-8B,functional_group,24,sulfone,sulfoxide,0.793741,1,1
+weidawang-Chem-R-8B,functional_group,24,sulfone,thioether,0.592613,1,0
+weidawang-Chem-R-8B,functional_group,24,sulfone,thiol,0.522276,1,0
+weidawang-Chem-R-8B,functional_group,24,sulfoxide,thioether,0.693095,1,0
+weidawang-Chem-R-8B,functional_group,24,sulfoxide,thiol,0.633625,1,0
+weidawang-Chem-R-8B,functional_group,24,thioether,thiol,0.758105,1,1
+weidawang-Chem-R-8B,functional_group,31,alcohol,aldehyde,0.512158,1,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,alkyl bromide,0.319922,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,alkyl chloride,0.337816,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,alkyl fluoride,0.325297,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,alkyl iodide,0.278192,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,amide,0.375326,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,amine,0.559342,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,carboxylic acid,0.47587,1,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,ester,0.373405,1,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,ether,0.473512,1,1
+weidawang-Chem-R-8B,functional_group,31,alcohol,imine,0.311896,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,ketone,0.361471,1,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,nitrile,0.301955,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,nitro,0.385286,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,sulfone,0.333165,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,sulfoxide,0.415255,0,0
+weidawang-Chem-R-8B,functional_group,31,alcohol,thioether,0.302954,0,1
+weidawang-Chem-R-8B,functional_group,31,alcohol,thiol,0.490627,0,1
+weidawang-Chem-R-8B,functional_group,31,aldehyde,alkyl bromide,0.307706,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,alkyl chloride,0.285245,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,alkyl fluoride,0.280742,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,alkyl iodide,0.294198,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,amide,0.566759,0,1
+weidawang-Chem-R-8B,functional_group,31,aldehyde,amine,0.445331,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,carboxylic acid,0.597311,1,1
+weidawang-Chem-R-8B,functional_group,31,aldehyde,ester,0.440931,1,1
+weidawang-Chem-R-8B,functional_group,31,aldehyde,ether,0.365636,1,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,imine,0.51975,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,ketone,0.520546,1,1
+weidawang-Chem-R-8B,functional_group,31,aldehyde,nitrile,0.410708,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,nitro,0.390139,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,sulfone,0.330941,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,sulfoxide,0.416807,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,thioether,0.297151,0,0
+weidawang-Chem-R-8B,functional_group,31,aldehyde,thiol,0.376525,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,alkyl chloride,0.711829,1,1
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,alkyl fluoride,0.62567,1,1
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,alkyl iodide,0.665301,1,1
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,amide,0.321755,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,amine,0.407188,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,carboxylic acid,0.255031,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,ester,0.345825,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,ether,0.44568,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,imine,0.343949,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,ketone,0.287364,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,nitrile,0.443115,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,nitro,0.460035,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,sulfone,0.294977,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,sulfoxide,0.303532,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,thioether,0.504363,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl bromide,thiol,0.433507,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,alkyl fluoride,0.661559,1,1
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,alkyl iodide,0.650774,1,1
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,amide,0.297886,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,amine,0.420361,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,carboxylic acid,0.265275,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,ester,0.313185,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,ether,0.427477,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,imine,0.328074,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,ketone,0.265898,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,nitrile,0.423719,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,nitro,0.419574,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,sulfone,0.279047,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,sulfoxide,0.287374,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,thioether,0.492208,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl chloride,thiol,0.430921,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,alkyl iodide,0.61148,1,1
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,amide,0.293815,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,amine,0.399014,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,carboxylic acid,0.26583,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,ester,0.2993,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,ether,0.456766,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,imine,0.313991,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,ketone,0.251544,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,nitrile,0.412159,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,nitro,0.396124,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,sulfone,0.26899,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,sulfoxide,0.283193,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,thioether,0.466647,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl fluoride,thiol,0.383611,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,amide,0.309649,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,amine,0.387126,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,carboxylic acid,0.226556,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,ester,0.28368,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,ether,0.382263,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,imine,0.408635,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,ketone,0.244788,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,nitrile,0.40636,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,nitro,0.40606,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,sulfone,0.25493,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,sulfoxide,0.280412,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,thioether,0.451126,0,0
+weidawang-Chem-R-8B,functional_group,31,alkyl iodide,thiol,0.398127,0,0
+weidawang-Chem-R-8B,functional_group,31,amide,amine,0.603904,1,0
+weidawang-Chem-R-8B,functional_group,31,amide,carboxylic acid,0.613758,0,1
+weidawang-Chem-R-8B,functional_group,31,amide,ester,0.53794,0,1
+weidawang-Chem-R-8B,functional_group,31,amide,ether,0.372578,0,0
+weidawang-Chem-R-8B,functional_group,31,amide,imine,0.535574,1,0
+weidawang-Chem-R-8B,functional_group,31,amide,ketone,0.550586,0,1
+weidawang-Chem-R-8B,functional_group,31,amide,nitrile,0.484194,1,0
+weidawang-Chem-R-8B,functional_group,31,amide,nitro,0.438401,1,0
+weidawang-Chem-R-8B,functional_group,31,amide,sulfone,0.328612,0,0
+weidawang-Chem-R-8B,functional_group,31,amide,sulfoxide,0.379514,0,0
+weidawang-Chem-R-8B,functional_group,31,amide,thioether,0.33909,0,0
+weidawang-Chem-R-8B,functional_group,31,amide,thiol,0.372353,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,carboxylic acid,0.365184,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,ester,0.352228,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,ether,0.438641,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,imine,0.534312,1,1
+weidawang-Chem-R-8B,functional_group,31,amine,ketone,0.398589,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,nitrile,0.504162,1,1
+weidawang-Chem-R-8B,functional_group,31,amine,nitro,0.493258,1,1
+weidawang-Chem-R-8B,functional_group,31,amine,sulfone,0.328918,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,sulfoxide,0.348098,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,thioether,0.391336,0,0
+weidawang-Chem-R-8B,functional_group,31,amine,thiol,0.498832,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,ester,0.596829,1,1
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,ether,0.317581,1,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,imine,0.350762,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,ketone,0.542601,1,1
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,nitrile,0.335874,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,nitro,0.345158,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,sulfone,0.370131,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,sulfoxide,0.390773,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,thioether,0.295584,0,0
+weidawang-Chem-R-8B,functional_group,31,carboxylic acid,thiol,0.374001,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,ether,0.593339,1,0
+weidawang-Chem-R-8B,functional_group,31,ester,imine,0.388331,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,ketone,0.610833,1,1
+weidawang-Chem-R-8B,functional_group,31,ester,nitrile,0.39821,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,nitro,0.403182,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,sulfone,0.404866,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,sulfoxide,0.4181,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,thioether,0.427014,0,0
+weidawang-Chem-R-8B,functional_group,31,ester,thiol,0.312474,0,0
+weidawang-Chem-R-8B,functional_group,31,ether,imine,0.399382,0,0
+weidawang-Chem-R-8B,functional_group,31,ether,ketone,0.382141,1,0
+weidawang-Chem-R-8B,functional_group,31,ether,nitrile,0.397753,0,0
+weidawang-Chem-R-8B,functional_group,31,ether,nitro,0.421911,0,0
+weidawang-Chem-R-8B,functional_group,31,ether,sulfone,0.378248,0,0
+weidawang-Chem-R-8B,functional_group,31,ether,sulfoxide,0.434812,0,0
+weidawang-Chem-R-8B,functional_group,31,ether,thioether,0.511051,0,1
+weidawang-Chem-R-8B,functional_group,31,ether,thiol,0.34268,0,1
+weidawang-Chem-R-8B,functional_group,31,imine,ketone,0.451405,0,0
+weidawang-Chem-R-8B,functional_group,31,imine,nitrile,0.505543,1,1
+weidawang-Chem-R-8B,functional_group,31,imine,nitro,0.417063,1,1
+weidawang-Chem-R-8B,functional_group,31,imine,sulfone,0.2939,0,0
+weidawang-Chem-R-8B,functional_group,31,imine,sulfoxide,0.382183,0,0
+weidawang-Chem-R-8B,functional_group,31,imine,thioether,0.332717,0,0
+weidawang-Chem-R-8B,functional_group,31,imine,thiol,0.324789,0,0
+weidawang-Chem-R-8B,functional_group,31,ketone,nitrile,0.390199,0,0
+weidawang-Chem-R-8B,functional_group,31,ketone,nitro,0.360209,0,0
+weidawang-Chem-R-8B,functional_group,31,ketone,sulfone,0.388673,0,0
+weidawang-Chem-R-8B,functional_group,31,ketone,sulfoxide,0.441533,0,0
+weidawang-Chem-R-8B,functional_group,31,ketone,thioether,0.337537,0,0
+weidawang-Chem-R-8B,functional_group,31,ketone,thiol,0.366818,0,0
+weidawang-Chem-R-8B,functional_group,31,nitrile,nitro,0.517064,1,1
+weidawang-Chem-R-8B,functional_group,31,nitrile,sulfone,0.299821,0,0
+weidawang-Chem-R-8B,functional_group,31,nitrile,sulfoxide,0.287048,0,0
+weidawang-Chem-R-8B,functional_group,31,nitrile,thioether,0.370485,0,0
+weidawang-Chem-R-8B,functional_group,31,nitrile,thiol,0.346135,0,0
+weidawang-Chem-R-8B,functional_group,31,nitro,sulfone,0.370699,0,0
+weidawang-Chem-R-8B,functional_group,31,nitro,sulfoxide,0.383171,0,0
+weidawang-Chem-R-8B,functional_group,31,nitro,thioether,0.365294,0,0
+weidawang-Chem-R-8B,functional_group,31,nitro,thiol,0.328755,0,0
+weidawang-Chem-R-8B,functional_group,31,sulfone,sulfoxide,0.766204,1,1
+weidawang-Chem-R-8B,functional_group,31,sulfone,thioether,0.507571,1,0
+weidawang-Chem-R-8B,functional_group,31,sulfone,thiol,0.48947,1,0
+weidawang-Chem-R-8B,functional_group,31,sulfoxide,thioether,0.548778,1,0
+weidawang-Chem-R-8B,functional_group,31,sulfoxide,thiol,0.549166,1,0
+weidawang-Chem-R-8B,functional_group,31,thioether,thiol,0.673876,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,aldehyde,0.37685,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,alkyl bromide,0.581223,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,alkyl chloride,0.546778,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,alkyl fluoride,0.666908,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,alkyl iodide,0.590916,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,amide,0.241484,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,amine,0.934584,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,carboxylic acid,0.314815,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,ester,0.654052,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,ether,0.634712,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,imine,0.57465,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,ketone,0.763121,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,nitrile,0.177054,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,nitro,-0.090491,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,sulfone,0.6734,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,sulfoxide,0.65518,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,thioether,0.654143,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alcohol,thiol,0.886302,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,alkyl bromide,0.32287,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,alkyl chloride,0.276143,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,alkyl fluoride,0.433708,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,alkyl iodide,0.253285,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,amide,0.637507,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,amine,0.371562,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,carboxylic acid,0.595939,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,ester,0.257876,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,ether,0.128125,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,imine,0.554697,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,ketone,0.361794,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,nitrile,0.358838,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,nitro,0.362154,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,sulfone,0.463211,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,sulfoxide,0.246479,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,thioether,0.103433,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,aldehyde,thiol,0.355033,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,alkyl chloride,0.848799,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,alkyl fluoride,0.812444,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,alkyl iodide,0.814733,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,amide,0.163125,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,amine,0.525378,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,carboxylic acid,0.210074,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,ester,0.528656,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,ether,0.766291,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,imine,0.437091,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,ketone,0.516986,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,nitrile,0.200171,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,nitro,-0.134977,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,sulfone,0.529019,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,sulfoxide,0.525344,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,thioether,0.621548,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl bromide,thiol,0.601614,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,alkyl fluoride,0.727588,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,alkyl iodide,0.804281,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,amide,0.197926,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,amine,0.46964,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,carboxylic acid,0.257097,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,ester,0.579509,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,ether,0.735016,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,imine,0.404305,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,ketone,0.544118,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,nitrile,0.13219,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,nitro,-0.329664,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,sulfone,0.592152,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,sulfoxide,0.58466,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,thioether,0.68898,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl chloride,thiol,0.575175,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,alkyl iodide,0.696822,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,amide,0.23364,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,amine,0.631582,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,carboxylic acid,0.260301,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,ester,0.398551,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,ether,0.60831,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,imine,0.559329,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,ketone,0.467416,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,nitrile,0.32996,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,nitro,0.118399,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,sulfone,0.442272,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,sulfoxide,0.398258,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,thioether,0.458586,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl fluoride,thiol,0.576783,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,amide,0.096742,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,amine,0.530078,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,carboxylic acid,0.145103,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,ester,0.570788,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,ether,0.814757,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,imine,0.309576,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,ketone,0.559187,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,nitrile,0.088028,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,nitro,-0.376472,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,sulfone,0.540059,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,sulfoxide,0.569971,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,thioether,0.706595,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,alkyl iodide,thiol,0.625633,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,amine,0.276082,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,carboxylic acid,0.948302,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,ester,0.293669,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,ether,0.013853,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,imine,0.526685,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,ketone,0.335486,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,nitrile,0.24669,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,nitro,0.385714,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,sulfone,0.474122,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,sulfoxide,0.304384,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,thioether,0.115828,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amide,thiol,0.273058,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,carboxylic acid,0.28264,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,ester,0.584295,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,ether,0.558246,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,imine,0.621582,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,ketone,0.721489,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,nitrile,0.202101,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,nitro,-0.029468,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,sulfone,0.621817,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,sulfoxide,0.589196,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,thioether,0.592206,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,amine,thiol,0.84581,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,ester,0.375496,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,ether,0.115713,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,imine,0.488649,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,ketone,0.375826,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,nitrile,0.204244,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,nitro,0.324049,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,sulfone,0.535864,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,sulfoxide,0.38759,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,thioether,0.216793,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,carboxylic acid,thiol,0.330843,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,ether,0.686835,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,imine,0.300596,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,ketone,0.905364,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,nitrile,0.041359,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,nitro,-0.327394,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,sulfone,0.923062,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,sulfoxide,0.96916,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,thioether,0.787833,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ester,thiol,0.711479,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,imine,0.225684,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,ketone,0.584937,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,nitrile,0.055212,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,nitro,-0.410432,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,sulfone,0.612838,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,sulfoxide,0.674107,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,thioether,0.83311,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ether,thiol,0.66773,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,ketone,0.423775,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,nitrile,0.379426,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,nitro,0.322356,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,sulfone,0.434049,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,sulfoxide,0.311133,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,thioether,0.252952,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,imine,thiol,0.529764,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ketone,nitrile,0.107719,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ketone,nitro,-0.238518,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ketone,sulfone,0.870584,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ketone,sulfoxide,0.877749,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ketone,thioether,0.671577,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,ketone,thiol,0.783194,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitrile,nitro,0.317269,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitrile,sulfone,0.104351,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitrile,sulfoxide,0.043463,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitrile,thioether,-0.010318,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitrile,thiol,0.104657,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitro,sulfone,-0.161692,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitro,sulfoxide,-0.311583,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitro,thioether,-0.474231,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,nitro,thiol,-0.192129,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,sulfone,sulfoxide,0.932825,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,sulfone,thioether,0.752872,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,sulfone,thiol,0.742713,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,sulfoxide,thioether,0.809151,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,sulfoxide,thiol,0.725826,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,thioether,thiol,0.741368,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,aldehyde,0.628905,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,alkyl bromide,0.621213,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,alkyl chloride,0.641351,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,alkyl fluoride,0.616579,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,alkyl iodide,0.565488,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,amide,0.632979,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,amine,0.830391,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,carboxylic acid,0.692772,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,ester,0.6872,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,ether,0.706536,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,imine,0.629741,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,ketone,0.759395,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,nitrile,0.666894,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,nitro,0.558138,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,sulfone,0.652105,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,sulfoxide,0.648185,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,thioether,0.683681,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alcohol,thiol,0.816591,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,alkyl bromide,0.443001,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,alkyl chloride,0.450013,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,alkyl fluoride,0.389517,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,alkyl iodide,0.454628,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,amide,0.673421,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,amine,0.513213,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,carboxylic acid,0.70499,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,ester,0.625484,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,ether,0.415538,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,imine,0.658848,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,ketone,0.643545,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,nitrile,0.643366,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,nitro,0.380824,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,sulfone,0.482088,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,sulfoxide,0.463126,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,thioether,0.451297,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,aldehyde,thiol,0.548423,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,alkyl chloride,0.913263,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,alkyl fluoride,0.841512,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,alkyl iodide,0.887693,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,amide,0.455166,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,amine,0.594514,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,carboxylic acid,0.484805,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,ester,0.520212,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,ether,0.761303,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,imine,0.58052,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,ketone,0.506197,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,nitrile,0.599771,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,nitro,0.698044,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,sulfone,0.533572,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,sulfoxide,0.514479,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,thioether,0.739593,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl bromide,thiol,0.664954,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,alkyl fluoride,0.865453,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,alkyl iodide,0.855236,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,amide,0.504482,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,amine,0.595412,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,carboxylic acid,0.529838,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,ester,0.573398,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,ether,0.792076,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,imine,0.57734,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,ketone,0.52866,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,nitrile,0.627074,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,nitro,0.69981,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,sulfone,0.581292,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,sulfoxide,0.54863,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,thioether,0.751532,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl chloride,thiol,0.665248,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,alkyl iodide,0.848538,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,amide,0.451916,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,amine,0.612319,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,carboxylic acid,0.445602,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,ester,0.513508,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,ether,0.810862,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,imine,0.529676,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,ketone,0.492247,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,nitrile,0.63352,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,nitro,0.69846,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,sulfone,0.594901,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,sulfoxide,0.589351,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,thioether,0.79595,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl fluoride,thiol,0.693475,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,amide,0.439766,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,amine,0.569143,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,carboxylic acid,0.450368,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,ester,0.490321,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,ether,0.754248,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,imine,0.593372,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,ketone,0.47692,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,nitrile,0.585468,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,nitro,0.644835,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,sulfone,0.549245,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,sulfoxide,0.546791,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,thioether,0.758149,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,alkyl iodide,thiol,0.656196,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,amine,0.665951,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,carboxylic acid,0.841276,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,ester,0.756322,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,ether,0.50349,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,imine,0.662103,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,ketone,0.663237,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,nitrile,0.713121,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,nitro,0.548021,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,sulfone,0.645786,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,sulfoxide,0.613582,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,thioether,0.478377,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amide,thiol,0.616548,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,carboxylic acid,0.600422,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,ester,0.637951,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,ether,0.648887,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,imine,0.69765,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,ketone,0.722064,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,nitrile,0.663408,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,nitro,0.604444,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,sulfone,0.651814,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,sulfoxide,0.669861,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,thioether,0.689214,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,amine,thiol,0.791385,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,ester,0.743962,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,ether,0.486787,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,imine,0.573008,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,ketone,0.66785,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,nitrile,0.684905,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,nitro,0.529607,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,sulfone,0.609134,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,sulfoxide,0.574632,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,thioether,0.456848,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,carboxylic acid,thiol,0.630358,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,ether,0.632256,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,imine,0.611906,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,ketone,0.804103,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,nitrile,0.677091,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,nitro,0.550887,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,sulfone,0.745287,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,sulfoxide,0.716773,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,thioether,0.588392,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ester,thiol,0.615195,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,imine,0.562391,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,ketone,0.571083,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,nitrile,0.574488,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,nitro,0.630479,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,sulfone,0.605128,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,sulfoxide,0.624241,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,thioether,0.840594,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ether,thiol,0.690194,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,ketone,0.634787,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,nitrile,0.701177,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,nitro,0.574886,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,sulfone,0.601954,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,sulfoxide,0.616069,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,thioether,0.63785,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,imine,thiol,0.6491,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ketone,nitrile,0.648779,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ketone,nitro,0.531223,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ketone,sulfone,0.682036,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ketone,sulfoxide,0.656141,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ketone,thioether,0.599305,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,ketone,thiol,0.628048,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitrile,nitro,0.592208,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitrile,sulfone,0.66382,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitrile,sulfoxide,0.647007,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitrile,thioether,0.606992,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitrile,thiol,0.709385,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitro,sulfone,0.655838,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitro,sulfoxide,0.59504,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitro,thioether,0.655374,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,nitro,thiol,0.61135,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,sulfone,sulfoxide,0.918415,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,sulfone,thioether,0.704401,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,sulfone,thiol,0.722801,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,sulfoxide,thioether,0.716519,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,sulfoxide,thiol,0.733527,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,thioether,thiol,0.758972,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,aldehyde,0.660128,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,alkyl bromide,0.638,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,alkyl chloride,0.641669,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,alkyl fluoride,0.638744,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,alkyl iodide,0.624081,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,amide,0.673924,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,amine,0.806818,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,carboxylic acid,0.691861,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,ester,0.630145,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,ether,0.722778,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,imine,0.579603,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,ketone,0.705973,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,nitrile,0.640559,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,nitro,0.615758,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,sulfone,0.589485,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,sulfoxide,0.641881,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,thioether,0.653641,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alcohol,thiol,0.810095,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,alkyl bromide,0.617136,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,alkyl chloride,0.582668,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,alkyl fluoride,0.558349,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,alkyl iodide,0.600099,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,amide,0.731263,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,amine,0.572716,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,carboxylic acid,0.773325,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,ester,0.674343,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,ether,0.525597,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,imine,0.715478,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,ketone,0.711967,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,nitrile,0.710218,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,nitro,0.565811,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,sulfone,0.525427,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,sulfoxide,0.558875,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,thioether,0.55776,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,aldehyde,thiol,0.632468,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,alkyl chloride,0.925003,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,alkyl fluoride,0.8464,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,alkyl iodide,0.90536,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,amide,0.565191,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,amine,0.594331,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,carboxylic acid,0.597407,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,ester,0.613751,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,ether,0.695915,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,imine,0.560055,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,ketone,0.533676,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,nitrile,0.667377,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,nitro,0.741147,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,sulfone,0.602278,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,sulfoxide,0.609276,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,thioether,0.743215,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl bromide,thiol,0.717274,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,alkyl fluoride,0.888086,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,alkyl iodide,0.865457,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,amide,0.525579,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,amine,0.56923,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,carboxylic acid,0.555961,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,ester,0.559666,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,ether,0.727221,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,imine,0.535477,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,ketone,0.511362,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,nitrile,0.62827,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,nitro,0.717792,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,sulfone,0.580765,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,sulfoxide,0.603423,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,thioether,0.741591,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl chloride,thiol,0.708946,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,alkyl iodide,0.870725,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,amide,0.550073,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,amine,0.619879,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,carboxylic acid,0.535265,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,ester,0.556028,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,ether,0.757267,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,imine,0.571422,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,ketone,0.493999,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,nitrile,0.665071,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,nitro,0.73458,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,sulfone,0.611464,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,sulfoxide,0.632328,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,thioether,0.758866,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl fluoride,thiol,0.729776,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,amide,0.570912,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,amine,0.597582,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,carboxylic acid,0.564736,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,ester,0.581096,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,ether,0.702963,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,imine,0.614934,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,ketone,0.507492,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,nitrile,0.669268,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,nitro,0.739833,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,sulfone,0.638207,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,sulfoxide,0.661279,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,thioether,0.76889,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,alkyl iodide,thiol,0.73972,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,amine,0.689796,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,carboxylic acid,0.853345,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,ester,0.756606,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,ether,0.551466,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,imine,0.700437,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,ketone,0.701662,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,nitrile,0.761321,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,nitro,0.64757,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,sulfone,0.665881,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,sulfoxide,0.663791,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,thioether,0.592112,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amide,thiol,0.660145,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,carboxylic acid,0.57987,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,ester,0.535202,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,ether,0.612233,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,imine,0.68955,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,ketone,0.575107,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,nitrile,0.65322,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,nitro,0.65221,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,sulfone,0.564154,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,sulfoxide,0.617361,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,thioether,0.649422,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,amine,thiol,0.794135,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,ester,0.79759,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,ether,0.52321,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,imine,0.567949,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,ketone,0.7059,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,nitrile,0.680348,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,nitro,0.618681,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,sulfone,0.639343,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,sulfoxide,0.62679,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,thioether,0.535146,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,carboxylic acid,thiol,0.640242,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,ether,0.69754,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,imine,0.581569,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,ketone,0.771687,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,nitrile,0.67791,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,nitro,0.627709,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,sulfone,0.679438,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,sulfoxide,0.665403,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,thioether,0.638882,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ester,thiol,0.614737,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,imine,0.549381,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,ketone,0.598888,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,nitrile,0.590522,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,nitro,0.660759,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,sulfone,0.645486,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,sulfoxide,0.701853,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,thioether,0.818148,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ether,thiol,0.72403,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,ketone,0.599516,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,nitrile,0.754547,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,nitro,0.590419,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,sulfone,0.561716,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,sulfoxide,0.635319,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,thioether,0.650347,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,imine,thiol,0.669865,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ketone,nitrile,0.656742,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ketone,nitro,0.577987,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ketone,sulfone,0.625737,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ketone,sulfoxide,0.634257,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ketone,thioether,0.592675,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,ketone,thiol,0.64481,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitrile,nitro,0.663933,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitrile,sulfone,0.639659,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitrile,sulfoxide,0.64223,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitrile,thioether,0.657903,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitrile,thiol,0.723949,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitro,sulfone,0.727849,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitro,sulfoxide,0.696248,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitro,thioether,0.692883,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,nitro,thiol,0.680667,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,sulfone,sulfoxide,0.909057,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,sulfone,thioether,0.724488,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,sulfone,thiol,0.705395,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,sulfoxide,thioether,0.792308,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,sulfoxide,thiol,0.76941,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,thioether,thiol,0.847217,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,aldehyde,0.550552,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,alkyl bromide,0.32189,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,alkyl chloride,0.379478,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,alkyl fluoride,0.355643,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,alkyl iodide,0.37415,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,amide,0.447574,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,amine,0.62404,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,carboxylic acid,0.629979,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,ester,0.50605,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,ether,0.572385,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,imine,0.400711,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,ketone,0.49105,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,nitrile,0.382087,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,nitro,0.431483,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,sulfone,0.450501,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,sulfoxide,0.490999,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,thioether,0.454367,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alcohol,thiol,0.610024,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,alkyl bromide,0.273215,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,alkyl chloride,0.276105,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,alkyl fluoride,0.284062,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,alkyl iodide,0.294058,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,amide,0.650566,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,amine,0.448517,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,carboxylic acid,0.690163,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,ester,0.650354,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,ether,0.348186,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,imine,0.622523,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,ketone,0.663957,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,nitrile,0.525568,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,nitro,0.430664,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,sulfone,0.386717,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,sulfoxide,0.416447,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,thioether,0.357508,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,aldehyde,thiol,0.366803,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,alkyl chloride,0.72342,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,alkyl fluoride,0.588477,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,alkyl iodide,0.69179,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,amide,0.215575,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,amine,0.282391,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,carboxylic acid,0.250715,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,ester,0.284241,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,ether,0.424146,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,imine,0.246948,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,ketone,0.183668,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,nitrile,0.316505,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,nitro,0.407937,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,sulfone,0.345234,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,sulfoxide,0.346915,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,thioether,0.416038,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl bromide,thiol,0.361181,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,alkyl fluoride,0.68905,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,alkyl iodide,0.665573,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,amide,0.233534,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,amine,0.340722,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,carboxylic acid,0.244101,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,ester,0.272723,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,ether,0.473601,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,imine,0.248511,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,ketone,0.180109,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,nitrile,0.296232,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,nitro,0.422421,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,sulfone,0.337253,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,sulfoxide,0.363746,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,thioether,0.43871,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl chloride,thiol,0.379501,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,alkyl iodide,0.635646,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,amide,0.270243,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,amine,0.352151,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,carboxylic acid,0.272686,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,ester,0.307857,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,ether,0.48571,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,imine,0.299286,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,ketone,0.199226,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,nitrile,0.340742,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,nitro,0.418848,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,sulfone,0.363643,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,sulfoxide,0.3791,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,thioether,0.402567,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl fluoride,thiol,0.339688,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,amide,0.231068,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,amine,0.335439,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,carboxylic acid,0.261379,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,ester,0.286008,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,ether,0.457306,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,imine,0.343255,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,ketone,0.209145,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,nitrile,0.352712,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,nitro,0.412947,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,sulfone,0.379673,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,sulfoxide,0.387044,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,thioether,0.451076,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,alkyl iodide,thiol,0.416513,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,amine,0.579302,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,carboxylic acid,0.725318,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,ester,0.710526,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,ether,0.321683,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,imine,0.521887,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,ketone,0.601689,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,nitrile,0.53905,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,nitro,0.493223,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,sulfone,0.412034,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,sulfoxide,0.414132,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,thioether,0.354593,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amide,thiol,0.335714,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,carboxylic acid,0.462919,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,ester,0.373712,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,ether,0.35507,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,imine,0.550587,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,ketone,0.353708,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,nitrile,0.420129,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,nitro,0.50656,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,sulfone,0.358935,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,sulfoxide,0.387846,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,thioether,0.418975,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,amine,thiol,0.523912,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,ester,0.773336,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,ether,0.364502,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,imine,0.415747,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,ketone,0.598198,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,nitrile,0.46221,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,nitro,0.441476,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,sulfone,0.451871,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,sulfoxide,0.439713,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,thioether,0.360819,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,carboxylic acid,thiol,0.43318,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,ether,0.561587,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,imine,0.461267,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,ketone,0.677424,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,nitrile,0.501345,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,nitro,0.487504,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,sulfone,0.532174,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,sulfoxide,0.522457,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,thioether,0.439976,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ester,thiol,0.33316,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,imine,0.331459,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,ketone,0.379433,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,nitrile,0.291014,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,nitro,0.455928,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,sulfone,0.546227,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,sulfoxide,0.603565,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,thioether,0.60048,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ether,thiol,0.364123,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,ketone,0.486565,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,nitrile,0.584972,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,nitro,0.445693,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,sulfone,0.389043,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,sulfoxide,0.42542,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,thioether,0.411106,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,imine,thiol,0.357175,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ketone,nitrile,0.402509,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ketone,nitro,0.359715,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ketone,sulfone,0.483829,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ketone,sulfoxide,0.461284,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ketone,thioether,0.362059,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,ketone,thiol,0.337151,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitrile,nitro,0.513262,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitrile,sulfone,0.395616,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitrile,sulfoxide,0.383451,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitrile,thioether,0.367875,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitrile,thiol,0.379108,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitro,sulfone,0.512969,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitro,sulfoxide,0.47335,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitro,thioether,0.424793,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,nitro,thiol,0.349599,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,sulfone,sulfoxide,0.886614,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,sulfone,thioether,0.65822,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,sulfone,thiol,0.51214,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,sulfoxide,thioether,0.784553,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,sulfoxide,thiol,0.603717,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,thioether,thiol,0.76374,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,aldehyde,0.574579,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,alkyl bromide,0.312483,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,alkyl chloride,0.330628,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,alkyl fluoride,0.28054,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,alkyl iodide,0.340488,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,amide,0.461005,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,amine,0.556186,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,carboxylic acid,0.597197,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,ester,0.487652,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,ether,0.52056,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,imine,0.404176,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,ketone,0.50548,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,nitrile,0.3701,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,nitro,0.378045,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,sulfone,0.449488,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,sulfoxide,0.454794,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,thioether,0.395862,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alcohol,thiol,0.544309,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,alkyl bromide,0.302506,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,alkyl chloride,0.303539,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,alkyl fluoride,0.263841,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,alkyl iodide,0.345426,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,amide,0.562885,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,amine,0.410927,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,carboxylic acid,0.631684,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,ester,0.588857,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,ether,0.378837,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,imine,0.527282,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,ketone,0.596122,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,nitrile,0.438199,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,nitro,0.376872,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,sulfone,0.436177,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,sulfoxide,0.432464,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,thioether,0.354895,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,aldehyde,thiol,0.397333,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,alkyl chloride,0.606726,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,alkyl fluoride,0.495683,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,alkyl iodide,0.606365,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,amide,0.269927,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,amine,0.277459,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,carboxylic acid,0.302907,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,ester,0.334614,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,ether,0.362104,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,imine,0.26561,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,ketone,0.238514,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,nitrile,0.354295,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,nitro,0.355368,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,sulfone,0.301881,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,sulfoxide,0.292043,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,thioether,0.332857,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl bromide,thiol,0.312463,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,alkyl fluoride,0.590189,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,alkyl iodide,0.549613,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,amide,0.259422,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,amine,0.316126,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,carboxylic acid,0.299483,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,ester,0.315191,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,ether,0.433654,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,imine,0.257175,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,ketone,0.234062,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,nitrile,0.348618,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,nitro,0.398881,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,sulfone,0.296842,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,sulfoxide,0.29666,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,thioether,0.327552,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl chloride,thiol,0.318813,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,alkyl iodide,0.525086,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,amide,0.269363,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,amine,0.274007,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,carboxylic acid,0.277844,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,ester,0.312086,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,ether,0.39392,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,imine,0.260042,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,ketone,0.23744,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,nitrile,0.350436,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,nitro,0.354289,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,sulfone,0.31027,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,sulfoxide,0.282494,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,thioether,0.314944,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl fluoride,thiol,0.302863,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,amide,0.330551,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,amine,0.349579,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,carboxylic acid,0.345924,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,ester,0.365508,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,ether,0.393192,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,imine,0.363004,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,ketone,0.269524,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,nitrile,0.42159,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,nitro,0.399345,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,sulfone,0.364305,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,sulfoxide,0.342729,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,thioether,0.390524,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,alkyl iodide,thiol,0.368696,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,amine,0.573751,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,carboxylic acid,0.668508,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,ester,0.647826,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,ether,0.328542,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,imine,0.439954,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,ketone,0.560425,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,nitrile,0.503499,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,nitro,0.447579,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,sulfone,0.449849,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,sulfoxide,0.410051,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,thioether,0.391345,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amide,thiol,0.408221,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,carboxylic acid,0.447875,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,ester,0.394721,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,ether,0.366893,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,imine,0.518426,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,ketone,0.379477,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,nitrile,0.437638,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,nitro,0.483302,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,sulfone,0.406642,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,sulfoxide,0.403093,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,thioether,0.399638,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,amine,thiol,0.49116,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,ester,0.719157,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,ether,0.37315,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,imine,0.37419,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,ketone,0.572833,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,nitrile,0.44209,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,nitro,0.414131,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,sulfone,0.440928,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,sulfoxide,0.414917,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,thioether,0.37406,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,carboxylic acid,thiol,0.460781,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,ether,0.504694,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,imine,0.430387,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,ketone,0.636399,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,nitrile,0.480387,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,nitro,0.448491,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,sulfone,0.517547,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,sulfoxide,0.487348,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,thioether,0.452103,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ester,thiol,0.393227,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,imine,0.365379,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,ketone,0.407633,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,nitrile,0.338891,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,nitro,0.412376,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,sulfone,0.510115,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,sulfoxide,0.516221,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,thioether,0.491466,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ether,thiol,0.358211,0,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,ketone,0.474893,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,nitrile,0.536659,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,nitro,0.414385,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,sulfone,0.443584,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,sulfoxide,0.434182,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,thioether,0.375327,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,imine,thiol,0.330566,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ketone,nitrile,0.386319,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ketone,nitro,0.378315,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ketone,sulfone,0.515913,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ketone,sulfoxide,0.477821,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ketone,thioether,0.382179,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,ketone,thiol,0.358068,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitrile,nitro,0.497092,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitrile,sulfone,0.388193,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitrile,sulfoxide,0.363263,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitrile,thioether,0.38982,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitrile,thiol,0.375779,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitro,sulfone,0.457344,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitro,sulfoxide,0.407341,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitro,thioether,0.375362,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,nitro,thiol,0.354456,0,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,sulfone,sulfoxide,0.871451,1,1
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,sulfone,thioether,0.626936,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,sulfone,thiol,0.522768,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,sulfoxide,thioether,0.722442,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,sulfoxide,thiol,0.596509,1,0
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,thioether,thiol,0.744877,1,1

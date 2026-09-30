@@ -1,0 +1,16 @@
+model,entity_type,scoring,n_templates,n_per_template,mean_accuracy,sd_accuracy,min_accuracy,max_accuracy,binomial_sd,dispersion_ratio
+meta-llama-Llama-3.1-8B,functional_group,raw,10,92,0.836957,0.104005,0.630435,0.967391,0.038513,2.700507
+meta-llama-Llama-3.1-8B,functional_group,length_normalized,10,92,0.401087,0.148281,0.119565,0.641304,0.051098,2.901871
+meta-llama-Llama-3.1-8B,functional_group,free_strict,10,92,0.584783,0.171542,0.195652,0.880435,0.051374,3.339099
+phenixace-Chem-R-Faithful,functional_group,raw,10,92,0.978261,0.030744,0.902174,1.0,0.015204,2.0221
+phenixace-Chem-R-Faithful,functional_group,length_normalized,10,92,0.720652,0.150181,0.48913,0.978261,0.046778,3.210506
+phenixace-Chem-R-Faithful,functional_group,free_strict,10,92,0.843478,0.109322,0.684783,1.0,0.037882,2.88587
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,raw,10,92,0.804348,0.192745,0.326087,0.967391,0.041359,4.660299
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,length_normalized,10,92,0.522826,0.186053,0.184783,0.869565,0.052074,3.572849
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,free_strict,10,92,0.789131,0.100042,0.586957,0.923913,0.042529,2.352311
+weidawang-Chem-R-8B,functional_group,raw,10,92,0.923913,0.107481,0.717391,1.0,0.027642,3.888262
+weidawang-Chem-R-8B,functional_group,length_normalized,10,92,0.563043,0.153873,0.402174,0.902174,0.051713,2.975534
+weidawang-Chem-R-8B,functional_group,free_strict,10,92,0.902174,0.135179,0.652174,1.0,0.030973,4.364476
+OpenDFM-ChemDFM-v1.5-8B,functional_group,raw,10,92,0.892391,0.138295,0.521739,1.0,0.032308,4.280538
+OpenDFM-ChemDFM-v1.5-8B,functional_group,length_normalized,10,92,0.640217,0.212904,0.130435,0.923913,0.050037,4.254936
+OpenDFM-ChemDFM-v1.5-8B,functional_group,free_strict,10,92,0.634783,0.12321,0.336957,0.75,0.050199,2.454427

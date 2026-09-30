@@ -28,12 +28,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ANALYSIS = os.path.abspath(os.path.join(HERE, '..'))
 REPO = os.path.abspath(os.path.join(ANALYSIS, '..', '..'))
 
-# Dataset and prompt-configuration facts stated in Setup. Each is checkable against
-# functional_group_dataset.csv or config_extract_activation.yaml, not against an analysis.
+# Dataset, prompt-configuration and architecture facts stated in Setup. Each is checkable
+# against functional_group_dataset.csv, config_extract_activation.yaml or model_registry.py,
+# not against an analysis.
 SETUP = {
     '92', '20', '23', '19', '17', '10', '920',      # molecules, classes, templates, prompts
     '3', '4', '5', '6', '8',                        # carbon counts, class sizes
     '32', '0', '1', '2', '15', '16', '18', '24', '31',   # layers
+    '4096',                                         # residual width (model_registry.py)
     '171', '95', '3.1', '0.975', '1.00',            # pairs, CI level, model name, quoted span
 }
 

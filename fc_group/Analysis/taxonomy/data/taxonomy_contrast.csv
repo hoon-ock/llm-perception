@@ -14,3 +14,13 @@ deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,8,19,0.689069,1.05462,
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,16,19,1.138933,1.479831,0.340898
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,24,19,1.450229,1.602738,0.152509
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,31,19,1.609891,1.608015,-0.001875
+weidawang-Chem-R-8B,functional_group,0,19,0.342363,0.598414,0.256051
+weidawang-Chem-R-8B,functional_group,8,19,0.787673,1.175537,0.387863
+weidawang-Chem-R-8B,functional_group,16,19,1.002228,1.376871,0.374643
+weidawang-Chem-R-8B,functional_group,24,19,1.382471,1.671578,0.289107
+weidawang-Chem-R-8B,functional_group,31,19,1.534408,1.696643,0.162235
+OpenDFM-ChemDFM-v1.5-8B,functional_group,0,19,0.450071,0.62551,0.17544
+OpenDFM-ChemDFM-v1.5-8B,functional_group,8,19,0.849785,1.279924,0.430139
+OpenDFM-ChemDFM-v1.5-8B,functional_group,16,19,1.054274,1.497487,0.443214
+OpenDFM-ChemDFM-v1.5-8B,functional_group,24,19,1.468519,1.668291,0.199772
+OpenDFM-ChemDFM-v1.5-8B,functional_group,31,19,1.526116,1.581389,0.055273

@@ -40,12 +40,20 @@ REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 DEFAULT_RESULTS = os.path.join(REPO, 'fc_group', 'Results')
 DEFAULT_OUT = os.path.join(HERE, 'data')
 
+# APPENDED, never inserted: `main` loops over `args.models` in order and the writer
+# preserves it, so adding to the end leaves the original three models' rows byte-identical.
+# All five have both readings on disk -- a family_probability.csv and five
+# between_class_similarity_layer_*.csv each.
 MODELS = [
     'meta-llama-Llama-3.1-8B',
     'phenixace-Chem-R-Faithful',
     'deepseek-ai-DeepSeek-R1-Distill-Llama-8B',
+    'weidawang-Chem-R-8B',
+    'OpenDFM-ChemDFM-v1.5-8B',
 ]
 
+# The five coarse families the probe scores, in the order `class_names` reports them.
+FAMILIES = ['halide', 'hydrocarbon', 'nitrogen', 'oxygen', 'sulfur']
 # The rival family, and the groups that define it geometrically.
 RIVAL = 'oxygen'
 OXYGEN_GROUPS = ['alcohol', 'aldehyde', 'ketone', 'ester', 'carboxylic acid', 'ether']
@@ -56,6 +64,12 @@ CONTROLS = {'nitrogen': ['amine', 'imine', 'nitrile'],
             'sulfur': ['thiol', 'thioether']}
 AMBIGUOUS = {'amide': 'nitrogen', 'nitro': 'nitrogen',
              'sulfone': 'sulfur', 'sulfoxide': 'sulfur'}
+
+# Condensed structural formula per group, read from the dataset's own
+# `functional_group_structure` column rather than written out here -- one authority for what
+# a group IS, shared with everything else that quotes it. Carried into the snapshot so a
+# figure can label `amide` with the notation without reloading the molecule table.
+STRUCTURE_CSV = 'functional_group_dataset.csv'
 
 
 def read_csv(path):
@@ -75,6 +89,75 @@ def posterior_ratio(results_dir, model, entity_type, layer):
         p_home = float(row[f"p_{row['home_family']}"])
         denom = p_ox + p_home
         out[row['group']] = p_ox / denom if denom > 0 else float('nan')
+    return out
+
+
+def read_structures(repo):
+    """`group -> condensed formula`, e.g. amide -> -CONH2, from the dataset."""
+    path = os.path.join(repo, 'fc_group', STRUCTURE_CSV)
+    out = {}
+    for r in read_csv(path):
+        out.setdefault(r['functional_group'], r['functional_group_structure'])
+    return out
+
+
+def fold_accuracy(results_dir, model, entity_type, tag='coarse_group'):
+    """`(layer, group) -> argmax accuracy` on that group's own held-out fold.
+
+    Leave-one-group-out makes each fold a single-class test set, so this is the recall on
+    that group -- the fraction of its rows the probe assigned to the IUPAC home family.
+
+    It belongs beside the probability mass because the two can disagree completely, and the
+    disagreement is the whole argument: at layer 31 the base model scores 1.000 on `amide`
+    while putting 0.156 on oxygen, and chemdfm scores 0.225 on the same group. Accuracy sees
+    a model that got it right and a model that got it wrong; the mass shows one committed to
+    a naming convention and the other to the chemistry.
+    """
+    path = os.path.join(results_dir, 'functional_group_probe', model, entity_type,
+                        'data', f'probe_scores_{tag}.csv')
+    return {(int(r['layer']), r['fold']): float(r['accuracy']) for r in read_csv(path)}
+
+
+def snapshot_family_probability(results_dir, model, entity_type, structures):
+    """Copy the probe's family-probability table into Analysis/ for every layer.
+
+    `posterior_ratio` reduces this to one ratio at one layer, which is the right input for
+    the two-readings table but throws away what a figure needs: the actual mass on each of
+    the five families, and the CONTROL groups alongside the ambiguous ones. Without the
+    controls in view a reader sees a model committing hard on `amide` and concludes it denies
+    the ambiguity, when the same model may be committing just as hard everywhere -- which is
+    what the base model in fact does (controls r = 0.012 against chem-r's 0.226).
+
+    Snapshotted here rather than read from `Results/` by the figure script, so the
+    reproducible-without-Results property holds for the visuals too.
+    """
+    path = os.path.join(results_dir, 'ambiguity_metric', model, entity_type, 'data',
+                        'family_probability.csv')
+    acc = fold_accuracy(results_dir, model, entity_type)
+    keep = set(AMBIGUOUS) | {c for v in CONTROLS.values() for c in v}
+    out = []
+    for r in read_csv(path):
+        if r['group'] not in keep:
+            continue
+        home = r['home_family']
+        p_ox, p_home = float(r[f'p_{RIVAL}']), float(r[f'p_{home}'])
+        denom = p_ox + p_home
+        out.append({
+            'model': model, 'entity_type': entity_type, 'layer': int(r['layer']),
+            'group': r['group'], 'role': r['role'], 'home_family': home,
+            'n_molecules': int(r['n_molecules']),
+            'p_home': round(p_home, 6), 'p_oxygen': round(p_ox, 6),
+            # Summed from the remaining three family columns, NOT derived as 1 - home - ox.
+            # The stored probabilities are float16 and do not sum to exactly one: base/L0/
+            # nitro already has home + oxygen = 1.000044, so subtraction would clamp to zero
+            # and silently hide that the row is 4e-5 over. Summing what is actually there
+            # keeps the bar honest about its own total.
+            'p_other': round(sum(float(r[f'p_{f}']) for f in FAMILIES
+                                 if f not in (RIVAL, home)), 6),
+            'posterior_r': round(p_ox / denom, 6) if denom > 0 else '',
+            'accuracy': acc.get((int(r['layer']), r['group']), ''),
+            'structure': structures.get(r['group'], ''),
+        })
     return out
 
 
@@ -159,6 +242,17 @@ def main():
                 row.update(c)
                 rows.append({k: (round(v, 6) if isinstance(v, float) else v)
                              for k, v in row.items()})
+    # Second output: the full per-layer mass table the figures draw from, ambiguous groups
+    # and their controls together. Written after the headline table so a failure here cannot
+    # leave the two-readings CSV half-written.
+    structures = read_structures(REPO)
+    fam = [r for model in args.models
+           for r in snapshot_family_probability(args.results_dir, model, args.entity_type,
+                                                structures)]
+    write_csv(os.path.join(args.out_dir, 'ambiguity_family_probability.csv'), fam,
+              ['model', 'entity_type', 'layer', 'group', 'role', 'home_family', 'structure',
+               'n_molecules', 'p_home', 'p_oxygen', 'p_other', 'posterior_r', 'accuracy'])
+
     write_csv(os.path.join(args.out_dir, 'ambiguity_two_readings.csv'), rows,
               ['model', 'entity_type', 'layer', 'group', 'home_family', 'controls',
                'posterior_r', 'posterior_r_controls', 'posterior_delta',

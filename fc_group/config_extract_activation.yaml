@@ -351,3 +351,43 @@ extraction:
       prompt_name: "1_templates"
       templates:
         - "{smiles}"
+
+    # --- RAG axis (branch: rag-axis) -------------------------------------------
+    # Same 10 declarative templates as "functional_group" above, with a retrieved
+    # textbook passage prepended. Identical base templates are what makes the
+    # comparison valid; the only difference between these and the baseline is the
+    # context. The rag_* columns live in the shared dataset because the analysis
+    # scripts hardcode its path (functional_group_probe.py:61) and the surface
+    # baseline renders these templates against it. Built by fc_group/rag/build_contexts.py.
+
+    - entity_type: "functional_group_rag"
+      data_file: "fc_group/functional_group_dataset.csv"
+      prompt_name: "10_templates"
+      templates:
+        - "{rag_context}\n\n{iupac_name} ({smiles}) contains the functional group "
+        - "{rag_context}\n\nThe primary functional group in {iupac_name} ({smiles}) is "
+        - "{rag_context}\n\nFor {iupac_name} ({smiles}), the functional-group class is "
+        - "{rag_context}\n\n{iupac_name} ({smiles}) is classified as a molecule containing a "
+        - "{rag_context}\n\nThe characteristic functional group of {iupac_name} ({smiles}) is "
+        - "{rag_context}\n\nThe main functional group present in {iupac_name} ({smiles}) is "
+        - "{rag_context}\n\nWhen classified by functional group, {iupac_name} ({smiles}) is a "
+        - "{rag_context}\n\n{iupac_name} ({smiles}) can be categorized by the functional group "
+        - "{rag_context}\n\nThe functional-group identity of {iupac_name} ({smiles}) is "
+        - "{rag_context}\n\nFor the molecule {iupac_name} ({smiles}), the defining functional group is "
+
+    # Control: same corpus, same k, same register, WRONG molecule. Makes the
+    # comparison relevant-minus-irrelevant instead of relevant-minus-nothing.
+    - entity_type: "functional_group_rag_mismatched"
+      data_file: "fc_group/functional_group_dataset.csv"
+      prompt_name: "10_templates"
+      templates:
+        - "{rag_context_mismatched}\n\n{iupac_name} ({smiles}) contains the functional group "
+        - "{rag_context_mismatched}\n\nThe primary functional group in {iupac_name} ({smiles}) is "
+        - "{rag_context_mismatched}\n\nFor {iupac_name} ({smiles}), the functional-group class is "
+        - "{rag_context_mismatched}\n\n{iupac_name} ({smiles}) is classified as a molecule containing a "
+        - "{rag_context_mismatched}\n\nThe characteristic functional group of {iupac_name} ({smiles}) is "
+        - "{rag_context_mismatched}\n\nThe main functional group present in {iupac_name} ({smiles}) is "
+        - "{rag_context_mismatched}\n\nWhen classified by functional group, {iupac_name} ({smiles}) is a "
+        - "{rag_context_mismatched}\n\n{iupac_name} ({smiles}) can be categorized by the functional group "
+        - "{rag_context_mismatched}\n\nThe functional-group identity of {iupac_name} ({smiles}) is "
+        - "{rag_context_mismatched}\n\nFor the molecule {iupac_name} ({smiles}), the defining functional group is "

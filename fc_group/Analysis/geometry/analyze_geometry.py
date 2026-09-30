@@ -41,6 +41,10 @@ MODELS = [
     'meta-llama-Llama-3.1-8B',
     'phenixace-Chem-R-Faithful',
     'deepseek-ai-DeepSeek-R1-Distill-Llama-8B',
+    # Appended, never inserted: the written rows are model-major, so adding slugs at the end
+    # leaves every pre-existing row of both CSVs byte-identical and appends the new ones.
+    'weidawang-Chem-R-8B',
+    'OpenDFM-ChemDFM-v1.5-8B',
 ]
 # Reported alongside hit@1 so the two are never read apart; see the docstring.
 RETRIEVAL_MODE = 'lumped'
@@ -61,6 +65,14 @@ def mean(xs):
     return sum(xs) / len(xs) if xs else None
 
 
+def median(xs):
+    xs = sorted(x for x in xs if x is not None)
+    if not xs:
+        return None
+    mid = len(xs) // 2
+    return xs[mid] if len(xs) % 2 else (xs[mid - 1] + xs[mid]) / 2
+
+
 def read_csv(path):
     if not os.path.exists(path):
         return []
@@ -78,6 +90,12 @@ def anisotropy(results_dir, model, entity_type):
         svd = v['diff_vector_isotropy']['svd_variance_ratio']
         out[int(layer)] = {
             'raw_pairwise_cosine': v['raw_isotropy']['pairwise_mean'],
+            # The spread travels with the mean rather than being left in the JSON:
+            # check_numbers.py traces prose numerals only to committed Analysis/*/data/*.csv,
+            # so an SD quoted in the text is untraceable until it lives in this file. It is a
+            # DESCRIPTIVE spread over all C(92,2)=4186 molecule pairs, not a standard error --
+            # each molecule sits in 91 of them, so the pairs are not independent.
+            'raw_pairwise_sd': v['raw_isotropy']['pairwise_std'],
             'diffvec_svd_top1': svd['1'],
             'diffvec_svd_top5': svd['5'],
             'centered_within': v['mean_centered']['full_within_mean'],
@@ -103,6 +121,27 @@ def similarity(results_dir, model, entity_type, layer):
             'raw_between_max': max(between) if between else None}
 
 
+def trial_ranks(results_dir, model, entity_type, tree, mode):
+    """`{layer: [rank_excl, ...]}` straight off the per-trial rows.
+
+    The only file that can give a real median. `retrieval_by_group.csv` carries per-group
+    medians, and a trial-weighted mean of medians is not the median of anything -- so the
+    median has to be taken over the trials themselves.
+    """
+    path = os.path.join(results_dir, tree, model, entity_type, 'data',
+                        'retrieval_trials.csv')
+    rows = [r for r in read_csv(path) if r['mode'] == mode]
+    if not rows:
+        # read_csv swallows a missing file into [], which would sail on as a None median
+        # rather than stopping. A results tree without trials is a broken results tree.
+        raise SystemExit(f'no {mode} trials in {os.path.relpath(path, REPO)} -- re-run '
+                         'fc_group/analogy_retrieval.py for this model')
+    out = {}
+    for r in rows:
+        out.setdefault(int(r['layer']), []).append(int(r['rank_excl']))
+    return out
+
+
 def retrieval(results_dir, model, entity_type,
               tree='functional_group_analogy_retrieval', mode=RETRIEVAL_MODE):
     """Pooled hit@1 and degenerate rate by layer, weighted by trial count.
@@ -111,16 +150,50 @@ def retrieval(results_dir, model, entity_type,
     layer, so it shifts the level for all three equally and only obscures the
     between-model comparison. Both columns are emitted rather than choosing.
 
+    That "equally" is a fact about hit@1 alone, and does NOT carry to the rank columns
+    below. Sulfoxide is a miss for everyone, but at L31 on the inter-group tree base misses
+    it by one place (rank 2) while chem-r and chem-faithful miss it by the whole pool
+    (15 and 16 of ~16). It is the only group where the three disagree at all, and on
+    `mean_rank` those 2 trials of 20 are the entire between-model spread. There is
+    deliberately no `mean_rank_ex_sulfoxide`: `median_rank` exposes the same tail without
+    privileging one group by name.
+
     `random_hit1` is carried through because it differs per tree -- the candidate pool is
     19 groups for the inter-group set, 4 for the halide column, and the whole ladder for
-    the carbon set -- so hit@1 is meaningless without the baseline it belongs to.
+    the carbon set -- so hit@1 is meaningless without the baseline it belongs to. The same
+    holds cutoff by cutoff, which is why `hit2`/`hit3` each travel with their own
+    `random_hit2`/`random_hit3` rather than sharing the k=1 line.
+
+    `hit2` reaches the per-axis table only; `geometry_by_layer.csv` filters it out along
+    with `hit3` in main(), so that table's columns do not move.
+
+    `mean_rank` answers what no hit rate can: how badly a miss misses. It travels with
+    `random_mean_rank` for the same reason every hit column travels with its own baseline,
+    and more urgently -- chance rank is the pool size, so it is 8.6 on the inter-group tree
+    and 37.3 on the carbon ladder, and a rank read without it says nothing. `mrr` comes
+    along as the bounded companion.
+
+    `median_rank` is read from `retrieval_trials.csv` via trial_ranks() rather than pooled
+    out of the per-group column here, because a trial-weighted mean of per-group medians is
+    not a median. It is worth the second file read: a mean far above its median is a tail,
+    and on the inter-group tree at L31 that distinction is the whole result. chem-r and
+    chem-faithful mean 2.55 and 2.60 against base's 1.20 while all three have median 1 --
+    the gap is two sulfoxide trials, not a worse ordering.
     """
     path = os.path.join(results_dir, tree, model, entity_type, 'data',
                         'retrieval_by_group.csv')
     rows = [r for r in read_csv(path) if r['mode'] == mode]
+    ranks = trial_ranks(results_dir, model, entity_type, tree, mode)
     out = {}
     for layer in sorted({int(r['layer']) for r in rows}):
         at = [r for r in rows if int(r['layer']) == layer]
+        # The two files are written by the same run over the same trials, so a disagreement
+        # here means a half-finished results tree rather than a rounding question.
+        n_trials = sum(int(r['n_trials']) for r in at)
+        if len(ranks.get(layer, [])) != n_trials:
+            raise SystemExit(
+                f'{tree}/{model} L{layer} {mode}: retrieval_by_group.csv says {n_trials} '
+                f'trials, retrieval_trials.csv has {len(ranks.get(layer, []))}')
 
         def pooled(subset, field):
             n = sum(int(r['n_trials']) for r in subset)
@@ -132,10 +205,22 @@ def retrieval(results_dir, model, entity_type,
         out[layer] = {
             'hit1': pooled(at, 'hit1_rate'),
             'hit1_ex_sulfoxide': pooled(ex, 'hit1_rate'),
+            'hit2': pooled(at, 'hit2_rate'),
             'hit3': pooled(at, 'hit3_rate'),
             'random_hit1': pooled(at, 'random_hit1'),
+            # Each cutoff gets its own chance line, for the same reason hit1 does: the pools
+            # differ per tree, and a hit@3 bar read against the hit@1 baseline would look
+            # three times better than it is.
+            'random_hit2': pooled(at, 'random_hit2'),
+            'random_hit3': pooled(at, 'random_hit3'),
             'degenerate_rate': pooled(at, 'degenerate_top1_rate'),
-            'n_trials': sum(int(r['n_trials']) for r in at),
+            # Each is a per-group mean over that group's trials, so weighting by trial
+            # count recovers the true pooled mean rather than approximating it.
+            'mean_rank': pooled(at, 'mean_rank'),
+            'random_mean_rank': pooled(at, 'random_mean_rank'),
+            'mrr': pooled(at, 'mrr'),
+            'median_rank': median(ranks[layer]),
+            'n_trials': n_trials,
             'n_groups': len(at),
         }
     return out
@@ -159,7 +244,7 @@ def main():
     args = p.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
-    fields = ['model', 'entity_type', 'layer', 'raw_pairwise_cosine',
+    fields = ['model', 'entity_type', 'layer', 'raw_pairwise_cosine', 'raw_pairwise_sd',
               'diffvec_svd_top1', 'diffvec_svd_top5', 'raw_within', 'raw_between',
               'raw_gap', 'raw_between_max', 'centered_within', 'centered_between',
               'centered_null', 'centered_null_sd', 'hit1', 'hit1_ex_sulfoxide',
@@ -193,7 +278,32 @@ def main():
                        for k, x in v.items()}})
     write_csv(os.path.join(args.out_dir, 'retrieval_by_axis.csv'), axis_rows,
               ['model', 'entity_type', 'axis', 'layer', 'hit1', 'hit1_ex_sulfoxide',
-               'hit3', 'random_hit1', 'degenerate_rate', 'n_trials', 'n_groups'])
+               'hit2', 'hit3', 'random_hit1', 'random_hit2', 'random_hit3',
+               'degenerate_rate', 'n_trials', 'n_groups',
+               # Appended, never inserted: every consumer indexes by name, but the
+               # column-position diff is what proves a re-run was additive.
+               'mean_rank', 'random_mean_rank', 'mrr', 'median_rank'])
+
+    # ---- the rank distribution behind those summaries -----------------------------
+    # A mean and a median are two numbers off a sample that is far from normal: ranks are
+    # small integers piled on 1, with a thin tail that on some axes IS the whole result.
+    # Snapshotting the histogram lets a figure show the sample itself without reaching into
+    # `Results/`, which nothing under Analysis/visuals is allowed to read. Lossless, because
+    # ranks are integers -- repeating each rank n times reconstructs the sample exactly.
+    hist_rows = []
+    for model in args.models:
+        for axis, (tree, mode) in RETRIEVAL_AXES.items():
+            ranks = trial_ranks(args.results_dir, model, args.entity_type, tree, mode)
+            for layer in sorted(ranks):
+                counts = {}
+                for r in ranks[layer]:
+                    counts[r] = counts.get(r, 0) + 1
+                for rank in sorted(counts):
+                    hist_rows.append({
+                        'model': model, 'entity_type': args.entity_type, 'axis': axis,
+                        'layer': layer, 'rank': rank, 'n': counts[rank]})
+    write_csv(os.path.join(args.out_dir, 'retrieval_rank_hist.csv'), hist_rows,
+              ['model', 'entity_type', 'axis', 'layer', 'rank', 'n'])
 
 
 if __name__ == '__main__':

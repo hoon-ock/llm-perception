@@ -30,7 +30,10 @@ Reads only `Results/generation_eval/`. No activations, no model, CPU-only.
 import argparse
 import csv
 import json
+import math
 import os
+
+from statistics import stdev
 
 import numpy as np
 
@@ -42,7 +45,14 @@ DEFAULT_OUT = os.path.join(HERE, 'data')
 MODEL_8B = 'meta-llama-Llama-3.1-8B'
 MODEL_CHEM = 'phenixace-Chem-R-Faithful'
 MODEL_R1 = 'deepseek-ai-DeepSeek-R1-Distill-Llama-8B'
-MODELS = [MODEL_8B, MODEL_CHEM, MODEL_R1]
+# The second chemistry tier. Chem-R-8B is what Chem-R-Faithful was GRPO-trained FROM, so the
+# pair separates domain tuning from faithfulness tuning; ChemDFM-v1.5-8B sits on Llama-3
+# rather than 3.1 and is external-validity only (see fc_group/model_registry.py).
+MODEL_CHEM_R = 'weidawang-Chem-R-8B'
+MODEL_CHEMDFM = 'OpenDFM-ChemDFM-v1.5-8B'
+# Appended, never inserted: every section below loops this list in order and the one `rng`
+# is consumed after them, so a model added at the END leaves existing rows byte-identical.
+MODELS = [MODEL_8B, MODEL_CHEM, MODEL_R1, MODEL_CHEM_R, MODEL_CHEMDFM]
 # Chemistry-tuned vs base is the contrast the paradox is stated over.
 DEFAULT_PAIR = (MODEL_CHEM, MODEL_8B)
 SCORINGS = ('raw', 'length_normalized')
@@ -76,6 +86,57 @@ def load_scores(results_dir, model, entity_type):
     if names != [n for n in dict.fromkeys(names) for _ in range(n_tpl)]:
         raise SystemExit(f"{model}: scores.csv is not molecule-major -- row layout changed")
     return rows, n_mol, n_tpl
+
+
+def log_loss_from(rows, labels, prefix):
+    """Mean cross-entropy of the true class under a softmax over one score column set.
+
+    `generation_eval.py` records log-loss for the RAW scores only: `p_true` there is a
+    softmax over the summed log-probabilities, so `summary.json` carries one `log_loss` and
+    it belongs to raw scoring alone. This re-derives it from the stored per-candidate scores,
+    which lets the same quantity be computed for the length-normalized rule as well.
+
+    A caution that belongs with the number, not in a reader's head: the length-normalized
+    scores are per-token MEANS, not log-probabilities, so a softmax over them is not a
+    calibrated posterior -- it is a softmax at an arbitrary temperature. Dividing by token
+    count compresses the spread of the 20 scores (1.74x narrower for the base model), and a
+    flatter score vector raises cross-entropy mechanically, whether or not the model is
+    really less certain. The normalized column is therefore comparable ACROSS MODELS, which
+    all get identical treatment, and NOT against the raw column beside it.
+    """
+    total = 0.0
+    for r in rows:
+        scores = [float(r[prefix + lab]) for lab in labels]
+        m = max(scores)
+        denom = m + math.log(sum(math.exp(x - m) for x in scores))
+        total += -(float(r[prefix + r['true_label']]) - denom)
+    return total / len(rows)
+
+
+def write_results_log_loss(results_dir, model, entity_type, per_scoring):
+    """Attach each scoring rule's log-loss to its own block in the model's summary.json.
+
+    The top-level `log_loss` that `generation_eval.py` wrote is left exactly as it is -- it
+    is the raw one, and other readers may depend on it. This adds `raw.log_loss` and
+    `length_normalized.log_loss` beside the accuracies they belong to, so the file says which
+    rule each number came from instead of leaving it implicit.
+
+    Assigning into the existing blocks keeps the merge idempotent. `Results*` is gitignored
+    and `scripts/pull_results.sh` rsyncs summary.json down without --delete, so a later pull
+    reverts this; re-running the script restores it.
+    """
+    path = os.path.join(results_dir, model, entity_type, 'data', 'summary.json')
+    if not os.path.exists(path):
+        print(f"  no summary.json for {model} -- skipped (the CSVs are the artifact)")
+        return
+    with open(path) as fh:
+        summary = json.load(fh)
+    for scoring, value in per_scoring.items():
+        if scoring in summary:
+            summary[scoring]['log_loss'] = round(value, 6)
+    with open(path, 'w') as fh:
+        json.dump(summary, fh, indent=2)
+    print(f"  merged per-scoring log_loss into {os.path.relpath(path)}")
 
 
 def bootstrap_diff(rows_a, rows_b, n_mol, n_tpl, field, n_boot, rng):
@@ -118,6 +179,10 @@ def main():
                    metavar=('MODEL_A', 'MODEL_B'))
     p.add_argument('--n-boot', type=int, default=20000)
     p.add_argument('--seed', type=int, default=0)
+    p.add_argument('--no-results-summary', action='store_true',
+                   help='do not merge per-scoring log_loss into each model\'s '
+                        'summary.json under --results-dir, leaving Results/ a pure '
+                        'mirror of what the HPC run produced.')
     args = p.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -127,6 +192,21 @@ def main():
                  for m in args.models}
     scores = {m: load_scores(args.results_dir, m, args.entity_type)
               for m in args.models}
+
+    # The 20 class names, read off the score columns rather than hardcoded.
+    any_rows = scores[args.models[0]][0]
+    labels = [c[len('logp_'):] for c in any_rows[0] if c.startswith('logp_')]
+    # Log-loss per scoring rule. `raw` re-derives what generation_eval.py already published
+    # (asserted below); `length_normalized` is the one that did not exist before.
+    ll = {m: {'raw': log_loss_from(scores[m][0], labels, 'logp_'),
+              'length_normalized': log_loss_from(scores[m][0], labels, 'logpnorm_')}
+          for m in args.models}
+    for m in args.models:
+        published = summaries[m]['log_loss']
+        if abs(ll[m]['raw'] - published) > 1e-6:
+            raise SystemExit(
+                f"{m}: re-derived raw log-loss {ll[m]['raw']:.6f} != published "
+                f"{published:.6f} -- the scoring columns and summary.json disagree")
 
     # ---- 1. headline per model x scoring ----------------------------------------
     rows = []
@@ -140,9 +220,12 @@ def main():
                 'chance': s['chance'],
                 'accuracy': round(s[scoring]['accuracy'], 6),
                 'balanced_accuracy': round(s[scoring]['balanced_accuracy'], 6),
-                # log_loss and margin describe the full distribution, not an argmax, so they
-                # are properties of the scoring run rather than of either tie-break rule.
-                'log_loss': round(s['log_loss'], 6),
+                # log_loss describes the full distribution rather than an argmax, but it
+                # IS a property of the scoring rule -- the softmax is taken over that rule's
+                # scores -- so each row carries its own. The margin stays raw-only: it is
+                # read from the raw score gap in generation_eval.py and has no normalized
+                # counterpart to report.
+                'log_loss': round(ll[model][scoring], 6),
                 'mean_top1_margin': round(s['mean_top1_margin'], 6),
             })
     write_csv(os.path.join(args.out_dir, 'generation_summary.csv'), rows,
@@ -160,6 +243,61 @@ def main():
                     'functional_group': cls, 'recall': round(recall, 6)})
     write_csv(os.path.join(args.out_dir, 'generation_by_class.csv'), class_rows,
               ['model', 'entity_type', 'scoring', 'functional_group', 'recall'])
+
+    # ---- 3b. prompt sensitivity: spread of accuracy over the 10 templates ----------
+    #
+    # Greedy decoding and teacher-forced scoring are both deterministic, so this -- not
+    # repeated sampling -- is where each readout's variance lives. The caption used to quote
+    # it for three models from `free_generation_by_template.csv`; the teacher-forced half had
+    # no committed source at all, which is what this adds.
+    #
+    # THE SD IS NOT COMPARABLE ACROSS ROWS ON ITS OWN, and that is why `dispersion_ratio` is
+    # here beside it. Accuracy near 1.0 has nowhere to vary: across these five models, mean
+    # accuracy and raw SD correlate at r = -0.84, so a low SD mostly reports a high mean.
+    # The ratio divides the observed SD by the binomial null sqrt(p(1-p)/n_per_template) --
+    # the spread 92 Bernoulli draws per template would produce at that accuracy even if every
+    # template were equally good -- so 1.0 means "no more template effect than sampling
+    # noise". Every model here lands between 2 and 5.
+    sens_rows = []
+    free_tpl = {}
+    free_path = os.path.join(args.out_dir, 'free_generation_by_template.csv')
+    if os.path.exists(free_path):
+        for r in read_csv(free_path):
+            free_tpl.setdefault(r['model'], {})[int(r['template_index'])] = \
+                float(r['strict_accuracy'])
+    for model in args.models:
+        rows_m, n_mol, n_tpl = scores[model]
+        readouts = {}
+        # Teacher-forced, recomputed per template from the per-prompt rows. `load_scores`
+        # has already asserted the molecule-major layout, so `i % n_tpl` is the template.
+        for scoring, col in (('raw', 'correct_raw'), ('length_normalized', 'correct_norm')):
+            per = [[] for _ in range(n_tpl)]
+            for i, r in enumerate(rows_m):
+                per[i % n_tpl].append(int(r[col]))
+            readouts[scoring] = [sum(v) / len(v) for v in per]
+        if model in free_tpl:
+            # Read back from the released per-template CSV, whose values are stored at 6dp.
+            # Averaging them can therefore differ from the pooled accuracy in
+            # free_generation_summary.csv by ~1e-6 (reason: 0.789131 here against 0.789130,
+            # exactly 726/920 = 0.7891304). That is the rounding of already-rounded inputs,
+            # not a disagreement, and it is far below anything sd or dispersion_ratio resolve.
+            readouts['free_strict'] = [free_tpl[model][i] for i in sorted(free_tpl[model])]
+        for scoring, acc in readouts.items():
+            mu = sum(acc) / len(acc)
+            sd = stdev(acc)
+            null = math.sqrt(mu * (1 - mu) / n_mol) if 0 < mu < 1 else float('nan')
+            sens_rows.append({
+                'model': model, 'entity_type': args.entity_type, 'scoring': scoring,
+                'n_templates': len(acc), 'n_per_template': n_mol,
+                'mean_accuracy': round(mu, 6), 'sd_accuracy': round(sd, 6),
+                'min_accuracy': round(min(acc), 6), 'max_accuracy': round(max(acc), 6),
+                'binomial_sd': round(null, 6),
+                'dispersion_ratio': round(sd / null, 6) if null == null else '',
+            })
+    write_csv(os.path.join(args.out_dir, 'template_sensitivity.csv'), sens_rows,
+              ['model', 'entity_type', 'scoring', 'n_templates', 'n_per_template',
+               'mean_accuracy', 'sd_accuracy', 'min_accuracy', 'max_accuracy',
+               'binomial_sd', 'dispersion_ratio'])
 
     # ---- 3. paired molecule-level bootstrap --------------------------------------
     a, b = args.pair
@@ -182,6 +320,10 @@ def main():
             'ci_excludes_zero': int(not (lo < 0 < hi)),
             'n_molecules': n_mol, 'n_boot': args.n_boot, 'seed': args.seed,
         })
+    if not args.no_results_summary:
+        for model in args.models:
+            write_results_log_loss(args.results_dir, model, args.entity_type, ll[model])
+
     write_csv(os.path.join(args.out_dir, 'generation_diff_bootstrap.csv'), diff_rows,
               ['model_a', 'model_b', 'entity_type', 'scoring', 'acc_a', 'acc_b',
                'diff_a_minus_b', 'ci_lo', 'ci_hi', 'ci_excludes_zero', 'n_molecules',

@@ -19,6 +19,17 @@ R1 = 'deepseek-ai-DeepSeek-R1-Distill-Llama-8B'
 # Presentation order everywhere: base first, then the two fine-tunes.
 MODELS = [BASE, CHEM, R1]
 
+# The second chemistry tier. These two were run after the snapshots were taken and have
+# since been folded back into every one of them -- `probe/`, `taxonomy/`, `geometry/` and
+# `ambiguity/` all carry five models now. They keep their own list rather than joining
+# MODELS anyway: MODELS is what the paper's tables and figures iterate, and every one of
+# them is a three-model argument.
+CHEM_R = 'weidawang-Chem-R-8B'
+CHEMDFM = 'OpenDFM-ChemDFM-v1.5-8B'
+# base, the Tier-1 pair in training order (Chem-R-Faithful is GRPO-trained FROM Chem-R-8B),
+# the off-base chemistry model, then the reasoning distill.
+BEHAVIOURAL = [BASE, CHEM_R, CHEM, CHEMDFM, R1]
+
 # Display names. The analysis scripts carry their own terse SHORT maps for console tables
 # (`base`/`chem`/`r1`); the paper needs the real checkpoint names, so this is a separate
 # mapping rather than a third copy of the same one.
@@ -26,8 +37,14 @@ LABEL = {
     BASE: r'Llama-3.1-8B \textsc{(base)}',
     CHEM: r'Chem-R-Faithful \textsc{(chem)}',
     R1: r'R1-Distill-Llama-8B \textsc{(reason)}',
+    CHEM_R: r'Chem-R-8B \textsc{(chem-r)}',
+    # Marked in the label itself: ChemDFM sits on Llama-3, not 3.1, so a ChemDFM-vs-base gap
+    # confounds chemistry training with the 3 -> 3.1 difference and is never a controlled
+    # contrast. Chem-R-8B is what carries that.
+    CHEMDFM: r'ChemDFM-v1.5-8B$^{\dagger}$ \textsc{(chemdfm)}',
 }
-SHORT = {BASE: 'base', CHEM: 'chem', R1: 'reason'}
+SHORT = {BASE: 'base', CHEM: 'chem', R1: 'reason',
+         CHEM_R: 'chem-r', CHEMDFM: 'chemdfm'}
 # Okabe-Ito blue / vermillion / bluish-green. Chosen by running the dataviz palette
 # validator, not by eye: the seaborn default (#4C72B0/#C44E52/#55A868) puts red beside
 # green at deuteranopic dE 7.3, inside the band that is only legal with secondary

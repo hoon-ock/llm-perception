@@ -30,17 +30,28 @@ MODEL_8B = 'meta-llama-Llama-3.1-8B'
 MODEL_CHEM = 'phenixace-Chem-R-Faithful'
 MODEL_R1 = 'deepseek-ai-DeepSeek-R1-Distill-Llama-8B'
 MODEL_70B = 'meta-llama-Llama-3.1-70B'
+# Registered after this snapshot was first taken. Their probe results were already on disk
+# under Results/functional_group_probe/ -- only the CSVs had not been regenerated.
+MODEL_CHEM_R = 'weidawang-Chem-R-8B'
+MODEL_CHEMDFM = 'OpenDFM-ChemDFM-v1.5-8B'
 
-# The default set is the three 8B derivatives of one base, so every contrast varies
-# fine-tuning against a shared architecture, tokenizer and depth. --models still
-# accepts the 70B names for the scale pair this script was first written for.
-MODELS = [MODEL_8B, MODEL_CHEM, MODEL_R1]
+# The default set is the 8B derivatives of one base, so every contrast varies fine-tuning
+# against a shared architecture, tokenizer and depth -- with the exception of ChemDFM, which
+# sits on Llama-3 rather than 3.1 and therefore speaks to external validity only. --models
+# still accepts the 70B names for the scale pair this script was first written for.
+#
+# The two additions are APPENDED, never inserted. Every writer below either iterates
+# `args.models` or `curves.items()` in insertion order, so appending leaves the rows for the
+# original three byte-identical and adds new ones after them; inserting would rewrite the
+# whole file and make a pure-addition diff impossible to check.
+MODELS = [MODEL_8B, MODEL_CHEM, MODEL_R1, MODEL_CHEM_R, MODEL_CHEMDFM]
 # Section 4 is a PAIRED bootstrap and stays a pair however many models are loaded;
 # base vs chemistry-tuned is the contrast the functional-group paper is built on.
 DEFAULT_PAIR = (MODEL_CHEM, MODEL_8B)
 
 # Every default model now ends in "8B", so the old name[-3:] label collides.
-SHORT = {MODEL_8B: 'base', MODEL_CHEM: 'chem', MODEL_R1: 'r1', MODEL_70B: '70B'}
+SHORT = {MODEL_8B: 'base', MODEL_CHEM: 'chem', MODEL_R1: 'r1', MODEL_70B: '70B',
+         MODEL_CHEM_R: 'chem-r', MODEL_CHEMDFM: 'chemdfm'}
 
 
 def short(model):

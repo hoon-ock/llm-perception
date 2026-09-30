@@ -27,11 +27,26 @@ DEFAULT_ANISO = os.path.join(REPO, 'fc_group', 'Results', 'anisotropy_diagnostic
 DEFAULT_OUT = os.path.join(HERE, 'data')
 
 MODEL_8B = 'meta-llama-Llama-3.1-8B'
+MODEL_CHEM = 'phenixace-Chem-R-Faithful'
+MODEL_R1 = 'deepseek-ai-DeepSeek-R1-Distill-Llama-8B'
 MODEL_70B = 'meta-llama-Llama-3.1-70B'
-MODELS = [MODEL_8B, MODEL_70B]
+MODEL_R1_70B = 'deepseek-ai-DeepSeek-R1-Distill-Llama-70B'
+
+# The default set is the three 8B derivatives of one base -- base, reasoning-distilled
+# and chemistry-tuned -- so every contrast varies fine-tuning against a shared
+# architecture, tokenizer and depth. The 70B names stay registered because --model
+# still accepts them for the scale-pair comparison this script was first written for.
+MODELS = [MODEL_8B, MODEL_CHEM, MODEL_R1]
+DEFAULT_PAIR = (MODEL_CHEM, MODEL_8B)
+
 # Layer index is reported as a fraction of the stack so a 32- and an 80-layer model
-# can be compared at all. Both trees sample 5 layers only; see README "Limits".
-N_LAYERS = {MODEL_8B: 32, MODEL_70B: 80}
+# can be compared at all. Every tree samples 5 layers only; see README "Limits".
+N_LAYERS = {MODEL_8B: 32, MODEL_CHEM: 32, MODEL_R1: 32,
+            MODEL_70B: 80, MODEL_R1_70B: 80}
+
+# Every default model now ends in "8B", so the old name[-3:] label collides.
+SHORT = {MODEL_8B: 'base', MODEL_CHEM: 'chem', MODEL_R1: 'r1',
+         MODEL_70B: '70B', MODEL_R1_70B: 'r1-70'}
 
 
 def read_json(path):
@@ -148,7 +163,11 @@ def main():
     p.add_argument('--entity-type', default='functional_group',
                    help="prompt type; the review this was written for covers only the "
                         "declarative functional_group prompt")
-    p.add_argument('--model', action='append', choices=MODELS, default=None)
+    p.add_argument('--model', action='append', choices=list(N_LAYERS),
+                   default=None, metavar='MODEL')
+    p.add_argument('--pair', nargs=2, default=list(DEFAULT_PAIR),
+                   metavar=('MODEL_A', 'MODEL_B'),
+                   help='the two models the head-to-head section compares')
     args = p.parse_args()
 
     models = args.model or MODELS
@@ -167,7 +186,7 @@ def main():
           f"{'orig w':>7s} {'orig b':>7s} {'orig gap':>9s} | "
           f"{'cent w':>7s} {'cent b':>7s} {'cent gap':>9s}")
     for r in trend:
-        print(f"{r['model'][-3:]:>4s} {r['layer']:4d} {r['depth']:6.2f} "
+        print(f"{SHORT[r['model']]:>5s} {r['layer']:4d} {r['depth']:6.2f} "
               f"{r['raw_pairwise_cos']:8.3f} | {r['orig_within']:7.3f} {r['orig_between']:7.3f} "
               f"{r['orig_gap']:9.3f} | {r['cent_within']:7.3f} {r['cent_between']:7.3f} "
               f"{r['cent_gap']:9.3f}")
@@ -185,24 +204,27 @@ def main():
             down = all(d < 0 for d in deltas)
             shape = 'monotone up' if up else 'monotone down' if down else 'NOT monotone'
             peak = rows[max(range(len(vals)), key=lambda i: vals[i])]
-            print(f"  {model[-3:]:>3s} {label:26s} {' '.join(f'{v:6.3f}' for v in vals)}"
+            print(f"  {SHORT[model]:>5s} {label:26s} {' '.join(f'{v:6.3f}' for v in vals)}"
                   f"   {shape:14s} peak L{peak['layer']} (d={peak['depth']:.2f})")
 
-    print(f"\n=== 8B vs 70B at matched depth (centered gap) ===")
-    if len(models) == 2:
-        a = [r for r in trend if r['model'] == MODEL_8B]
-        b = [r for r in trend if r['model'] == MODEL_70B]
+    name_a, name_b = args.pair
+    print(f"\n=== {SHORT.get(name_a, name_a)} vs {SHORT.get(name_b, name_b)} "
+          f"at matched depth (centered gap) ===")
+    if name_a in models and name_b in models:
+        a = [r for r in trend if r['model'] == name_a]
+        b = [r for r in trend if r['model'] == name_b]
+        label_a, label_b = SHORT.get(name_a, name_a), SHORT.get(name_b, name_b)
         wins = 0
         for ra, rb in zip(a, b):
-            better = '8B' if ra['cent_gap'] > rb['cent_gap'] else '70B'
-            wins += better == '8B'
-            print(f"  d={ra['depth']:.2f}  8B {ra['cent_gap']:.3f}  vs  70B {rb['cent_gap']:.3f}"
-                  f"   -> {better}")
-        print(f"  8B ahead at {wins}/{len(a)} matched depths")
+            better = label_a if ra['cent_gap'] > rb['cent_gap'] else label_b
+            wins += better == label_a
+            print(f"  d={ra['depth']:.2f}  {label_a} {ra['cent_gap']:.3f}  vs  "
+                  f"{label_b} {rb['cent_gap']:.3f}   -> {better}")
+        print(f"  {label_a} ahead at {wins}/{len(a)} matched depths")
 
     print(f"\n=== analogy quadruples: n per layer and how many clear the CI ===")
     for r in trend:
-        print(f"  {r['model'][-3:]:>3s} L{r['layer']:<3d} mean={r['analogy_mean']:6.3f}  "
+        print(f"  {SHORT[r['model']]:>5s} L{r['layer']:<3d} mean={r['analogy_mean']:6.3f}  "
               f"{r['analogy_n_positive_sig']}/{r['analogy_n']} sig-positive, "
               f"{r['analogy_n_negative_sig']}/{r['analogy_n']} sig-NEGATIVE "
               f"(+-{r['closed_form_ci']:.4f})")

@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import torch
@@ -40,7 +41,9 @@ def load_tokenizer(model_name, hf_token):
 
 def load_model(model_name, hf_token, quantization_config):
     """
-    Load the pre-trained model with quantization configuration.
+    Load the pre-trained model, using 4-bit quantization when requested and
+    falling back to a plain fp16/bf16 load on MPS/CPU otherwise (bitsandbytes
+    4-bit quantization only works on Linux+NVIDIA).
 
     Args:
         model_name (str): Name of the pre-trained model.
@@ -57,20 +60,30 @@ def load_model(model_name, hf_token, quantization_config):
         "bfloat16": torch.bfloat16
     }
     compute_dtype = dtype_map.get(quantization_config.get("bnb_4bit_compute_dtype", "float16"), torch.float16)
-    
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=quantization_config.get("load_in_4bit", True),
-        bnb_4bit_use_double_quant=quantization_config.get("bnb_4bit_use_double_quant", False),
-        bnb_4bit_quant_type=quantization_config.get("bnb_4bit_quant_type", "nf4"),
-        bnb_4bit_compute_dtype=compute_dtype
-    )
-    torch.cuda.empty_cache()
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map="auto",
-        quantization_config=bnb_config,
-        use_auth_token=hf_token,
-    )
+
+    if quantization_config.get("load_in_4bit", True):
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=quantization_config.get("bnb_4bit_use_double_quant", False),
+            bnb_4bit_quant_type=quantization_config.get("bnb_4bit_quant_type", "nf4"),
+            bnb_4bit_compute_dtype=compute_dtype
+        )
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+            quantization_config=bnb_config,
+            use_auth_token=hf_token,
+        )
+    else:
+        device = "mps" if torch.backends.mps.is_available() else ("cuda" if torch.cuda.is_available() else "cpu")
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=compute_dtype,
+            use_auth_token=hf_token,
+        )
+        model = model.to(device)
     return model
 
 # Prepare input data
@@ -157,7 +170,10 @@ def get_activations(model, input_ids, batch_mask):
     """
     activations = {}
     hooks = register_hooks(model, activations)
-    
+
+    input_ids = input_ids.to(model.device)
+    batch_mask = batch_mask.to(model.device)
+
     with torch.no_grad():
         model(input_ids=input_ids, attention_mask=batch_mask, output_hidden_states=True)
     
@@ -264,55 +280,6 @@ def save_activations(model_name, activations, entity_type, prompt_name, layer_ix
     print(f"Activations saved at: {save_path}")
 
 
-# Process and save activations
-# Process and save activations
-def process_and_save_activations(model, tokenizer, prompts, layer_ix, entity_type, prompt_name, model_name, aggregation='last', save_dir='activation_datasets', batch_size=550):
-    """
-    Process activations and save them for a given model, tokenizer, and prompts, and store the activations from the same layer in a single file.
-
-    Args:
-        model (AutoModelForCausalLM): The model to use.
-        tokenizer (AutoTokenizer): The tokenizer for the model.
-        prompts (list of str): List of input prompts.
-        layer_ix (int): Layer index to save activations.
-        entity_type (str): Type of the entity.
-        prompt_name (str): Name of the prompt.
-        model_name (str): Name of the model (for saving in the correct folder).
-        aggregation (str): Aggregation method ('last', 'mean', 'max').
-        save_dir (str): Base directory to save activations.
-    """
-    all_activations = []  # To store all batch activations for the layer
-
-    # Iterate over batches of prompts
-    for start_ix in range(0, len(prompts), batch_size):
-        batch_prompts = prompts[start_ix:start_ix + batch_size]
-        
-        # Process the activations for the current batch
-        processed_activations = get_and_process_activations(model, tokenizer, batch_prompts, aggregation)
-        layer_key = f'layer_{layer_ix}'
-        
-        if layer_key in processed_activations:
-            all_activations.append(processed_activations[layer_key])  # Collect activations
-        else:
-            print(f"Layer {layer_ix} not found in activations.")
-    
-    # Concatenate all the activations for the layer
-    if all_activations:
-        concatenated_activations = torch.cat(all_activations, dim=0)
-        save_activations(
-            model_name=model_name,
-            activations=concatenated_activations,  # Now saving all activations together
-            entity_type=entity_type,
-            prompt_name=prompt_name,
-            layer_ix=layer_ix,
-            aggregation=aggregation,
-            save_dir=save_dir
-        )
-    else:
-        print(f"No activations found for Layer {layer_ix}.")
-
-
-
 # Generate prompts
 def generate_prompts(df, templates):
     """
@@ -335,25 +302,37 @@ def generate_prompts(df, templates):
                 print(f"Missing key in data for template: {e}")
     return prompts
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Extract per-layer activations for configured entity/prompt sets.")
+    parser.add_argument("--config", "-c", default="config_extract_activation.yaml",
+                         help="Path to the extraction config YAML (default: config_extract_activation.yaml).")
+    parser.add_argument("--entity-types", nargs="+", default=None,
+                         help="Only process entities whose entity_type matches one of these (default: all entities in the config).")
+    return parser.parse_args()
+
 # Main processing function
 def main():
     """
     Main function to extract activations from language models.
-    
-    Configuration is loaded from config_extract_activation.yaml file. Key settings include:
+
+    Configuration is loaded from the file passed via --config (default:
+    config_extract_activation.yaml). Key settings include:
     - extraction.model_name: Which model to use
     - extraction.batch_size: Batch size for processing
     - extraction.aggregation: How to aggregate token activations
     - extraction.save_dir: Directory to save activation files
     - extraction.quantization: Model quantization parameters
     - extraction.entities: List of entity types and their templates
-    
-    To change any of these settings, edit the config_extract_activation.yaml file.
+
+    To change any of these settings, edit the config file, or pass --entity-types
+    to run only a subset of the configured entities.
     """
+    args = parse_args()
+
     # Load configuration
-    config_data = load_config()
+    config_data = load_config(args.config)
     HF_TOKEN = config_data.get("HF_TOKEN")
-    
+
     # Get extraction configuration
     extraction_config = config_data.get("extraction", {})
     model_name = extraction_config.get("model_name", "meta-llama/Llama-2-7b-hf")
@@ -362,92 +341,95 @@ def main():
     base_save_dir = extraction_config.get("save_dir", "activation_datasets")
     quantization_config = extraction_config.get("quantization", {})
     entities = extraction_config.get("entities", [])
-    
+
+    if args.entity_types:
+        entities = [e for e in entities if e["entity_type"] in args.entity_types]
+
     print(f"Using model: {model_name}")
     print(f"Batch size: {batch_size}")
     print(f"Aggregation method: {aggregation}")
     print(f"Save directory: {base_save_dir}")
-    
+
     # Load tokenizer and model
     tokenizer = load_tokenizer(model_name, HF_TOKEN)
     model = load_model(model_name, HF_TOKEN, quantization_config)
-    
+
     # Validate entities configuration
     if not entities:
-        print("No entities found in configuration. Please check your config_extract_activation.yaml file.")
+        print("No matching entities found in configuration. Please check your config file and --entity-types filter.")
         return
-    
-    print(f"Found {len(entities)} entity types in configuration.")
-    
-    # Use entities from configuration
-    
-    # Remove hardcoded entities list - now using configuration
-    # The following entities are now defined in config_extract_activation.yaml under extraction.entities:
-    # - atomic number, atomic mass, group, period, electronegativity (with various templates)
-    # - question variants for each property type
-    # - relationship templates and single templates
-    # - element templates
-    
+
+    print(f"Found {len(entities)} entity types to process.")
+
+    num_layers = len(model.model.layers)
+    print(f"Model has {num_layers} layers.")
+
     # Process each entity type from configuration
     for entity in entities:
         entity_type = entity["entity_type"]
         data_file = entity["data_file"]
         templates = entity["templates"]
         prompt_name = entity["prompt_name"]
-        
+
         print(f"Processing entity type: {entity_type}")
-        
+
         # Load data
         if not os.path.exists(data_file):
             print(f"Data file {data_file} not found. Skipping entity {entity_type}.")
             continue
         df = pd.read_csv(data_file)
-        
+
         # Generate prompts
         prompts = generate_prompts(df, templates)
         print(f"Generated {len(prompts)} prompts for entity type '{entity_type}'.")
-        
-        # Use configured values
-        # batch_size, aggregation, and base_save_dir are now from configuration
-        
-        # Define number of layers (assuming model has 'n_layers' layers)
-        # Alternatively, determine from the model
-        num_layers = len(model.model.layers)
-        print(f"Model has {num_layers} layers.")
-        
-        # Iterate over each layer
-        for layer_ix in range(num_layers):
-        # for layer_ix in range(20,21):
-            print(f"Processing Layer {layer_ix}")
-            # Iterate over batches
-            for start_ix in range(0, len(prompts), batch_size):
-                batch_prompts = prompts[start_ix:start_ix + batch_size]
-                
-                try:
-                    # Process and save activations for the current batch and layer
-                    process_and_save_activations(
-                        model=model,
-                        tokenizer=tokenizer,
-                        prompts=batch_prompts,
-                        layer_ix=layer_ix,
-                        entity_type=entity_type,
-                        prompt_name=prompt_name,
-                        model_name=model_name,
-                        aggregation=aggregation,
-                        save_dir=base_save_dir,
-                        batch_size=batch_size
-                    )
-                    print(f"Processed batch {start_ix // batch_size + 1} for Layer {layer_ix}")
-                
-                except torch.cuda.OutOfMemoryError as e:
-                    print(f"CUDA out of memory: {e}. Reducing batch size or freeing up memory.")
+
+        # Each batch needs only one forward pass: get_and_process_activations already
+        # returns every layer's activations in one call, so we accumulate per layer
+        # across batches instead of rerunning the model once per (layer, batch) pair.
+        layer_activations = {layer_ix: [] for layer_ix in range(num_layers)}
+
+        for start_ix in range(0, len(prompts), batch_size):
+            batch_prompts = prompts[start_ix:start_ix + batch_size]
+            batch_num = start_ix // batch_size + 1
+
+            try:
+                processed_activations = get_and_process_activations(model, tokenizer, batch_prompts, aggregation)
+                for layer_ix in range(num_layers):
+                    layer_key = f'layer_{layer_ix}'
+                    if layer_key in processed_activations:
+                        layer_activations[layer_ix].append(processed_activations[layer_key])
+                    else:
+                        print(f"Layer {layer_ix} not found in activations for batch {batch_num}.")
+                print(f"Processed batch {batch_num} ({len(batch_prompts)} prompts) for entity '{entity_type}'.")
+
+            except RuntimeError as e:
+                if "out of memory" not in str(e).lower():
+                    raise
+                print(f"Out of memory: {e}. Skipping batch {batch_num}.")
+                if torch.cuda.is_available():
                     torch.cuda.empty_cache()
-                    # Optionally, implement a smaller batch size retry mechanism
-                    # For simplicity, we skip the batch if OOM occurs
-                    continue
-            
-            print(f"Layer {layer_ix} activations processed and saved.")
-    
+                elif torch.backends.mps.is_available():
+                    torch.mps.empty_cache()
+                continue
+
+        # Concatenate and save the accumulated activations, one file per layer
+        for layer_ix in range(num_layers):
+            if layer_activations[layer_ix]:
+                concatenated_activations = torch.cat(layer_activations[layer_ix], dim=0)
+                save_activations(
+                    model_name=model_name,
+                    activations=concatenated_activations,
+                    entity_type=entity_type,
+                    prompt_name=prompt_name,
+                    layer_ix=layer_ix,
+                    aggregation=aggregation,
+                    save_dir=base_save_dir
+                )
+            else:
+                print(f"No activations found for Layer {layer_ix}.")
+
+        print(f"Entity '{entity_type}' activations processed and saved.")
+
     print("All activations processed and saved.")
 
 if __name__ == "__main__":

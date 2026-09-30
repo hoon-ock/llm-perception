@@ -1,41 +1,106 @@
 model,layer,depth,pair_a,pair_b,cosine_sim,clears_ci
-meta-llama-Llama-3.1-8B,0,0.0,thioether - thiol,ether - alcohol,0.4879620373249054,1
-meta-llama-Llama-3.1-8B,0,0.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,0.07845679670572281,1
-meta-llama-Llama-3.1-8B,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,-0.14008793234825134,1
-meta-llama-Llama-3.1-8B,0,0.0,imine - aldehyde,amine - alcohol,0.04429284483194351,0
-meta-llama-Llama-3.1-8B,8,0.2581,thioether - thiol,ether - alcohol,0.6427133679389954,1
-meta-llama-Llama-3.1-8B,8,0.2581,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,0.1073654443025589,1
-meta-llama-Llama-3.1-8B,8,0.2581,sulfoxide - thioether,sulfone - sulfoxide,-0.0229041650891304,0
-meta-llama-Llama-3.1-8B,8,0.2581,imine - aldehyde,amine - alcohol,0.21557019650936127,1
-meta-llama-Llama-3.1-8B,16,0.5161,thioether - thiol,ether - alcohol,0.7037471532821655,1
-meta-llama-Llama-3.1-8B,16,0.5161,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,0.09436965733766556,1
+meta-llama-Llama-3.1-8B,0,0.0,thioether - thiol,ether - alcohol,0.4928419589996338,1
+meta-llama-Llama-3.1-8B,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,-0.14008796215057373,1
+meta-llama-Llama-3.1-8B,0,0.0,imine - aldehyde,amine - alcohol,0.24667587876319885,1
+meta-llama-Llama-3.1-8B,0,0.0,thiol - alcohol,thioether - ether,-0.004947055596858263,0
+meta-llama-Llama-3.1-8B,0,0.0,amide - carboxylic acid,amine - alcohol,0.5693557262420654,1
+meta-llama-Llama-3.1-8B,0,0.0,ester - carboxylic acid,ketone - aldehyde,0.8700097799301147,1
+meta-llama-Llama-3.1-8B,0,0.0,carboxylic acid - alcohol,amide - amine,0.9273291230201721,1
+meta-llama-Llama-3.1-8B,8,0.2581,thioether - thiol,ether - alcohol,0.589101254940033,1
+meta-llama-Llama-3.1-8B,8,0.2581,sulfoxide - thioether,sulfone - sulfoxide,-0.02290417067706585,0
+meta-llama-Llama-3.1-8B,8,0.2581,imine - aldehyde,amine - alcohol,0.22929559648036957,1
+meta-llama-Llama-3.1-8B,8,0.2581,thiol - alcohol,thioether - ether,0.40411221981048584,1
+meta-llama-Llama-3.1-8B,8,0.2581,amide - carboxylic acid,amine - alcohol,0.2215937227010727,1
+meta-llama-Llama-3.1-8B,8,0.2581,ester - carboxylic acid,ketone - aldehyde,0.5665944814682007,1
+meta-llama-Llama-3.1-8B,8,0.2581,carboxylic acid - alcohol,amide - amine,0.6777167916297913,1
+meta-llama-Llama-3.1-8B,16,0.5161,thioether - thiol,ether - alcohol,0.571503758430481,1
 meta-llama-Llama-3.1-8B,16,0.5161,sulfoxide - thioether,sulfone - sulfoxide,-0.1514291614294052,1
-meta-llama-Llama-3.1-8B,16,0.5161,imine - aldehyde,amine - alcohol,0.44375577569007874,1
-meta-llama-Llama-3.1-8B,24,0.7742,thioether - thiol,ether - alcohol,0.6592795848846436,1
-meta-llama-Llama-3.1-8B,24,0.7742,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.24990476667881012,1
+meta-llama-Llama-3.1-8B,16,0.5161,imine - aldehyde,amine - alcohol,0.5733843445777893,1
+meta-llama-Llama-3.1-8B,16,0.5161,thiol - alcohol,thioether - ether,0.6765007972717285,1
+meta-llama-Llama-3.1-8B,16,0.5161,amide - carboxylic acid,amine - alcohol,0.4443146884441376,1
+meta-llama-Llama-3.1-8B,16,0.5161,ester - carboxylic acid,ketone - aldehyde,0.6227527260780334,1
+meta-llama-Llama-3.1-8B,16,0.5161,carboxylic acid - alcohol,amide - amine,0.6662996411323547,1
+meta-llama-Llama-3.1-8B,24,0.7742,thioether - thiol,ether - alcohol,0.5838165879249573,1
 meta-llama-Llama-3.1-8B,24,0.7742,sulfoxide - thioether,sulfone - sulfoxide,-0.14114582538604736,1
-meta-llama-Llama-3.1-8B,24,0.7742,imine - aldehyde,amine - alcohol,0.683415412902832,1
-meta-llama-Llama-3.1-8B,31,1.0,thioether - thiol,ether - alcohol,0.6431759595870972,1
-meta-llama-Llama-3.1-8B,31,1.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.34948310256004333,1
+meta-llama-Llama-3.1-8B,24,0.7742,imine - aldehyde,amine - alcohol,0.7335494160652161,1
+meta-llama-Llama-3.1-8B,24,0.7742,thiol - alcohol,thioether - ether,0.832086443901062,1
+meta-llama-Llama-3.1-8B,24,0.7742,amide - carboxylic acid,amine - alcohol,0.606392502784729,1
+meta-llama-Llama-3.1-8B,24,0.7742,ester - carboxylic acid,ketone - aldehyde,0.4342562258243561,1
+meta-llama-Llama-3.1-8B,24,0.7742,carboxylic acid - alcohol,amide - amine,0.6124890446662903,1
+meta-llama-Llama-3.1-8B,31,1.0,thioether - thiol,ether - alcohol,0.5657995939254761,1
 meta-llama-Llama-3.1-8B,31,1.0,sulfoxide - thioether,sulfone - sulfoxide,-0.3013056218624115,1
-meta-llama-Llama-3.1-8B,31,1.0,imine - aldehyde,amine - alcohol,0.6089657545089722,1
-meta-llama-Llama-3.1-70B,0,0.0,thioether - thiol,ether - alcohol,0.7490499019622803,1
-meta-llama-Llama-3.1-70B,0,0.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.16748566925525665,1
-meta-llama-Llama-3.1-70B,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,0.2667355239391327,1
-meta-llama-Llama-3.1-70B,0,0.0,imine - aldehyde,amine - alcohol,-0.1633538454771042,1
-meta-llama-Llama-3.1-70B,20,0.2532,thioether - thiol,ether - alcohol,0.5412211418151855,1
-meta-llama-Llama-3.1-70B,20,0.2532,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.15559688210487366,1
-meta-llama-Llama-3.1-70B,20,0.2532,sulfoxide - thioether,sulfone - sulfoxide,-0.03682093694806099,1
-meta-llama-Llama-3.1-70B,20,0.2532,imine - aldehyde,amine - alcohol,0.3848331570625305,1
-meta-llama-Llama-3.1-70B,40,0.5063,thioether - thiol,ether - alcohol,0.7187040448188782,1
-meta-llama-Llama-3.1-70B,40,0.5063,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.21436424553394318,1
-meta-llama-Llama-3.1-70B,40,0.5063,sulfoxide - thioether,sulfone - sulfoxide,0.009188984520733356,0
-meta-llama-Llama-3.1-70B,40,0.5063,imine - aldehyde,amine - alcohol,0.47220444679260254,1
-meta-llama-Llama-3.1-70B,60,0.7595,thioether - thiol,ether - alcohol,0.7316778898239136,1
-meta-llama-Llama-3.1-70B,60,0.7595,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.2579428255558014,1
-meta-llama-Llama-3.1-70B,60,0.7595,sulfoxide - thioether,sulfone - sulfoxide,0.08120033144950867,1
-meta-llama-Llama-3.1-70B,60,0.7595,imine - aldehyde,amine - alcohol,0.43757274746894836,1
-meta-llama-Llama-3.1-70B,79,1.0,thioether - thiol,ether - alcohol,0.7001746296882629,1
-meta-llama-Llama-3.1-70B,79,1.0,alkyl bromide - alkyl chloride,alkyl iodide - alkyl bromide,-0.21556837856769562,1
-meta-llama-Llama-3.1-70B,79,1.0,sulfoxide - thioether,sulfone - sulfoxide,-0.08517180383205414,1
-meta-llama-Llama-3.1-70B,79,1.0,imine - aldehyde,amine - alcohol,0.4649698734283447,1
+meta-llama-Llama-3.1-8B,31,1.0,imine - aldehyde,amine - alcohol,0.696949303150177,1
+meta-llama-Llama-3.1-8B,31,1.0,thiol - alcohol,thioether - ether,0.8032112717628479,1
+meta-llama-Llama-3.1-8B,31,1.0,amide - carboxylic acid,amine - alcohol,0.6218576431274414,1
+meta-llama-Llama-3.1-8B,31,1.0,ester - carboxylic acid,ketone - aldehyde,0.44557833671569824,1
+meta-llama-Llama-3.1-8B,31,1.0,carboxylic acid - alcohol,amide - amine,0.5375037789344788,1
+phenixace-Chem-R-Faithful,0,0.0,thioether - thiol,ether - alcohol,0.25617629289627075,1
+phenixace-Chem-R-Faithful,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,0.12319730967283249,1
+phenixace-Chem-R-Faithful,0,0.0,imine - aldehyde,amine - alcohol,0.22546885907649994,1
+phenixace-Chem-R-Faithful,0,0.0,thiol - alcohol,thioether - ether,0.11857341229915619,1
+phenixace-Chem-R-Faithful,0,0.0,amide - carboxylic acid,amine - alcohol,0.46229439973831177,1
+phenixace-Chem-R-Faithful,0,0.0,ester - carboxylic acid,ketone - aldehyde,0.4478018879890442,1
+phenixace-Chem-R-Faithful,0,0.0,carboxylic acid - alcohol,amide - amine,0.9349597096443176,1
+phenixace-Chem-R-Faithful,8,0.2581,thioether - thiol,ether - alcohol,0.6053430438041687,1
+phenixace-Chem-R-Faithful,8,0.2581,sulfoxide - thioether,sulfone - sulfoxide,-0.18078474700450897,1
+phenixace-Chem-R-Faithful,8,0.2581,imine - aldehyde,amine - alcohol,0.3641699254512787,1
+phenixace-Chem-R-Faithful,8,0.2581,thiol - alcohol,thioether - ether,0.19925770163536072,1
+phenixace-Chem-R-Faithful,8,0.2581,amide - carboxylic acid,amine - alcohol,0.33212876319885254,1
+phenixace-Chem-R-Faithful,8,0.2581,ester - carboxylic acid,ketone - aldehyde,0.2914583384990692,1
+phenixace-Chem-R-Faithful,8,0.2581,carboxylic acid - alcohol,amide - amine,0.6766026616096497,1
+phenixace-Chem-R-Faithful,16,0.5161,thioether - thiol,ether - alcohol,0.7058067917823792,1
+phenixace-Chem-R-Faithful,16,0.5161,sulfoxide - thioether,sulfone - sulfoxide,-0.13215583562850952,1
+phenixace-Chem-R-Faithful,16,0.5161,imine - aldehyde,amine - alcohol,0.34198641777038574,1
+phenixace-Chem-R-Faithful,16,0.5161,thiol - alcohol,thioether - ether,0.6148806214332581,1
+phenixace-Chem-R-Faithful,16,0.5161,amide - carboxylic acid,amine - alcohol,0.4989144206047058,1
+phenixace-Chem-R-Faithful,16,0.5161,ester - carboxylic acid,ketone - aldehyde,0.30019375681877136,1
+phenixace-Chem-R-Faithful,16,0.5161,carboxylic acid - alcohol,amide - amine,0.6895624399185181,1
+phenixace-Chem-R-Faithful,24,0.7742,thioether - thiol,ether - alcohol,0.6331632137298584,1
+phenixace-Chem-R-Faithful,24,0.7742,sulfoxide - thioether,sulfone - sulfoxide,-0.3168977200984955,1
+phenixace-Chem-R-Faithful,24,0.7742,imine - aldehyde,amine - alcohol,0.3359445333480835,1
+phenixace-Chem-R-Faithful,24,0.7742,thiol - alcohol,thioether - ether,0.6651096940040588,1
+phenixace-Chem-R-Faithful,24,0.7742,amide - carboxylic acid,amine - alcohol,0.43220436573028564,1
+phenixace-Chem-R-Faithful,24,0.7742,ester - carboxylic acid,ketone - aldehyde,0.2591918110847473,1
+phenixace-Chem-R-Faithful,24,0.7742,carboxylic acid - alcohol,amide - amine,0.6001713871955872,1
+phenixace-Chem-R-Faithful,31,1.0,thioether - thiol,ether - alcohol,0.44265589118003845,1
+phenixace-Chem-R-Faithful,31,1.0,sulfoxide - thioether,sulfone - sulfoxide,-0.39141935110092163,1
+phenixace-Chem-R-Faithful,31,1.0,imine - aldehyde,amine - alcohol,0.26726192235946655,1
+phenixace-Chem-R-Faithful,31,1.0,thiol - alcohol,thioether - ether,0.5241261124610901,1
+phenixace-Chem-R-Faithful,31,1.0,amide - carboxylic acid,amine - alcohol,0.37488383054733276,1
+phenixace-Chem-R-Faithful,31,1.0,ester - carboxylic acid,ketone - aldehyde,0.2257245033979416,1
+phenixace-Chem-R-Faithful,31,1.0,carboxylic acid - alcohol,amide - amine,0.4749850332736969,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,thioether - thiol,ether - alcohol,0.3559059202671051,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,sulfoxide - thioether,sulfone - sulfoxide,-0.029919782653450966,0
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,imine - aldehyde,amine - alcohol,0.0850919559597969,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,thiol - alcohol,thioether - ether,-0.01589912362396717,0
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,amide - carboxylic acid,amine - alcohol,0.5574947595596313,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,ester - carboxylic acid,ketone - aldehyde,0.7845630645751953,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,0,0.0,carboxylic acid - alcohol,amide - amine,0.9049534201622009,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,thioether - thiol,ether - alcohol,0.5408674478530884,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,sulfoxide - thioether,sulfone - sulfoxide,-0.15256722271442413,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,imine - aldehyde,amine - alcohol,0.36476367712020874,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,thiol - alcohol,thioether - ether,0.26225563883781433,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,amide - carboxylic acid,amine - alcohol,0.3541131913661957,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,ester - carboxylic acid,ketone - aldehyde,0.38942188024520874,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,8,0.2581,carboxylic acid - alcohol,amide - amine,0.6702821850776672,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,thioether - thiol,ether - alcohol,0.5728858113288879,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,sulfoxide - thioether,sulfone - sulfoxide,-0.17471151053905487,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,imine - aldehyde,amine - alcohol,0.516373336315155,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,thiol - alcohol,thioether - ether,0.6584673523902893,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,amide - carboxylic acid,amine - alcohol,0.297454833984375,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,ester - carboxylic acid,ketone - aldehyde,0.3227449357509613,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,16,0.5161,carboxylic acid - alcohol,amide - amine,0.5742911696434021,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,thioether - thiol,ether - alcohol,0.4787527024745941,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,sulfoxide - thioether,sulfone - sulfoxide,-0.14400291442871094,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,imine - aldehyde,amine - alcohol,0.4804140031337738,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,thiol - alcohol,thioether - ether,0.7640641927719116,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,amide - carboxylic acid,amine - alcohol,0.3484722077846527,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,ester - carboxylic acid,ketone - aldehyde,0.3622094988822937,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,24,0.7742,carboxylic acid - alcohol,amide - amine,0.5181024670600891,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,thioether - thiol,ether - alcohol,0.3786435127258301,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,sulfoxide - thioether,sulfone - sulfoxide,-0.26633235812187195,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,imine - aldehyde,amine - alcohol,0.4334428012371063,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,thiol - alcohol,thioether - ether,0.6886221170425415,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,amide - carboxylic acid,amine - alcohol,0.3027722239494324,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,ester - carboxylic acid,ketone - aldehyde,0.25785794854164124,1
+deepseek-ai-DeepSeek-R1-Distill-Llama-8B,31,1.0,carboxylic acid - alcohol,amide - amine,0.3985650837421417,1

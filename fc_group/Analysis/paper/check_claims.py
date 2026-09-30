@@ -81,7 +81,7 @@ def main():
     # with having to produce the answer. Guarded here so the two orderings cannot silently
     # converge if the parser is ever loosened.
     fg = {r['model']: r for r in rows('generation/data/free_generation_summary.csv')}
-    for m, want in ((BASE, 0.585), (CHEM, 0.825), (R1, 0.789)):
+    for m, want in ((BASE, 0.585), (CHEM, 0.8435), (R1, 0.789)):
         c.eq(f'free-generation strict accuracy {NAME[m]}', fg[m]['strict_accuracy'], want)
     c.true('free generation ranks reason above base, forced choice does not',
            float(fg[R1]['strict_accuracy']) > float(fg[BASE]['strict_accuracy'])
@@ -110,7 +110,7 @@ def main():
             'non_answer_rate', 'malformed_rate'))
         c.eq(f'response types partition {NAME[m]}', total, 1.0, 1e-5)
     fgd = rows('generation/data/free_generation_diff_bootstrap.csv')[0]
-    c.eq('free-generation chem-base diff', fgd['diff_a_minus_b'], 0.240, 1e-3)
+    c.eq('free-generation chem-base diff', fgd['diff_a_minus_b'], 0.2587, 1e-3)
     c.true('free-generation chem-base CI excludes zero', int(fgd['ci_excludes_zero']))
 
     # --- Aim 1: the chemical blocks are built by the stack, not present at input -------
@@ -195,8 +195,12 @@ def main():
     # --- the anisotropy precondition --------------------------------------------------
     geo = {(r['model'], int(r['layer'])): r
            for r in rows('geometry/data/geometry_by_layer.csv')}
-    for m, want in ((BASE, 0.944), (CHEM, 0.676), (R1, 0.806)):
+    for m, want, sd in ((BASE, 0.944, 0.018), (CHEM, 0.676, 0.073), (R1, 0.806, 0.057)):
         c.eq(f'anisotropy {NAME[m]} L31', geo[(m, LAYER)]['raw_pairwise_cosine'], want)
+        # The spread Table 3 now prints beside the mean. Held because it carries its own
+        # claim -- base is UNIFORMLY anisotropic, not merely anisotropic on average -- and
+        # because the SD moves further between models than the mean does.
+        c.eq(f'anisotropy sd {NAME[m]} L31', geo[(m, LAYER)]['raw_pairwise_sd'], sd)
         d = abs(float(geo[(m, LAYER)]['centered_between'])
                 - float(geo[(m, LAYER)]['centered_null']))
         c.true(f'centered between-class == null, {NAME[m]}', d < 5e-3, f'{d:.5f}')

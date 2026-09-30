@@ -1,0 +1,35 @@
+thioether : thiol  ::  ether : alcohol      C5
+==============================================================================
+
+figure                    analogy3d_meta-llama-Llama-3.1-8B_L31_thioether-thiol_ether-alcohol_C5.png
+model                     meta-llama-Llama-3.1-8B
+layer                     31
+pool                      carbon_matched -- chain length C5 only, no averaging over C3-C6
+
+RETRIEVAL  (full 4096-D; copied from retrieval_trials.csv, never recomputed here)
+  rank of ether                     1 of 16
+  cosine to the constructed point   0.806
+  corners at hit@1                  4 of 4
+  degenerate corners                0
+  mean cosine over corners          0.836
+
+PROJECTION  (mean-centered top-3 PCA over all 19 groups; plot units)
+  variance held by PC-1..3          61%
+  of the constructed point in view  47%
+  3D rank of ether                  1   (agrees with the 4096-D rank)
+  X lands                           3.9 from ether
+  nearest rival                     12.5 from alkyl bromide
+  camera (elev / azim)              16 / 105
+
+COMPOUNDS AT C5
+  a1  thioether         methyl butyl sulfide
+  a2  thiol             n-amyl mercaptan + sec-amyl mercaptan   (2-isomer mean)
+  b1  ether             methyl butyl ether
+  b2  alcohol           n-amyl alcohol + sec-amyl alcohol   (2-isomer mean)
+
+NOTES
+  The axes carry no tick labels: the PC coordinates are in no unit a reader
+  wants off an axis. All three share one scale, so the distances above are
+  comparable with each other, and the grid on the panel shows that scale.
+  thiol and alcohol are the mean of their n- and sec- isomers at this chain
+  length -- the one place this panel is still an average.

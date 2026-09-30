@@ -28,7 +28,7 @@ Three outputs, in increasing order of what they defend against:
   between_class_matrix.csv the input matrices themselves, in long form. `Results/` is
                            gitignored, so without this snapshot neither these numbers nor
                            the paper's dendrogram figure could be rebuilt from a clean
-                           checkout. ~120 KB for 3 models x 5 layers x 171 pairs.
+                           checkout. ~200 KB for 5 models x 5 layers x 171 pairs.
 
 Reads only `Results/functional_group_analogy/`. No activations, no model, CPU-only.
 """
@@ -48,6 +48,11 @@ MODELS = [
     'meta-llama-Llama-3.1-8B',
     'phenixace-Chem-R-Faithful',
     'deepseek-ai-DeepSeek-R1-Distill-Llama-8B',
+    # Appended, never inserted. Every output section below loops over this list in order and
+    # the permutation control draws from one shared `rng`, so a model added at the END leaves
+    # every row already in these CSVs byte-identical -- which `git diff` is expected to show.
+    'weidawang-Chem-R-8B',
+    'OpenDFM-ChemDFM-v1.5-8B',
 ]
 # The paired test needs a reference. Base vs chemistry-tuned is the contrast the
 # paper is built on; --pair overrides it.

@@ -26,8 +26,8 @@ phenixace-Chem-R-Faithful,functional_group,alkyl chloride,0.8
 phenixace-Chem-R-Faithful,functional_group,alkyl fluoride,0.775
 phenixace-Chem-R-Faithful,functional_group,alkyl iodide,0.925
 phenixace-Chem-R-Faithful,functional_group,amide,1.0
-phenixace-Chem-R-Faithful,functional_group,amine,0.825
-phenixace-Chem-R-Faithful,functional_group,carboxylic acid,0.1
+phenixace-Chem-R-Faithful,functional_group,amine,0.9875
+phenixace-Chem-R-Faithful,functional_group,carboxylic acid,0.2
 phenixace-Chem-R-Faithful,functional_group,ester,0.45
 phenixace-Chem-R-Faithful,functional_group,ether,0.9
 phenixace-Chem-R-Faithful,functional_group,imine,0.7
@@ -59,3 +59,43 @@ deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,sulfone,0.5
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,sulfoxide,0.95
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,thioether,0.325
 deepseek-ai-DeepSeek-R1-Distill-Llama-8B,functional_group,thiol,0.9375
+weidawang-Chem-R-8B,functional_group,alcohol,1.0
+weidawang-Chem-R-8B,functional_group,aldehyde,0.9
+weidawang-Chem-R-8B,functional_group,alkyl bromide,0.875
+weidawang-Chem-R-8B,functional_group,alkyl chloride,0.8
+weidawang-Chem-R-8B,functional_group,alkyl fluoride,0.75
+weidawang-Chem-R-8B,functional_group,alkyl iodide,0.925
+weidawang-Chem-R-8B,functional_group,amide,0.875
+weidawang-Chem-R-8B,functional_group,amine,0.975
+weidawang-Chem-R-8B,functional_group,carboxylic acid,0.9
+weidawang-Chem-R-8B,functional_group,ester,0.875
+weidawang-Chem-R-8B,functional_group,ether,0.85
+weidawang-Chem-R-8B,functional_group,imine,0.7
+weidawang-Chem-R-8B,functional_group,ketone,0.975
+weidawang-Chem-R-8B,functional_group,nitrile,1.0
+weidawang-Chem-R-8B,functional_group,nitro,0.875
+weidawang-Chem-R-8B,functional_group,none (alkane),0.9
+weidawang-Chem-R-8B,functional_group,sulfone,0.925
+weidawang-Chem-R-8B,functional_group,sulfoxide,0.95
+weidawang-Chem-R-8B,functional_group,thioether,0.925
+weidawang-Chem-R-8B,functional_group,thiol,0.9
+OpenDFM-ChemDFM-v1.5-8B,functional_group,alcohol,0.8875
+OpenDFM-ChemDFM-v1.5-8B,functional_group,aldehyde,0.75
+OpenDFM-ChemDFM-v1.5-8B,functional_group,alkyl bromide,0.125
+OpenDFM-ChemDFM-v1.5-8B,functional_group,alkyl chloride,0.525
+OpenDFM-ChemDFM-v1.5-8B,functional_group,alkyl fluoride,0.25
+OpenDFM-ChemDFM-v1.5-8B,functional_group,alkyl iodide,0.725
+OpenDFM-ChemDFM-v1.5-8B,functional_group,amide,0.5
+OpenDFM-ChemDFM-v1.5-8B,functional_group,amine,0.8875
+OpenDFM-ChemDFM-v1.5-8B,functional_group,carboxylic acid,0.575
+OpenDFM-ChemDFM-v1.5-8B,functional_group,ester,0.55
+OpenDFM-ChemDFM-v1.5-8B,functional_group,ether,0.65
+OpenDFM-ChemDFM-v1.5-8B,functional_group,imine,0.7
+OpenDFM-ChemDFM-v1.5-8B,functional_group,ketone,0.475
+OpenDFM-ChemDFM-v1.5-8B,functional_group,nitrile,0.65
+OpenDFM-ChemDFM-v1.5-8B,functional_group,nitro,0.65
+OpenDFM-ChemDFM-v1.5-8B,functional_group,none (alkane),0.65
+OpenDFM-ChemDFM-v1.5-8B,functional_group,sulfone,0.725
+OpenDFM-ChemDFM-v1.5-8B,functional_group,sulfoxide,0.85
+OpenDFM-ChemDFM-v1.5-8B,functional_group,thioether,0.275
+OpenDFM-ChemDFM-v1.5-8B,functional_group,thiol,0.7125

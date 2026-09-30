@@ -172,8 +172,7 @@ cython_debug/
 
 activation_datasets/
 fc_group/activation_datasets_functional_groups/
-fc_group/Results/
-fc_group/Results_old/
+fc_group/Results*
 fc_group/logs/*
 !fc_group/logs/.gitkeep
 fc_group/__*.csv
@@ -183,3 +182,23 @@ slurm-*.err
 
 # macOS
 .DS_Store
+
+# The paper is an Overleaf project synced through GitHub, cloned here from that repo:
+#   git clone https://github.com/hoon-ock/llm_perception.git paper
+# (underscore -- a different repo from this one). Overleaf pulls from it manually via
+#   Menu -> GitHub -> Pull GitHub changes into Overleaf
+# That repo is the version control for the .tex sources, so the outer repo must not
+# try to track the nested clone. What IS tracked here is everything that builds it:
+# fc_group/Analysis/paper/ (the table, figure and verification generators) and the
+# fc_group/Analysis/*/data/*.csv they read.
+/paper/
+
+# Claude Code session config and transcripts -- local, not project state.
+.claude/
+
+# Generated figures. Every PNG under Analysis/visuals/ is rebuilt from the committed
+# Analysis/*/data/*.csv by fc_group/Analysis/paper/make_visuals*.py, so tracking them adds a
+# new binary blob on every regeneration for no information the repo does not already hold.
+# The READMEs and the analogy3d_*.txt readouts beside them ARE tracked -- they are the
+# argument and the numbers, not the rendering.
+fc_group/Analysis/visuals/**/*.png
